@@ -1,0 +1,85 @@
+.otp-page {
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    background-color: #F6F6F6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.main-otp-card {
+    max-width: 800px;
+    width: 600px;
+    background-color: #F6F6F6;
+    text-align: center;
+}
+.h2-heading {
+    font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: #1A3D6F;
+    font-weight: 700;
+    font-size: 40px;
+  }
+  .otp-para {
+    font-size: 20px;
+    color: #1A3D6F;
+    padding: 5px 20%;
+
+  }
+.otp-btn {
+    width: 57%;
+    
+}
+
+
+.otpInput {
+    width: 60px;
+    height: 55px;
+    margin: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #1A3D6F;
+    outline: none;
+    color: #1A3D6F;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+   .otpInput:hover:focus {
+   outline: 2px solid #659ff0;
+   
+  }
+  .otpInput:active {
+    outline: 2px solid #659ff0;
+  } 
+  .otp-btn::selection {
+    outline: 2px solid #659ff0 !important; 
+  }
+
+  .otp-logo {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px !important;
+  }
+
+  @media screen and (max-width:680px ) {
+    .h2-heading {
+        font-size: 22px;
+    }
+    .otp-para {
+        font-size: 16px;
+        padding: 5px 30%;
+    }
+    .otp-btn {
+        width: 45%;
+        
+    }
+    .otpInput {
+        width: 40px;
+        height: 35px;
+        margin: 5px;
+    }
+  }
+  

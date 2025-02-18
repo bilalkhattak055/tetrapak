@@ -1,0 +1,57 @@
+@media only screen and (max-width:1200px){
+    .ticketspageheading{
+        font-size: 35px !important;
+        padding-top: 80px !important;
+    }
+} 
+
+@media only screen and (max-width:700px){
+    .ticketspageheading{
+        font-size: 30px !important; 
+    }
+} 
+
+@media only screen and (max-width:650px){
+    .ticketspageheading{
+        font-size: 24px !important; 
+    }
+    .cardlisting{
+        margin-top: -600px !important;
+        width: 100% !important;
+    }
+    .newgeneratecards{
+        width: 100% !important;
+    }
+    .iconsize{
+        width: 40px !important;
+        height: 40px !important;
+    }
+    .cardtextsize{
+        font-size: 18px !important; 
+    }
+    .cardbackcolor{
+        height: 750px !important;
+    }
+    .ticketspageheading{
+        padding-top: 60px !important; 
+        line-height: 33px !important;
+    }
+} 
+
+.newgeneratecards{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.filtersbtn{
+    border: 0px;
+    background: transparent;
+    outline: none;
+    margin: 0px;
+}
+.filteractive{
+    border-bottom: 1px solid #175FA4 !important;
+    color: #175FA4 !important;
+}

@@ -1,0 +1,299 @@
+.cardsectionParent{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .CustomCard1 h1{
+    font-size: 18px; 
+    font-weight: 200;
+  }
+  .cardsectionParent .CustomCard1 .chartbox{ 
+    border-radius: 10px; 
+    background: white; 
+  }
+  .AlertsDashboardSection{
+    display: flex;
+    justify-content: space-between; 
+  }
+  .AlertsDashboardSection h1{
+    font-size: 30px;
+  }
+  
+  .alertParent .AlertCard .alertBox .alertsmallcards h2{
+   background: lightgreen;
+   color: rgb(0, 77, 0);
+    padding: 3px;
+    border-radius: 5px;
+    font-size: 20px;
+  }
+  .alertParent .AlertCard .alertBox .alertsmallcards h1{
+    font-size: 18px;
+  }
+  .alertParent .AlertCard .alertBox{
+    width: 170px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    background: white;
+  }
+  .alertParent{ 
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .alertsmallcards h1{
+    font-size: 15px;
+    padding-left: 10px;
+    margin-top: 3px;
+  }
+  .alertsmallcards2{
+    display: flex ;
+  }
+  .alertsmallcards2 span{
+    color: red;
+  }
+  .alertsmallcards2 h1{
+    font-size: 17px;
+    /* padding-right: 30px; */
+    /* padding-left: 5px; */
+  }
+  .alertsmallcards{
+    display: flex;
+  }
+  .alertsmallcards2 h1{
+    font-size: 18px;
+  }
+  .alertsmallcards2 span{
+    font-size: 12px;
+    padding-right: 10px;
+  }
+  .alertsmallcards2 h2{
+    font-size: 13px;
+  }
+  .alertsmallcards{
+    padding-block: 5px;
+  }
+  .Cameracard{
+    /* width: 170px; */
+  }
+  .Camerabox{
+    width: 100%;
+    height: 160px;
+  }
+  .Camerabox img{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+  .Cameracard h1{
+    font-size: 15px;
+  }
+  .CameraParent{
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap; 
+  }
+  .modalbodyback{
+    background: transparent;
+  }
+  .imageshow{
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  .imageshow img{
+    width: 800px ;
+    height: 300px;
+    border-radius: 10px;
+  }
+  .Camerabox:hover{
+    scale: 1.05;
+    transition: 90ms;
+    cursor: pointer;
+  }
+  .hellobab{
+    background: black !important;
+    width: 100% !important;
+  }
+  .sectionPaddning{
+    padding-left: 5px;
+  }
+.MachingGuardSmallCardImage{
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  /* height: 80px;
+  width: 130px; */
+}
+
+  /* @media only screen and (min-width:2000px){
+    .factoryHeroCardIcon{
+      font-size: 35px !important;
+    }
+    .factoryHeroCardpadding{
+      padding: 30px 70px !important;
+    }
+    .factoruherocardpercentage h2{
+      font-size: 35px !important;
+    }
+    .factoruherocardpercentage p {
+      font-size: 25px !important;
+    }
+    .factoruherocardicon{
+      font-size: 23px !important;
+    }
+    .factoruherocardPercentNumber{
+      font-size: 23px !important;
+    }
+    .factorycardcahildone{
+      font-size: 30px !important;
+    }
+  } */
+  /* @media only screen and (max-width:1600px){
+    .forkLifeBigCardsHero div div h4{
+      font-size: 30px !important; 
+    }
+    .forkLifeBigCardsHero{
+      padding: 10px 50px !important;
+    }
+    .forkLifeBigCardsHero div p{
+      font-size: 17px !important;
+    }
+  }  */
+  @media only screen and (max-width:1450px){
+    
+    .factoryHeroCardIcon{
+      font-size: 17px !important;
+    }
+    .factoryHeroCardpadding{
+      padding: 20px 40px !important;
+    }
+    .factoruherocardpercentage h2{
+      font-size: 15px !important; 
+    }
+    .factoruherocardpercentage p {
+      font-size: 15px !important;
+    }
+    .factorycardcahildone{
+      font-size: 17px !important;
+    }
+    .factoruherocardicon{
+      font-size: 15px !important;
+    }
+    .factoryCardPercent p{
+      font-size: 12px !important;
+    }
+
+
+
+
+    .forkLifeBigCardsHero div div h4{
+      font-size: 20px !important;   
+    }
+    .forkLifeBigCardsHero{
+      padding: 10px 70px !important;
+    }
+    .forkLifeBigCardsHero div p{
+      font-size: 12px !important;
+    }
+    .forkLifeBigCardsHeroParent{
+      padding: 0px !important;
+    }
+    
+  }
+  
+
+  @media only screen and (max-width:1199px){
+    .ppeModuleHeading{
+      font-size: 25px !important; 
+    }
+    .heroCardHeadingfactoryHomepage{
+      font-size: 16px !important;
+    }
+    .forkLifeBigCardsHero div div h4{
+      font-size: 23px !important;  
+    }
+    .forkLifeBigCardsHero{
+      padding: 10px 20px !important;
+    } 
+    .forkLifeBigCardsHero div p{
+      font-size: 15px !important; 
+    }
+    .forkLifeBigCardsHeroParent{
+      padding: 10px 10px !important;
+    }
+    .AlertsCardScroll{
+      /* border: 10px solid; */
+      display: flex;
+      overflow-y: auto;
+    }
+    .alertsRowWidth{
+      /* width: 400px; */
+    }
+    .AlertsCardScroll2{
+      min-width: 500px !important;
+      margin: 2px;
+    }
+    .iframforMachineGuard{
+      height: 60vh !important;
+    }
+  }
+ 
+  @media only screen and (max-width:1150px){
+ 
+    .factoryHeroCardpadding{
+      padding: 30px 10px !important;
+    }
+   
+  } 
+  @media only screen and (max-width:991px){
+ 
+    .factoryHeroCardpadding{
+      padding: 40px 20px !important;
+    }
+   
+  } 
+  @media only screen and (max-width:830px){
+ 
+    .factoryHeroCardpadding{
+      padding: 30px 10px !important;
+    }
+    .forkLifeBigCardsHero div div h4{
+      font-size: 21px !important;  
+    }
+  } 
+  @media only screen and (max-width:500px){
+    /* .mobsizepadding{
+      padding: 10px !important;
+    } */
+    .factoryHeroCardpadding{
+      padding: 0px !important;
+    }
+    .forkLifeBigCardsHero{
+      padding: 20px 10px !important;
+    }
+    
+  } 
+  @media only screen and (max-width:575px){
+    .AlertsCardScroll2{
+      min-width: 200px !important;
+      margin: 2px;
+    }
+    .alertsCardAllHeading{
+      margin-top: 10px;
+    }
+    .alertsCardAllHeading div {
+      justify-content: start !important ;  
+    }
+  }
+
+
+.machineguardalerts{
+  height: 66px;
+}
+
+@media (max-height:1921px){
+  .machineguardalerts{
+    height: 85px;
+  }
+}

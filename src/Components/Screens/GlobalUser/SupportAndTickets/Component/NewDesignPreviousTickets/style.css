@@ -1,0 +1,32 @@
+.new_ticket_card_details{
+    color:#555555D9;
+    font-size: '14px';  
+    white-space: nowrap; /* Prevents line breaks */
+    overflow: hidden;    /* Hides overflow if the content is too wide */
+    text-overflow: ellipsis
+}
+.custom-modal .modal-content {
+    border-radius: 24px;  /* Change this value to adjust border radius */
+  }
+.formGrupCustom{
+    padding-block: 10px;
+}
+.subHeading{
+    color: #555555;
+    font-size: 16px;
+    font-weight: 400;
+}
+.selectallbtn{
+    border: 1px solid #175FA4;
+    border-radius: 100px;
+    padding: 4px 8px;
+    background: transparent;
+    color: #175FA4D9;
+}
+.clearallbtn{
+    border: 1px solid #DFDFDF;
+    border-radius: 100px;
+    padding: 4px 8px;
+    background: transparent;
+    color: #353535D9;
+}

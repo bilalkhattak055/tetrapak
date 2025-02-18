@@ -1,0 +1,32 @@
+.uni-logo-div {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.uni-logoo {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+.download-btn-noti{
+    width: 50px !important;
+    padding: 0px 0px !important;
+    margin: 0 !important;
+   
+ }
+ 
+ .send-btn-noti {
+    
+     margin: 0 !important;
+     padding: 0px !important;
+     text-align: center !important;
+     color: white !important;
+     z-index: 133;
+ }
+
+@media only screen and (min-width:811px) and (max-width:826px){
+    .logoutwidthforresponsive{
+       padding-inline: 5px !important;
+    }
+}

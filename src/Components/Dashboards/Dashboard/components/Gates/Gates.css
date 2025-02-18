@@ -1,0 +1,17 @@
+
+.main-box {
+    height: 30px;
+}
+.para {
+    background-color: antiquewhite;
+    align-content: center;
+    font-size: 13px;
+    text-wrap: nowrap;
+    height: 100%;
+    margin-bottom: 0;
+    
+}
+.prog-bar {
+    height: 3px;
+    width: 100%;
+}

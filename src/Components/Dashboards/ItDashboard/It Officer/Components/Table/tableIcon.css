@@ -1,0 +1,18 @@
+.rdt_TableHead .rdt_TableCol_Sortable span {
+    display: inline-block !important; /* Always show sort icon */
+    opacity: 1 !important; /* Make sure the icon is fully visible */
+    margin-left: 5px;
+}
+.rdt_TableHead .rdt_TableCol_Sortable svg {
+    visibility: visible !important; /* Always make the icon visible */
+    color: #007bff !important; /* Customize icon color */
+}
+ 
+.rdt_TableBody{
+    padding: 0px !important;  
+}
+.data-table-wrapper {
+    border-radius: 20px 20px 0 0; /* Ensure border-radius for the wrapper */
+    overflow: hidden;  
+  }
+  

@@ -1,0 +1,20 @@
+.kpi_card_total{
+    margin:5px -7px 5px 0px;
+}
+.kpi_card_live{
+    margin:5px 0px 5px -7px;
+}
+.kpi_card_total {
+height: 120px;
+}
+.kpi_card_live {
+height: 120px;
+}
+@media (max-width: 577px) {
+    .kpi_card_total{
+        margin:5px 0px;
+    }
+    .kpi_card_live{
+        margin:5px 0px;
+    }
+   }

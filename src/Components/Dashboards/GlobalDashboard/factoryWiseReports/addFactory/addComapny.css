@@ -1,0 +1,19 @@
+.add-company-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100% !important;
+    height: calc(100vh - 200px);
+   
+}
+
+.add-compnay-form {
+    width: 800px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px 10px;
+}
+.add-company-card {
+    padding: 30px 20px;
+}

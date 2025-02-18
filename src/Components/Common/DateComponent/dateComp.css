@@ -1,0 +1,20 @@
+.DateComponenet {
+    width: 400px;
+    position: absolute !important;
+    right: 172px;
+    top: 97px;
+    z-index: 1;
+}
+
+.float-right{
+    float: right;
+}
+
+@media screen and (max-width: 815px) {
+    .DateComponenet {
+        left: 10px;
+        width: fit-content;
+        top: 132px;
+        
+    }
+}

@@ -1,0 +1,267 @@
+/* General Styles */
+.gateNumber {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.room {
+  color: #9b9b9b;
+}
+
+.gateMainCardd {
+  min-width: 250px !important;
+  max-height: 200px !important;
+}
+
+.mainPic,
+.mainVid {
+  /* width: 100vh; */
+  /* height: 100%; Maintain aspect ratio for videos */
+  /* height: 100vh; */
+  width: 760px !important;
+  margin: 0px;
+  padding: 0px;
+  /* height: 500px !important; */
+}
+
+/* Thumbnail Video Styles */
+.gateVideoThumbnail {
+  width: 110px;
+  /* Thumbnail width */
+  height: 96px;
+  /* Thumbnail height */
+  border-radius: 20px;
+
+  overflow: hidden;
+  /* Hide overflow content */
+  object-fit: cover;
+  /* Ensure video covers the entire area */
+}
+
+.iframee2 {
+  /* height: 532px !important; */
+  /* max-height: 535px !important; */
+  height: 532px !important;
+  min-height: 531px !important;
+}
+
+.gateCardd {
+  overflow-y: auto !important;
+  scrollbar-width: 2px !important;
+}
+
+.gateImagee {
+  width: 134px;
+  height: 96px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1257px) {
+  .gateNumber {
+    font-size: 15px;
+  }
+}
+
+/* @media (max-width: 576px) {
+    .gateVideoThumbnail {
+      height: 60px;
+    }
+    .gateMainCardd{ 
+      min-width: 200px !important; 
+    }
+    .gateNumber {
+      font-size: 15px !important; 
+      border: 1px solid;
+      padding: 0px !important;
+    }
+    .gateImagee {
+      height: 60px !important;
+      width: 50% !important;
+  }
+    .room span{
+      font-size: 12px !important;  
+    }
+    .room{
+      padding: 0px !important;
+    }
+    .gateCol{
+     width: 100%;
+      justify-content: end ; 
+    }
+    
+  
+  } */
+@media (max-width:577px) {
+  .gateNumber {
+    font-size: 15px !important;
+  }
+  .iframee2 {
+    min-height: 532px !important;
+    height: 310px !important;
+  }
+  .room span {
+    font-size: 12px !important;
+  }
+
+  .gateNumber {
+    font-size: 15px !important;
+    padding: 0px !important;
+  }
+
+  .room {
+    padding: 0px !important;
+  }
+
+  .gateMainCardd {
+    min-height: 10px !important;
+    width: 280px;
+    min-width: 200px !important;
+    height: 150px !important;
+    padding: 0px !important;
+  }
+
+  .cardBodyPadding {
+    padding: 0px;
+  }
+  .gateImagee {
+    width: 90px !important;
+    /* height: 96px !important; */
+  }
+}
+
+/* @media (max-width:403px) {
+
+  .gateImagee {
+    height: 40px !important;
+    width: 100% !important;
+  }
+} */
+
+/* .gateCardd {
+
+  height: 100vh !important;
+  overflow-y: auto !important;
+  scrollbar-width: 2px !important;
+} */
+
+.mainCard {
+  background-color: #ededed;
+  /* height: 620px !important; 
+  min-height: 600px !important; */
+  border-radius: 20px;
+ 
+}
+
+@media (max-width:1170px) {
+  .mainCard {
+    /* position:fixed;
+    bottom:0px; */
+    /* height: 600px !important; */
+  }
+
+  .vidCard {
+    height: 532px !important;
+  }
+
+  .gateMainCardd {
+    min-width: 400px !important;
+    max-height: 250px !important;
+  }
+
+  .gateImagee {
+    width: 110px;
+    /* height: 96px; */
+  }
+
+  .iframee2 {
+    /* height: 532px !important; */
+    /* max-height: 535px !important; */
+    height: 532px !important;
+    min-height: 532px !important;
+  }
+
+  .gateCol {
+    display: flex;
+    justify-content: end !important;
+  }
+}
+
+@media (max-width:990px) {
+  .gateCardd {
+    /* height: 160px !important; */
+    scrollbar-width: 2px !important;
+    /* background-color: aqua; */
+    
+  }
+
+}
+
+@media (max-width:1200px) {
+  .gateCardd {
+    /* height: 160px !important; */
+    scrollbar-width: 2px !important;
+    /* background-color: purple; */
+    margin-bottom: 10px;
+
+  }
+
+  .gateMainCardd {
+    width: 400px !important;
+    min-width: 400px !important;
+    min-height: 10px !important;
+    height: 120px !important;
+    padding: 0px !important;
+    margin-right: 10px;
+  }
+ 
+   
+
+}
+
+@media(max-width:991px) {
+  .gateMainCardd {
+    min-height: 10px !important;
+    height: 130px !important;
+    padding: 0px !important;
+  }
+
+  .iframee2 {
+    height: 532px !important;
+  }
+}
+
+@media(max-width:1920px) {
+  .gateCardd {
+    scrollbar-width: 2px !important;
+  }
+}
+@media(max-width:560px){
+  .gateMainCardd{
+    width: 280px !important;
+    min-width: 280px !important;
+  }
+  .iframee2 {
+    min-height: 300px !important;
+    height: 310px !important;
+  }
+}
+@media(max-width:300px){
+  .gateMainCardd{
+    width: 250px !important;
+    min-width: 250px !important;
+  }
+}
+
+.gate_camera_card{
+  padding: 0px;
+  background-color: #ededed;
+  border-radius: 24px;
+  margin: 0px 20px 0px 0px;
+}
+
+@media(min-width:1200px){
+ .gate_camera_card{
+  position: fixed;
+  top: 10rem;
+ }
+}

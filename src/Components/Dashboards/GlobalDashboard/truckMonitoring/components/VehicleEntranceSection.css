@@ -1,0 +1,28 @@
+.border-right {
+    border-right: 2px solid #e8e8e8;
+}
+
+.card-body-entrance {
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.main-card-entrance {
+    /* max-width: fit-content !important; */
+    /* padding:0 40px ; */
+    /* width: fit-content; */
+    /* width: 300px;*/
+    min-width: 250px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.main-card-entrance-2 {
+    width: fit-content;
+}

@@ -1,0 +1,46 @@
+.itFormSubmitBtn{
+    margin-top: 10px;
+    background: #1A3D6F !important;
+    border: 0px !important;
+    padding: 10px 40px;
+} 
+
+.switch-state:before {
+    height: 17px !important;
+    width: 15px !important;
+    left: 3px !important;
+    bottom: 4px !important;  
+}
+
+.small-switch-state:before {
+ 
+    height: 22px !important;
+    width: 22px !important;
+    left: 4px !important;
+    bottom: 4px !important;
+}
+
+.table-column-operation {
+    width: 70% !important;
+}
+
+.table-column-timestamp {
+    width: 15% !important;
+}
+
+.table-column-delete {
+    width: 15% !important;
+}
+@media only screen and (max-width:1199px){
+    .filetrsGroupbtns{
+        padding-top: 10px;
+    } 
+}
+@media only screen and (max-width:767px){
+    .adduserbtn{
+        padding-top: 10px;
+    }
+    .filtersbtnforitlogs{
+        padding-top: 10px;
+    }
+}

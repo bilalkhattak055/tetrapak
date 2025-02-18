@@ -1,0 +1,11 @@
+/* Target the navigation arrows in react-datepicker */
+.react-datepicker__navigation--previous,
+.react-datepicker__navigation--next {
+    border-color: grey !important; /* Set the color of the arrows to grey */
+}
+
+/* Maintain grey color on hover and focus */
+.react-datepicker__navigation--previous:hover,
+.react-datepicker__navigation--next:hover {
+    border-color: grey !important; /* Keep the color grey on hover/focus */
+}

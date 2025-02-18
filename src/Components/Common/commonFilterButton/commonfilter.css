@@ -1,0 +1,26 @@
+.typehead-filter {
+font-size: 13px !important;
+}
+
+.typehead-filter .rbt-input {
+    font-size: 13px !important; /* Adjust the font size as needed */
+}
+.ellipsis-textt {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  .ellipsis-textt:hover,
+  .ellipsis-textt:focus {
+    white-space: normal;
+    overflow: visible;
+  }
+.typehead-filter .rbt-input::placeholder {
+    color: black !important; /* Replace with your desired color */
+    opacity: 1 !important; /* Adjust opacity if needed */
+}

@@ -1,0 +1,113 @@
+.sidebar-link .title {
+  color: black !important;
+  /* Default color for inactive links */
+  text-wrap: wrap !important;
+
+}
+
+.sidebar-link {
+  margin: 0 0 0px 12px;
+}
+
+.activatedFactory{
+  /* background: rgb(194, 194, 194) !important; */
+  /* color: rgb(39, 39, 39) !important; */
+  outline: none !important; 
+  width: 150px !important;
+  font-weight: 600;
+  color: rgb(36, 36, 36);
+  background: transparent !important;
+  border-bottom: 1px solid !important;
+  border: 0px;
+  border-radius: 0px;
+  font-size: 20px !important;
+  padding: 0px !important;
+}
+.deactivatedFactory{
+  background: transparent !important;
+  color: rgb(119, 119, 119) !important;
+  outline: none !important;
+  border-bottom: 1px solid transparent !important;
+  border: 0px !important;
+  width: 150px !important;
+  font-size: 18px !important;
+  padding: 0px !important;
+}
+
+
+.sidebar-link.active .title {
+  color: white !important;
+  /* Color for active links */
+}
+
+.sidebar-link:hover {
+  color: black !important;
+  /* Default color for inactive links */
+}
+
+.sidebar-link.active:hover .title {
+  color: black !important;
+  /* Default color for inactive links */
+}
+
+
+.sidebar-link.active {
+  margin: 0 10px 0px;
+  border-radius: 5px;
+}
+
+.sidebar-link .sidebar_icon {
+  color: black;
+}
+
+.sidebar-link.active .sidebar_icon {
+  color: white !important;
+}
+
+.sidebar-link.active:hover .sidebar_icon {
+  color: black !important;
+}
+
+.logo-sv-img {
+  width: 60px;
+}
+
+.uni-logo {
+  height: 110px !important;
+}
+
+.clickFalse {
+  pointer-events: none;
+  /* Prevent any interactions */
+  cursor: not-allowed !important;
+  opacity: 0.4;
+
+}
+.sidebar-z-indez {
+  z-index: 2;
+}
+.disrupt-logo-hideOn{
+  z-index: 1;
+}
+
+@media (max-height: 900px) {
+  .disrupt-logo-hideOn {
+    display: none;
+    /* This will hide the logo */
+  }
+ 
+}
+.hide-true {
+  display: none;
+}
+
+
+@media screen and (max-width: 900px) {
+  .fa-angle-right {
+    display: none;
+  }
+}
+
+.icon-class-available {
+  margin-left: 70px !important;
+}

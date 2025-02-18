@@ -1,0 +1,36 @@
+.target_card_compliance {
+  margin: 5px -7px 5px 0px;
+}
+.target_card_alert {
+  margin: 5px 0px 5px -7px;
+}
+
+.ellipsis-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.ellipsis-text:hover,
+.ellipsis-text:focus {
+  white-space: normal;
+  overflow: visible;
+}
+.AiOutlineEditBtn:hover {
+  fill: #1e67d6;
+}
+
+@media (max-width: 577px) {
+  .target_card_compliance {
+    margin: 5px 0px;
+  }
+  .target_card_alert {
+    margin: 5px 0px;
+  }
+}
+
+ 

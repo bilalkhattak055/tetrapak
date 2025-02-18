@@ -1,0 +1,13 @@
+.vehicleDetails {
+    outline: black !important;
+    font: 600;
+    font-size: 16px ;
+    color: black;
+    border: 1px solid black;
+    margin-left: 5px;
+}
+.vehicleDetails:hover {
+    background-color: #fff !important;
+    color: black !important;
+    border-color: black !important;
+}

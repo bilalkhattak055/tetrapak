@@ -1,0 +1,34 @@
+.type-head {
+    font-size: 12px !important;
+}
+
+.type-head .rbt-input-multi {
+ 
+    font-size: 14px;
+    overflow-y: auto;
+}
+.rbt-menu {
+    z-index: 12;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Button background color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 5px;
+    padding: 6px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  
+   
+    /* Transition for hover effects */
+}
+
+.back-button:hover {
+    background-color: #fff; /* Darker shade on hover */
+    transform: translateY(-2px); /* Move button slightly up on hover */
+}
+

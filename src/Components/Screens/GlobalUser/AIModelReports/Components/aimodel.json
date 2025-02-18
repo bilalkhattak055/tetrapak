@@ -1,0 +1,47 @@
+[
+    {
+      "chartsData": {
+        "totalAlertsChart": [
+          { "category": "Helmet", "value": 85 },
+          { "category": "Vest", "value": 30 },
+          { "category": "Emergency Exit", "value": 55 },
+          { "category": "Machine Guard", "value": 70 },
+          { "category": "MMHE", "value": 35 }
+        ],
+        "modelAccuracyChart": [
+          { "name": "Helmet", "value": 75 },
+          { "name": "Vest", "value": 85 },
+          { "name": "Emergency Exit", "value": 60 },
+          { "name": "Machine Guard", "value": 90 },
+          { "name": "MMHE", "value": 80 }
+        ]
+      },
+      "areaCards": [
+        {
+          "AreaName": "SA-5",
+          "AreaOwner": "Dr. Amjad",
+          "SubAreas": [
+            {
+              "SubAreaName": "OHC",
+              "Cameras": 1
+            },
+            {
+              "SubAreaName": "Medical Roof Top",
+              "Cameras": 1
+            }
+          ]
+        },
+        {
+          "AreaName": "SA-11",
+          "AreaOwner": "Sadia",
+          "SubAreas": [
+            {
+              "SubAreaName": "R&D Innovation Centre (Complete)",
+              "Cameras": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  

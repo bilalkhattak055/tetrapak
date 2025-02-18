@@ -1,0 +1,100 @@
+.liveAnalyticsHeroCards {
+    padding: 30px 30px !important;
+}
+
+.detailsofCards p {
+    color: black !important;
+}
+
+.detailsofCards :nth-child(1) {
+    color: #8C8C8C !important;
+}
+
+.ellipsis-text {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.ellipsis-text:hover,
+.ellipsis-text:focus {
+    white-space: normal;
+    overflow: visible;
+}
+
+/* .cardHeighForLiveAnalysis{
+    height: 165px;
+} */
+
+.apexcharts-heatmap .apexcharts-series rect {
+    /* rx: 10px !important;  */
+    /* ry: 10px !important;  */
+}
+
+.subheadingofcard {
+    margin-top: -8px !important;
+}
+
+
+/* @media only screen and (max-width:1980px){
+ 
+
+ 
+} */
+.colorShadeOfheatMap {
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; 
+    margin-top: 15px;
+    gap: 3;
+ }
+ .barcolorwidth{
+     width: 60px !important;
+ }
+ .progressbarParent{ 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+ }
+@media only screen and (max-width:575px){
+    .detailsofCards{
+        margin-top: 12px;
+        border-top: 1px solid rgb(202, 202, 202);
+        padding-top: 12px;
+    }   
+    .detailsofCards p{
+        font-size: 15px !important;
+    }
+}
+
+@media only screen and (min-width: 1400px) and (max-width: 1824px) {
+    /* .showDeatils {
+        display: none;
+    } */
+}
+@media only screen and (max-width: 1399px){
+    .progressbarParent .progressbarParent2:nth-child(1){
+        padding-top: 10px;
+    }
+    .donutParent{
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .progressbarParent{
+        padding-top: 10px;
+    }
+    .progressbarParentChild{
+        border-top: 0px !important;
+        border-bottom: 1px solid #ececec !important;
+    }
+}
+
+ 

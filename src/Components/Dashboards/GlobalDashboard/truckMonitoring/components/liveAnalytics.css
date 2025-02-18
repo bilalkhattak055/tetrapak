@@ -1,0 +1,49 @@
+.entrance-text {
+    font-weight: 400;
+    font-size: 16px;
+
+}
+
+.entrance-number {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+/* Donut css */
+.date-comp {
+    width: fit-content;
+    max-width: 500px;
+}
+
+.donut-card-body {
+    width: 100%;
+    height: 100%;
+}
+
+.donut-card-body .apexcharts-legend {
+    height: fit-content;
+    display: flex;
+    align-self: center;
+}
+
+/* .chart11 .apexcharts-legend {
+  width: 50% !important;
+  gap: 2;
+} */
+
+/* .apexcharts-legend {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+} */
+
+
+
+.truck-monitoring-donut-card {
+    height: 250px;
+}
+@media screen and (max-width: 610) {
+    .truck-monitoring-donut-card {
+        height: 300px;
+    }
+}

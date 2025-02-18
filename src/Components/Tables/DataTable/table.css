@@ -1,0 +1,15 @@
+.rdt_TableHeadRow {
+    background-color: #EFF4FA !important;
+    padding: 0;
+    border: none !important;
+}
+.rdt_TableRow {
+    background-color: white !important;
+}
+.card-body-table {
+    padding: 0 !important;
+}
+
+.rdt_TableBody {
+    padding: 10px;
+}

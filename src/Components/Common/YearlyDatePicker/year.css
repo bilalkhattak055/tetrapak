@@ -1,0 +1,16 @@
+.year-picker {
+    height: 48px;
+    border: 1px solid #dee2e6;
+    border: 1px solid gre;
+    background-color: white;
+    font-size: 16px;
+    width: 158px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.year-icon {
+    position: relative;
+    left: 18px;
+}

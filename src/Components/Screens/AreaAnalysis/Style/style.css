@@ -1,0 +1,6 @@
+.card-hover-area-analysis:hover{
+    scale: 1.03;
+    transition: 0.3s;
+    background: rgb(224, 224, 224);
+    cursor: pointer;
+}

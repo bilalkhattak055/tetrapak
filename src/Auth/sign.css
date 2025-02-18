@@ -1,0 +1,87 @@
+.sign-input {
+    border: none !important;
+    border-bottom: 1px solid #1A3D6F !important;
+    outline: none !important;
+    border-radius: 0 !important;
+    padding-left: 42px !important;
+    color: #184b93 !important;
+    font-size: 16px !important;
+}
+.sign-input:hover:focus {
+    outline: none !important;
+}
+.login-card {
+    max-width: 680px !important;
+    /* width: 500px; */
+    background-color: #F6F6F6 !important;
+}
+.login-page {
+    background-color: #F6F6F6 !important;
+    max-height: 100vw !important;
+
+}
+.login-main {
+    background-color: #F6F6F6 !important;
+    padding: 0 !important;
+
+}
+.login-tab {
+    background-color: #F6F6F6 !important;
+}
+.sign-btn {
+    background-color: #635470 !important;
+    color: #fff;
+    padding: 12px !important;
+}
+
+.sign-btn:hover {
+    color: #fff !important;
+    background-color: #635470 !important;
+}
+.form-Group {
+    position: relative;
+}
+
+.Email-icon {
+    position: absolute;
+    top: 14px;
+    left: 4px;
+    color: #184b93;
+}
+.margin-bottom-1 {
+    margin-bottom: 12px !important;
+}
+
+.forgot-password {
+    color: #184b93 !important;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: #184b93 !important;
+    text-decoration-thickness: 1px;
+
+}
+.optboxcss{
+    border: 1px solid grey !important;
+}
+.resetinputfieldsborder{
+    border-bottom: 1px solid black !important;
+    border-radius: 0px !important;
+}
+
+/* @media screen and(min-width: 600px) {
+    .login-card {
+        width: 400px !important;
+        min-width: 300px !important;
+    }
+} */
+
+.login-logo {
+    position: fixed;
+    top: 16px;
+    left: 10px;
+    width: 264px !important;
+}
+
+.PassLengthCheck{
+    color: green !important;
+}

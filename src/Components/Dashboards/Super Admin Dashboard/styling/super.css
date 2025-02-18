@@ -1,0 +1,92 @@
+@media(max-width:1397px){
+    .roleFont{
+        font-size: 12px !important;
+    }
+}
+
+@media (min-width:754px) and (max-width:1200px){
+    .header{
+        margin-top: 20px;
+    }
+    .superadminheading{
+        font-size: 25px !important;
+    }
+   .addbtnres{
+    padding: 8px 20px !important;
+   }
+   .DetailLogsCard{
+    margin: 0px !important;
+    padding: 0px !important;
+    padding-bottom: 20px !important;
+   }
+ 
+}
+@media only screen and (min-width:577px) and (max-width:754px){
+    .cardparentdetaillogit{
+        padding-bottom: 20px !important;
+    }
+}
+
+@media (max-width:576px){
+  
+    .addUser{
+        margin-top: 0px !important;
+        margin-bottom: 20px !important;
+        display: flex;
+        align-items: center !important;
+        justify-content: start !important;
+    }
+    .superadminheading{
+        text-align: start;
+        font-size: 20px !important;
+    }
+    .logsheadingres{
+        font-size: 18px !important;
+    }
+    .addbtnres{
+        padding: 5px 10px !important;
+       }
+       .permissioncolres{
+        padding: 0px !important;
+        margin: 0px !important;
+       }
+       .permissioncolresCol{
+        padding: 0px !important;
+        margin: 0px !important;
+       }
+       .permissioncolresCol h3{ 
+        font-size: 22px !important;
+        padding: 5px !important;
+        margin: 0px !important;
+       }
+       .DetailLogsCard{
+        margin: 0px !important;
+        padding: 0px !important;
+        padding-bottom: 20px !important;
+       }
+       .detailsCardList{ 
+        padding: 0px !important; 
+        margin: 0px !important; 
+       }
+       .detailedlogsitheader{
+        text-align: center;
+       }
+    
+}
+@media (max-width:1100px){
+    .dashTableRole{
+       width: 90% !important;
+    }
+}
+.activetbn{
+    border: 1px solid #54c500 !important;
+    background:#54c500 !important;
+    color:white !important;
+    margin: 2px !important;
+}
+.inactivetbn{
+    border: 1px solid #D3D3D3 !important;
+    background:transparent !important;
+    color:black !important;
+    margin: 2px !important;
+}

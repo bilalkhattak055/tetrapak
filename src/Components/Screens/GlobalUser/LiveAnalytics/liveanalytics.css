@@ -1,0 +1,55 @@
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+  
+  .blinking {
+    animation: blink 1s infinite; /* Animation runs indefinitely */
+  }
+
+  .custom-tooltip {
+    padding: 5px 10px;
+  }
+
+  .custom-tool {
+    padding: 8px 15px;
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .critical-blink rect {
+    animation: blink 1s infinite; /* 1-second blink animation */
+  }
+  .prog-bar-analytics {
+    height: 10px;
+  }
+  .apexcharts-heatmap-rect[data-value="0"] {
+    fill: #006400 !important;
+  }
+  .apexcharts-multiline-label {
+    white-space: pre-wrap; /* Allows the text to break lines based on whitespace */
+  }
+  
+  .apexcharts-multiline-label tspan {
+    /* Replace '|' with a line break */
+    display: inline;
+  }
+  
+  .apexcharts-text text {
+    display:block
+  }
+  .apexcharts-xaxis-label {
+    white-space: pre-wrap; /* Allows the text to wrap */
+  }
+  

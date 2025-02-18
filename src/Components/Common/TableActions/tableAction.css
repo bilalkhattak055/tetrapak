@@ -1,0 +1,9 @@
+.icon-1, .icon-2 {
+    color: #C5CEE0;
+    cursor: pointer;
+    transition: all 0.3ms;
+}
+
+.icon-1:hover, .icon-2:hover {
+    color: #1e67d6;
+}

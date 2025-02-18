@@ -1,0 +1,9 @@
+.tableButton {
+    padding: 10px 20px !important;
+}
+.table-btn {
+    transition: background-color 0.3s, transform 0.2s;
+}
+.table-btn:hover {
+    transform: translateY(-2px); /* Move button slightly up on hover */
+}

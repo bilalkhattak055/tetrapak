@@ -1,0 +1,31 @@
+{
+    "alerts": [
+      {
+        "id": 1,
+        "severity": "High",
+        "areaOwner": "Adil",
+        "subArea": "Roof Top Service Building",
+        "module": "Helmet",
+        "violation": "No Helmet",
+        "violationArea": "SA-2",
+        "date": "2024-10-01",
+        "time": "02:35 AM",
+        "factory": "ICF",
+        "shift": "Shift A"
+      },
+      {
+        "id": 2,
+        "severity": "Medium",
+        "areaOwner": "Adil",
+        "subArea": "Roof Top Service Building",
+        "module": "MMHE",
+        "violation": "MMHE Violation",
+        "violationArea": "SA-2",
+        "date": "2024-10-02",
+        "time": "12:03 AM",
+        "factory": "ICF",
+        "shift": "Shift A"
+      }
+    ]
+ 
+  }

@@ -1,0 +1,30 @@
+.calendar-time {
+    border: 1px solid #a4a3a3;
+    background-color:#ebebeb ;
+    font-size:11px;
+     padding: 6px 12px;
+     height:fit-content;
+     align-self: center;
+     width: fit-content;
+    
+     
+}
+
+.border-right {
+    border-right: 1px solid #a4a3a3;
+}
+.calendar-time-container{
+    text-align: -webkit-right;
+
+}
+
+.react-datepicker-popper {
+    right: 10px !important;
+}
+
+@media screen and (max-width: 576px) {
+    .calendar-time-container{
+        text-align: start !important;
+        margin: 10px 2px;
+    }
+}

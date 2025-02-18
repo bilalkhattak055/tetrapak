@@ -1,0 +1,15 @@
+.date-comp {
+    width: fit-content;
+    max-width: 500px;
+}
+
+.donut-card-body {
+    width: 100%;
+    height: 100%;
+}
+
+.donut-card-body .apexcharts-legend {
+    height: fit-content;
+    display: flex;
+    align-self: center;
+}

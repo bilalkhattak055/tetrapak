@@ -1,0 +1,164 @@
+@media (max-width: 575.98px) {
+  .custom-px-xs-1 {
+    padding-left: 0.5rem !important; /* Equivalent to Bootstrap's px-1 */
+    /* Equivalent to Bootstrap's px-1 */
+  }
+}
+.custom-badge {
+  background-color: "gray" !important ;
+  color: "white" !important;
+}
+
+.filter-cardd {
+  width: 200px;
+  border: 1px solid grey;
+  border-radius:  0 0 6px 6px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  background-color: white;
+  animation: slideFadeIn 0.5s ease-out forwards;
+}
+
+.progressCustomHeigh{
+  height: 8px !important;
+}
+
+.filter-btnnn {
+  width: 150px;
+  height: 44px;
+  transition: 1s all;
+  background-color: #1e67d6;
+  border-radius: 6px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.anlyticsTopCards {
+  height: 160px;
+}
+.anlyticsBottomCard {
+  height: 215px;
+}
+.custom-input {
+  border: 1px solid #80bdff !important;  /* Bootstrap's focus border color */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);  /* Optional, Bootstrap's default shadow */
+}
+
+
+.filters-weekly-span {
+  position:absolute;
+  top: 24%;
+  left: 29px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background-color: white;
+  z-index: 2;
+  font-size: 13px;
+  padding: 6px;
+}
+
+.filter-month-span {
+  position: absolute;
+  bottom:25%;
+  transform: translateY(50%);
+  color: #000;
+  pointer-events: none;
+  background-color: white;
+  z-index: 2;
+  right: 78px;
+  font-size: 13px;
+  padding: 6px;
+}
+.yellow-color {
+  background-color: rgb(249 197 10) !important; /* Add your custom color here */
+}
+.red-color{
+  background-color: #ff0000;
+}
+.light-blue-color {
+  background-color: #40a1ff;
+}
+.green-color {
+  background-color: #20e647;
+}
+
+.ellipsis-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease; 
+}
+
+.ellipsis-text:hover,
+.ellipsis-text:focus {
+  white-space: normal;
+  overflow: visible;
+}
+
+
+.dots-only {
+  display: flex;
+  justify-content: center;
+}
+
+.dots-only::before {
+  content: '• • • • • •'; /* Adjust number of dots */
+  font-size: 1rem; /* Dot size */
+  color: #ccc; /* Dot color */
+  letter-spacing: 0.2rem; /* Space between dots */
+}
+
+.AiAccuracy-section {
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .filters-weekly-span {
+     top: 23%;
+     left: 10px
+  }
+  .input-border-class-month {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  .input-border-class-weekly {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  .filter-month-span {
+    top: 54%;
+    width: 86px;
+    right: 39px;
+    
+  }
+  .alerts-trend-span {
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+  .filter-button-size {
+    width: 138px !important;
+  }
+  .filter-month-span{
+    padding: 2px !important;
+  } 
+}
+
+@media screen and (max-width: 575px) {
+  .AiAccuracy-section {
+  }
+  .AiAccuracy-section-cards {
+    gap: 20px;
+  }
+  .ai-mod-sec-buttons {
+    font-size: 11px !important;
+  }
+
+}
+

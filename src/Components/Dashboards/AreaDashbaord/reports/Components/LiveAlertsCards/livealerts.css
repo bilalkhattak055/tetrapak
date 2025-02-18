@@ -1,0 +1,241 @@
+.cardImage {
+  height: 15vh;
+}
+.modalclass{
+  margin: 0 auto;
+
+}
+@media only screen and (max-width:576px){
+  .modalclass{
+    margin-block: 0 !important;
+    margin-right: 40px;
+  
+  }
+}
+
+
+/* From Uiverse.io by gharsh11032000 */ 
+/* From Uiverse.io by css.accept-buttons-io */ 
+.accept-button {
+  --color: #468f53;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 8em;
+  height: 2.6em;
+  line-height: 2.5em;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border: 2px solid var(--color);
+  transition: color 0.5s, background-color 0.5s;
+  z-index: 1;
+  font-size: 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  color: var(--color);
+  background-color: white;
+}
+
+.accept-button.accepted {
+  background-color: var(--color);
+  color: white;
+}
+
+.accept-button:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: var(--color);
+  height: 150px;
+  width: 200px;
+  border-radius: 50%;
+  top: 100%;
+  left: 100%;
+  transition: all 0.7s;
+}
+
+.accept-button:hover:not(.accepted) {
+  background: var(--color);
+  color: white;
+}
+
+.accept-button:hover:before {
+  top: -30px;
+  left: -30px;
+}
+
+.accept-button:active:before {
+  background: var(--color);
+}
+.newResetHoverBTN:hover{
+  background: white; 
+  color: black !important;
+}
+
+.reject-button {
+  --color: #9c0610;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 8em;
+  height: 2.6em;
+  line-height: 2.5em;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border: 2px solid var(--color);
+  transition: color 0.5s, background-color 0.5s;
+  z-index: 1;
+  font-size: 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  color: var(--color);
+  background-color: white;
+}
+
+.reject-button.accepted {
+  background-color: var(--color);
+  color: white;
+}
+
+.reject-button:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: var(--color);
+  height: 150px;
+  width: 200px;
+  border-radius: 50%;
+  top: 100%;
+  left: 100%;
+  transition: all 0.7s;
+}
+
+.reject-button:hover:not(.accepted) {
+  background: var(--color);
+  color: white;
+}
+
+.ellipsis-textt {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.ellipsis-textt:hover,
+.ellipsis-textt:focus {
+  white-space: normal;
+  overflow: visible;
+}
+
+.reject-button:hover:before {
+  top: -30px;
+  left: -30px;
+}
+
+.reject-button:active:before {
+  background: var(--color);
+}
+
+.cardDetailsLiveAlert{
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+
+
+
+
+
+/* Custom CSS for blurring the background */
+/* Custom backdrop to apply background blur */
+
+.custom-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Optional darkening */
+  z-index: 1040; /* One below the modal (Bootstrap modal default is 1050) */
+  pointer-events: all; /* Ensure clicks are captured */
+  cursor: pointer;
+}
+
+@media (max-width: 576px) {
+  .modal {
+    width: 95% !important;  /* Set the modal width to 95% for small screens */
+    margin: 0 14px !important;  /* Center the modal horizontally */
+    top: 50% !important;  /* Adjust vertical position */
+    transform: translateY(-50%) !important;  
+  }
+  .modalfont{
+    font-size: 10px !important;
+  }
+}
+
+.card-img-top {
+  opacity: 0; /* Start fully transparent */
+  transition: opacity 0.5s ease-in-out; /* Adjust transition duration as needed */
+}
+
+.card-img-top.visible {
+  opacity: 1; /* Fade to fully visible */
+}
+.loader-for-imagee {
+  position: absolute;
+  top:25%;
+  right:50%;
+  transform: translateY(-50%);
+}
+
+
+
+/* livealerts.css */
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1280px) {
+  .detailsfont {
+    font-size: 12px !important;
+  }
+}
+
+.blink-text {
+  animation: blink 1.5s infinite; /* 1 second duration and infinite repetition */
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+  .cardImage {
+    height: 15vh !important;
+    margin-bottom: 10px !important;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  .cardImage {
+    height: 15vh !important;
+    margin-bottom: 10px !important;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .cardImage {
+    height: 25vh !important;
+    margin-bottom: 10px !important;
+  }
+}

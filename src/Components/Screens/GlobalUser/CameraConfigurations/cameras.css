@@ -1,0 +1,147 @@
+.col-right {
+  padding-right: 20px;
+}
+
+.col-left {
+  padding-left: 20px;
+  border-left: 1px solid lightgray;
+}
+.col-border {
+  border-left: 1px solid lightgray;
+  padding-left: 20px;
+}
+
+.camera_image {
+  opacity: 0; /* Start fully transparent */
+  transition: opacity 0.5s ease-in-out; /* Adjust transition duration as needed */
+}
+
+.camera_image.visible {
+  opacity: 1; /* Fade to fully visible */
+}
+.loader-for-image {
+  position: absolute;
+  top: 20px;
+  right: 49px;
+}
+
+@media (max-width: 1200px) {
+  .col-left {
+    border: none;
+    padding-left: 15px;
+  }
+}
+
+@media (max-width: 992px) {
+  .col-border {
+    border-left: none;
+    padding-left: 0px;
+  }
+  .col-right {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .col-left {
+    border: none;
+    padding-left: 0px;
+  }
+}
+
+.camera_item_card_odd {
+  margin: 5px -7px 5px 0px;
+}
+.camera_item_card_even {
+  margin: 5px 0px 5px -7px;
+}
+ .custom-typeahead .rbt-input::-webkit-scrollbar,
+.custom-typeahead .rbt-menu-dropdown::-webkit-scrollbar {
+  display: none; 
+} 
+
+/* Hide scrollbar in Firefox */
+.custom-typeahead .rbt-input {
+  scrollbar-width: none;
+  height: auto;
+
+}
+
+.custom-typeahead .rbt-menu-dropdown {
+  scrollbar-width: none; 
+}
+
+/* Ensure overflow is still active, so users can scroll */
+.custom-typeahead .rbt-input,
+.custom-typeahead .rbt-menu-dropdown {
+  overflow: none; 
+}  
+
+.custom-typeahead .rbt-input-multi {
+  cursor: text;
+  overflow-y: auto;
+  max-height: auto !important;
+  align-items: start;
+  vertical-align: top;
+  border-radius: 8px;
+}
+
+
+.ellipsis-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.ellipsis-text:hover,
+.ellipsis-text:focus {
+  white-space: normal;
+  overflow: visible;
+}
+
+@media (max-width: 1400px) {
+  .camera_item_card_odd {
+    margin: 5px 0px;
+  }
+  .camera_item_card_even {
+    margin: 5px 0px;
+  }
+}
+
+/* @media (max-width: 767px) {
+    .camera_item_card_odd{
+        margin:5px 0px;
+    }
+    .camera_item_card_even{
+        margin:5px 0px;
+    }
+   }
+
+   @media (max-width: 1120px) and (min-width: 993px) {
+    .camera_item_card_odd{
+        margin:5px 0px;
+    }
+    .camera_item_card_even{
+        margin:5px 0px;
+        
+    }
+    
+    }
+
+@media (max-width: 898px) and (min-width: 590px) {
+    .camera_item_card_odd{
+        margin:5px 0px;
+    }
+    .camera_item_card_even{
+        margin:5px 0px;
+    }
+    
+    } */
+
+.menu-title {
+  font-size: 14px;
+  color: black;
+  display: "inline-block";
+}

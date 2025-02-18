@@ -1,0 +1,37 @@
+.newDesignCardBtn:hover{
+    background: #1e67d6;
+    color: white;
+}
+.progress-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    background-color: #ffffff;
+  }
+  
+  .progress-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: conic-gradient(#ffa500 0deg, #f0f0f0 0deg);
+  }
+  
+  .progress-circle::before {
+    content: "";
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    position: absolute;
+  }
+  
+  .progress-text {
+    position: absolute;
+    font-size: 12px; 
+    color: #333;
+  }
+  
