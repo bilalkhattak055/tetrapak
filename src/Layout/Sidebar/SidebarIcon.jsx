@@ -4,6 +4,7 @@ import cubaimg from "../../assets/images/logo/login-logo.svg"
 import CustomizerContext from '../../_helper/Customizer';
 import uniIcon from '../../assets/images/logo/uni-logo.jpeg';
 import logoaxsen from '../../assets/images/logo/logoaxsen.svg';
+import TetraLogo from '../../assets/images/logo/TetraLogo.svg'
 
 const SidebarIcon = () => {
   const { layoutURL,  toggleSidebar, toggleIcon } = useContext(CustomizerContext);
@@ -43,7 +44,7 @@ const SidebarIcon = () => {
       <Link>
         <img
           className="img-fluid logo-sv-img"
-          src={logoaxsen}
+          src={TetraLogo}
           alt=""
         />
       </Link>

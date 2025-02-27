@@ -246,8 +246,8 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
             100% { transform: scale(1); }
           }
           .filter-dropdown .btn-primary {
-            background-color: #635470 !important;
-            border-color: #635470 !important;
+            background-color: #023F88 !important;
+            border-color: #023F88!important;
             font-size: 16px;
             transition: all 0.3s ease;
           }
@@ -348,19 +348,19 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
       </style>
 
 
-      <Container fluid className="py-2 pb-3">
+      <Container fluid className="py-2 pb-2 mb-3 shadow-sm" style={{backgroundColor:"#FFFFFF",borderRadius:"10px"}}>
         <Row>
           <Col className="d-flex align-items-center justify-content-between  dropdown">
 
             <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1 }}>
-              <h5 className={`mb-0 heading ${headingstyle}`}>{getDisplayHeading()}</h5>
-              <p className="mb-0 subheading" style={{ fontSize: "18px" }}>{alertText}</p>
+              <h5 className="mb-0 heading " style={{ fontSize: "15px" }}>{getDisplayHeading()}</h5>
+              <p className="mb-0 subheading" style={{ fontSize: "3vw" }}>{alertText}</p>
             </div>
             {shouldShowFilters && (
 
               <Dropdown
                 isOpen={dropdownOpen}
-                className='shadow-lg filter-dropdown bg-white rounded'
+                className='filter-dropdown bg-white rounded'
                 toggle={() => setDropdownOpen(!dropdownOpen)}
                 style={{ border: "1px solid #ECECEC" }}
               >

@@ -1337,7 +1337,7 @@
           z-index: 9;
           height: auto;
           line-height: inherit;
-          background: #FFFFFF;
+          background: #023F88;
           width: $sidebar-compact-width;
           text-align: left;
           transition: 0.3s;
@@ -1547,13 +1547,13 @@
                     vertical-align: -2px;
                     float: none;
                     transition: all 0.3s ease;
-                    color: #3b3243;
+                    color: #FFFFFF;
                   }
 
                   span {
                     letter-spacing: 0.7px;
                     text-transform: capitalize;
-                    color:#3b3243;
+                    color:#FFFFFF;
                     width: 79%;
                   }
 
@@ -1641,7 +1641,7 @@
                   &:hover {
                     >a {
                       &:hover {
-                        background-color: #B9B2BF;
+                        background-color: #FFFFFF;
                         transition: all 0.3s ease;
                       }
                     }
@@ -1933,7 +1933,7 @@
                     position: relative;
                     margin-bottom: 10px;
                     color: #404040;
-                    background-color: #B9B2BF;
+                    background-color: #FFFFFF;
 
                     .according-menu {
                       i {
@@ -1942,13 +1942,13 @@
                     }
 
                     svg {
-                      color:#3b3243;
+                      color:#023F88;
                       // fill: white;
                     }
 
                     span {
-                      color: #3b3243;
-                      color:#3b3243;
+                      color: #023F88;
+                      color:#023F88;
                       transition: all 0.3s ease;
                     }
                     &.active:hover{

@@ -9,12 +9,13 @@ import api from '../api/api';
 import { isTokenExpired } from '../_helper/helper';
 import Enums from './Enum';
 import { Btn } from '../AbstractElements';
-import AxenLogin from '../assets/images/logo/AxenLogin.svg';
+import AxenLogin from '../assets/images/logo/TetraLogo.svg';
 import Disrupt from './Disrupt.svg';
 import DesignTop from './DesignTop.svg';
 import DesignBottom from './DesignBottom.svg';
 import DesignBottom2 from './DesignBottom2.svg';
-import Axens1 from './Axens1.png';
+import Axens1 from './preview.png';
+
 
 const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({
@@ -54,12 +55,12 @@ const styles = {
     bottom: 0,
   },
   leftPanel: (isMobile) => ({
-    backgroundColor: '#635470',
+    backgroundColor: '#FFFFFF',
     position: 'absolute',
     top: 0,
     left: 0,
     bottom: 0,
-    width: '50%',
+    width: '52%',
     display: isMobile ? 'none' : 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -71,36 +72,36 @@ const styles = {
     height: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end', 
-    marginRight: 0, 
+    justifyContent: 'flex-end',
+    marginRight: 0,
   },
   dashboardImage: {
-    width: '90%',
-    height: '90%',
-    zIndex: 2,
-    filter: 'drop-shadow(-10px 0px 10px rgba(0, 0, 0, 0.40))', 
-    objectFit: 'contain', 
-    objectPosition: 'right', 
+    width: '100%',
+    height: '95%',
+    //zIndex: 2,
+    //filter: 'drop-shadow(-10px 0px 10px rgba(0, 0, 0, 0.40))', 
+    objectFit: 'contain',
+    //objectPosition: 'right', 
   },
   rightPanel: (isMobile) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center', 
+    justifyContent: 'center',
     padding: isMobile ? '2rem 0' : '2rem',
     minHeight: '100vh',
-    width: isMobile ? '100%' : '50%',
+    width: isMobile ? '100%' : '56%',
     marginLeft: isMobile ? 0 : '50%',
   }),
   contentWrapper: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center', 
+    justifyContent: 'center',
     width: '100%',
     maxWidth: '600px',
-    padding: '0 15px',
-    marginTop: 'auto', 
+    //padding: '0 15px',
+    marginTop: 'auto',
     marginBottom: 'auto',
   },
   logoTop: {
@@ -247,25 +248,26 @@ export default function LoginPage() {
             <div style={styles.dashboardContainer}>
               <img src={Axens1} alt="Axen1" style={styles.dashboardImage} />
             </div>
+            {/** 
             <img src={DesignTop} alt="design" style={styles.DesignTop1} />
             <img src={DesignTop} alt="design" style={styles.DesignTop2} />
             <img src={DesignBottom} alt="design" style={styles.DesignBottom1} />
             <img src={DesignBottom2} alt="design" style={styles.DesignBottom2} />
+          */}
           </div>
 
           <div style={styles.rightPanel(isMobile)}>
             <div style={styles.contentWrapper}>
-              <img src={AxenLogin} alt="Axen Logo" style={styles.logoTop} />
+              {/**<img src={AxenLogin} alt="Axen Logo" style={styles.logoTop} />*/}
 
               <Card style={styles.card}>
                 <CardBody>
-                  <div className="text-left mb-2">
-                    <h2 style={{ textAlign: 'center', color: '#635470' }}>Login</h2>
-                    <p style={{ textAlign: 'center', color: '#635470', fontSize: '20px' }} className="mb-2">
-                      Welcome!
-                    </p>
-                    <p className="text-muted" style={{ textAlign: 'center', color: '#635470', fontSize: '16px' }}>
-                      Please sign in to your account
+                  <div className="text-left mb-5">
+                    <h1 style={{ textAlign: 'left', fontWeight: 'bold' }}>
+                      Hi, <span style={{ color: '#023F88' }}>Welcome Back!</span>
+                    </h1>
+                    <p style={{ textAlign: 'left', fontSize: '20px', marginTop: '8px' }}>
+                      Are you <span style={{ fontWeight: 700,color:"#023F88" }}>Ready</span> to Check <span style={{ fontWeight: 700,color:"#023F88" }}>Inspection Stats</span> ?
                     </p>
                   </div>
 
@@ -275,7 +277,7 @@ export default function LoginPage() {
                     </Alert>
                   )}
 
-                  <Form onSubmit={handleSubmit}>
+                  <Form onSubmit={handleSubmit} className='mt-2'>
                     <FormGroup className="mb-1">
                       <Label for="email" className="mb-1">
                         Email Address
@@ -314,16 +316,16 @@ export default function LoginPage() {
                       </div>
                     </FormGroup>
 
-                    <div className="mb-1">
-                      <a href={`${process.env.PUBLIC_URL}/resetpassword`} style={{ color: '#635470' }}>
-                        Forgot Password?
+                    <div className="mb-3">
+                      <a href={`${process.env.PUBLIC_URL}/resetpassword`} style={{ color: "#555770",fontSize:"13px" }}>
+                       Forgot Password ? Click Here
                       </a>
                     </div>
 
                     <Btn
                       attrBtn={{
                         color: 'secondary',
-                        className: 'sign-btn d-block w-100 mb-4',
+                        className: 'sign-btn d-block w-100 ',
                         type: 'submit',
                       }}
                     >
@@ -333,7 +335,7 @@ export default function LoginPage() {
                 </CardBody>
               </Card>
             </div>
-            <img src={Disrupt} alt="disrupt logo" style={{ marginTop: 'auto', marginBottom: '20px' }} />
+            <img src={Disrupt} alt="disrupt logo"  />
           </div>
         </div>
       )}

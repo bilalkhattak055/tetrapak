@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import disrupttt from "../../assets/images/logo/disrupttt.png";
+import disrupttt from "../../assets/images/logo/Disrupt.png";
 import CustomizerContext from "../../_helper/Customizer";
 import { MENUITEMS } from "./Menu";
 import "./side.css";
@@ -498,7 +498,7 @@ const SidebarMenuItems = ({
               className={`${toggleIcon ? "hide-true" : ""} disrupt-logo-hideOn`}
             >
               <img
-                style={{ position: "absolute", bottom: "85px", right: "0px",width:"100%" }}
+                style={{ position: "absolute", bottom: "-78px", right: "-60px",width:"400px" }}
                 src={disrupttt}
                 alt="disrupt-logo"
               />

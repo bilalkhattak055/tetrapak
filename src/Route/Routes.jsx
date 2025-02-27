@@ -120,8 +120,8 @@ import LiveAnalyticsScreen from "../Components/Screens/GlobalUser/LiveAnalytics/
 //axens routes
 import AxenLiveAnalytics from "../Components/Screens/GlobalUser/LiveAnalyticsAxens/LiveAnalyticsAxens";
 import LiveAlertAxen from "../Components/Screens/GlobalUser/LiveAlertsV2/LiveAlertAxen"; 
-
- 
+//TetraPack Routes
+ import AnalyticsTetra from "../Components/Screens/GlobalUser/LiveAnalyticsTetrapack/LiveAnalyticsTetra";
 export const routes = {
   // superAdmin
   'super-admin': [
@@ -141,7 +141,7 @@ export const routes = {
   ],
   //Global
   'factory': [
-     { path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <LiveAnalyticsScreen /> },
+    // { path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <LiveAnalyticsScreen /> },
     
     { path: `${process.env.PUBLIC_URL}/dashboard/summary`, Component: <SummaryForGlobal /> },
     //{ path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <AxenLiveAnalytics/> },
@@ -211,7 +211,9 @@ export const routes = {
     // {path: `${process.env.PUBLIC_URL}/dashboard/emergency-alerts`, Component: <LiveAlerts />  },
     // {path: `${process.env.PUBLIC_URL}/dashboard/machine-guard-alerts`, Component: <LiveAlerts />  },
     // {path: `${process.env.PUBLIC_URL}/dashboard/forklift-alerts`, Component: <LiveAlerts />  },
-
+    
+    //Tetra Pack Routes
+    { path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <AnalyticsTetra/>},
 
   ],
   'global': [

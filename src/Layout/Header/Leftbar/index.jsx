@@ -171,7 +171,7 @@ useEffect(() => {
         {/* <NotificationSlider /> */} 
        {user?.id==129?
         null
-        :<H4 attrH4={{className: 'header-heading'}}>{role === 'it-officer' || role === 'super-admin' ? 'Industrial Safety AI Dashboard' : role === 'area' ? 'Area Safety AI Dashboard' :role=='global' ? 'Axens Safety AI Dashboard' :  `${JSON.parse(localStorage.getItem('userData'))?.factory?.name || 'Axens'} Safety AI Dashboard`}
+        :<H4 attrH4={{className: 'header-heading'}}>{role === 'it-officer' || role === 'super-admin' ? 'Industrial Safety AI Dashboard' : role === 'area' ? 'Area Safety AI Dashboard' :role=='global' ? 'Tetra Pack Safety AI Dashboard' :  `${JSON.parse(localStorage.getItem('userData'))?.factory?.name || 'Tetra Pack'} Safety AI Dashboard`}
         </H4>}
       </Col>
     </Fragment>

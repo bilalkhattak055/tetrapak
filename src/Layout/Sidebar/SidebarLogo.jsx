@@ -3,7 +3,7 @@ import { Grid } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { Image } from '../../AbstractElements';
 import CubaIcon from '../../assets/images/logo/login-logo.svg';
-import AxenLogin from '../../assets/images/logo/AxenLogin.svg';
+import TetraLogo from '../../assets/images/logo/TetraPack.png';
 import CustomizerContext from '../../_helper/Customizer';
 import './side.css'
 import resyncState from '../../_helper/resync';
@@ -69,16 +69,16 @@ const SidebarLogo = () => {
     <div className='logo-wrapper new-logo-wrapper'>
       {layout1 !== 'compact-wrapper dark-sidebar' && layout1 !== 'compact-wrapper color-sidebar' && mixLayout ? (
         navigation ? (<div onClick={clickLogo} className='bilal'>
-          <Image  attrImage={{ className: 'img-fluid d-inline uni-logo', style: { height: '110px' }, src: `${role === 'factory' ? AxenLogin : CubaIcon}`, alt: 'logo-main' }} />
+          <Image  attrImage={{ className: 'img-fluid d-inline uni-logo mt-4', style: { height: '110px' }, src: `${role === 'factory' ? TetraLogo : CubaIcon}`, alt: 'logo-main' }} />
         </div>) : (<div>
-          <Image attrImage={{ className: 'img-fluid d-inline uni-logo', style: { height: '110px' }, src: `${role === 'factory' ? AxenLogin : CubaIcon}`, alt: 'logo-main' }} />
+          <Image attrImage={{ className: 'img-fluid d-inline uni-logo mt-4', style: { height: '110px' }, src: `${role === 'factory' ? TetraLogo : CubaIcon}`, alt: 'logo-main' }} />
         </div>)
       ) : (
         navigation ? (<div type='button' onClick={clickLogo} className=' d-flex justify-content-center'>
-          <Image  attrImage={{ className: 'img-fluid d-inline uni-logo', src: `${AxenLogin}`, alt: 'main-logo' }} />
+          <Image  attrImage={{ className: 'img-fluid d-inline uni-logo mt-4', src: `${TetraLogo}`, alt: 'main-logo' }} />
           {/* <Image attrImage={{ className: 'img-fluid d-inline uni-logo', src:`${role === 'factory' ? uniIcon : CubaIcon}`, alt: 'main-logo' }} /> */}
         </div>): (<div className='d-flex justify-content-center'>
-          <Image attrImage={{ className: 'img-fluid d-inline uni-logo', src: `${AxenLogin}`, alt: 'main-logo' }} />
+          <Image attrImage={{ className: 'img-fluid d-inline uni-logo mt-4', src: `${TetraLogo}`, alt: 'main-logo' }} />
           {/* <Image attrImage={{ className: 'img-fluid d-inline uni-logo', src:`${role === 'factory' ? uniIcon : CubaIcon}`, alt: 'main-logo' }} /> */}
         </div>)
         

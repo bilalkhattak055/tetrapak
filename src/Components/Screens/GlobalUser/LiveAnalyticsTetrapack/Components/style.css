@@ -1,0 +1,49 @@
+/* Only target screens below 600px */
+@media screen and (max-width: 600px) {
+    /* Reduce icon size */
+    .icon {
+      width: 40px;
+      height: 40px;
+    }
+    
+    /* Adjust heading font size */
+    .heading-font {
+      font-size: 16px;
+      font-weight: 400;
+      color: #2F2F3B;
+      margin: 0;
+    }
+    
+    /* Reduce text size */
+    .d-flex p {
+      font-size: 13px !important;
+      font-weight: 500;
+      text-wrap: nowrap;
+    }
+    
+    /* Reduce left margin */
+    .ms-3 {
+      margin-left: 0.5rem !important;
+    }
+    
+    /* Adjust divider height */
+    .d-flex div[style*="dashed"] {
+      height: 70px !important;
+      margin: 0 5px;
+    }
+    
+    /* Make card responsive */
+    .card {
+      height: auto !important;
+    }
+    
+    /* Adjust card body padding */
+    .card-body {
+      padding: 10px !important;
+    }
+    
+    /* Ensure better spacing between elements */
+    .d-flex.justify-content-evenly {
+      justify-content: space-around !important;
+    }
+  }
