@@ -117,7 +117,7 @@
   "scripts": {
     "start": "react-scripts start",
     "electron": "electron .",
-    "build": "react-scripts build && electron ."
+    "build": "react-scripts build"
   },
   "build": {
   "appId": "com.Tetrapack.id",
