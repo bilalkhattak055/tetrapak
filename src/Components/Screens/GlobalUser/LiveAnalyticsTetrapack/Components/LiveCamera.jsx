@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, CardTitle, Row, Col } from 'reactstrap';
+import { Card, CardBody, CardTitle, Row, Col, Container } from 'reactstrap';
 import CameraImg from '../asset/CameraImg.jpeg';
 import Value from '../asset/ValueImg.jpeg';
 import CautionModal from './AuthenticationModal/CautionModal';
@@ -25,6 +25,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
 
     return (
         <>
+        <Container fluid className='mb-2'>
         <Card className="shadow h-100">
             <CardBody>
                 <CardTitle tag="h5" className="mb-3">Live Camera Image</CardTitle>
@@ -133,6 +134,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                 <CautionModal isOpen={isModalOpen} toggle={toggleModal} />
             </CardBody>
         </Card>
+        </Container>
         
         {/* ImageZoom Modal */}
         {showZoomModal && selectedImage && (

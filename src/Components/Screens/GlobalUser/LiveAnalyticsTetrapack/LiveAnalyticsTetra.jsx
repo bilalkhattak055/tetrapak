@@ -30,7 +30,7 @@ const AnalyticsTetra = () => {
 
     return (
         <WeekFilterProvider>
-        <Container fluid>
+        
             <Row>
                 <h1 className='mt-4'>
                     <span style={{ color: "#0E0D0B" }}>Welcome to </span>
@@ -74,7 +74,7 @@ const AnalyticsTetra = () => {
                     ]}
                 />
             </Row>
-        </Container>
+        
         </WeekFilterProvider>
     );
 };

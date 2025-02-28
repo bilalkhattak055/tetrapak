@@ -498,7 +498,7 @@ const SidebarMenuItems = ({
               className={`${toggleIcon ? "hide-true" : ""} disrupt-logo-hideOn`}
             >
               <img
-                style={{ position: "absolute", bottom: "-78px", right: "-60px",width:"400px" }}
+                style={{ position: "absolute", bottom: "-110px", right: "-60px",width:"400px" }}
                 src={disrupttt}
                 alt="disrupt-logo"
               />

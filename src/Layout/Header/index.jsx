@@ -153,7 +153,7 @@
 
 // export default Header;
 import React, { Fragment, useState, useEffect, useCallback, useContext } from 'react';
-import { Col, Form, Row } from 'reactstrap';
+import { Col, Form, Row ,Container} from 'reactstrap';
 import { X } from 'react-feather';
 import { Link } from 'react-router-dom';
 import CustomContext from '../../_helper/Customizer';
@@ -262,6 +262,7 @@ const Header = () => {
   };
 
   return (
+    <Container fluid>
     <Fragment>
       <div className={`page-header ${toggleIcon ? 'close_icon' : ''}`}>
         <Row className='header-wrapper m-0 ' style={{ position: 'relative' }}>
@@ -325,6 +326,7 @@ const Header = () => {
         </Row>
       </div>
     </Fragment>
+    </Container>
   );
 };
 

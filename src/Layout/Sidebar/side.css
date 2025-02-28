@@ -90,7 +90,7 @@
   z-index: 1;
 }
 
-@media (max-height: 900px) {
+@media (max-height: 500px) {
   .disrupt-logo-hideOn {
     display: none;
     /* This will hide the logo */
@@ -102,7 +102,7 @@
 }
 
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 500px) {
   .fa-angle-right {
     display: none;
   }

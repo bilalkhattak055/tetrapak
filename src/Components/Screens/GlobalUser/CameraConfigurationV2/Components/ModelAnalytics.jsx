@@ -348,8 +348,8 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
       </style>
 
 
-      <Container fluid className="py-2 pb-2 mb-3 shadow-sm" style={{backgroundColor:"#FFFFFF",borderRadius:"10px"}}>
-        <Row>
+      <Container fluid >
+        <Row className="py-2 pb-2 mb-3 shadow-sm " style={{backgroundColor:"#FFFFFF",borderRadius:"10px",width:"100%",marginLeft:"0px"}}>
           <Col className="d-flex align-items-center justify-content-between  dropdown">
 
             <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1 }}>

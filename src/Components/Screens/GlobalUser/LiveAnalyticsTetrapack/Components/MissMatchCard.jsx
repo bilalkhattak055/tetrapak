@@ -6,7 +6,7 @@ import './style.css'
 
 const MissandMatch = () => {
     return (
-        <Card style={{ borderRadius: '21px', height: '140px', width: '100%' }}>
+        <Card style={{ borderRadius: '21px', height: '130px', width: '100%' }}>
             <CardBody className='pt-4 pb-3'>
                 <div className='d-flex justify-content-around'>
                     {/* Match Reels */}

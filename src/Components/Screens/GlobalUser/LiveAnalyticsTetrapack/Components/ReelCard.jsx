@@ -60,7 +60,7 @@ const ReelCard= ({ loader }) => {
   }, []);
 
   return (
-    <Card style={{ borderRadius: '21px', height: '140px' }}>
+    <Card style={{ borderRadius: '21px', height: '130px' }}>
       <CardBody className='p-4'>
 
         {/**<p style={{ fontSize: '15px', color: '#383838', fontWeight: '400',textWrap:"nowrap" }}>Live Cameras Count</p>*/}
