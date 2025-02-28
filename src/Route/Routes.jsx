@@ -11,8 +11,6 @@ import DetailLog from "../Components/Dashboards/Super Admin Dashboard/Pages/Deta
 import Dashboardd from "../Components/Dashboards/Super Admin Dashboard/Pages/Dashboardd";
 import CameraStatusIt from "../Components/Dashboards/ItDashboard/It Officer/Pages/CameraStatusIt";
 
-
-
 //Global
 import Default from "../Components/Dashboards/GlobalDashboard/Default/Default"
 // import GlobalReports from "../Components/Dashboards/GlobalDashboard/reports";
