@@ -121,7 +121,7 @@
   },
   "build": {
   "appId": "com.Tetrapack.id",
-  "productName": "Tetra Pack",
+  "productName": "Tetra Pak",
   "directories": {
     "output": "dist"
   },
