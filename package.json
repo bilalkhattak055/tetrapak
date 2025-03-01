@@ -27,6 +27,7 @@
     "date-fns": "^2.29.3",
     "deni-react-treeview": "^1.1.11",
     "easymde": "^2.18.0",
+    "electron-updater": "^6.3.9",
     "emoji-mart": "^5.5.2",
     "feather-icons": "^4.29.0",
     "file-saver": "^2.0.5",
@@ -120,27 +121,27 @@
     "build": "react-scripts build"
   },
   "build": {
-  "appId": "com.Tetrapack.id",
-  "productName": "Tetra Pak",
-  "directories": {
-    "output": "dist"
+    "appId": "com.Tetrapack.id",
+    "productName": "Tetra Pak",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "sign": false,
+      "icon": "build/asset/icon.ico"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "bilalkhattak055",
+      "repo": "tetrapak"
+    }
   },
-  "win": {
-    "sign": false,
-    "icon": "build/asset/icon.ico"
-  },
-  "mac": {
-    "target": "dmg"
-  },
-  "linux": {
-    "target": "AppImage"
-  },
-  "publish": {
-    "provider": "github",
-    "owner": "bilalkhattak055",
-    "repo": "tetrapak"
-  }
-},
   "resolutions": {
     "react-dev-utils": "10.0.0"
   },
