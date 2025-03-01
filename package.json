@@ -130,7 +130,7 @@
     },
     "win": {
       "sign": false,
-      "icon": "public/icon.ico"
+      "icon": "build/icon.ico"
     },
     "mac": {
       "target": "dmg"
