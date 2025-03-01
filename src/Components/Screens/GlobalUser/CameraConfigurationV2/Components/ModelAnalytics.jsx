@@ -353,7 +353,7 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
           <Col className="d-flex align-items-center justify-content-between  dropdown">
 
             <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1 }}>
-              <h5 className="mb-0 heading " style={{ fontSize: "15px" }}>{getDisplayHeading()}</h5>
+              <h5 className="mb-0 heading " style={{ fontSize: "19px" }}>{getDisplayHeading()}</h5>
               <p className="mb-0 subheading" style={{ fontSize: "3vw" }}>{alertText}</p>
             </div>
             {shouldShowFilters && (
