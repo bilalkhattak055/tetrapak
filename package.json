@@ -114,7 +114,7 @@
     "world-map-geojson": "^1.0.2",
     "xlsx": "^0.18.5"
   },
-  "main": "build/electron.js",
+  "main": "public/electron.js",
   "scripts": {
     "start": "react-scripts start",
     "electron": "electron .",
@@ -128,7 +128,7 @@
     },
     "win": {
       "sign": false,
-      "icon": "build/asset/icon.ico"
+      "icon": "public/icon.ico"
     },
     "mac": {
       "target": "dmg"
