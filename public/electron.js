@@ -12,7 +12,7 @@ app.whenReady().then(() => {
   }
 
   mainWindow = new BrowserWindow({
-    width: 1600,
+    width: 2100,
     height: 1080, 
     icon: path.resolve(__dirname, 'icon.ico'),
     fullscreenable: true, 

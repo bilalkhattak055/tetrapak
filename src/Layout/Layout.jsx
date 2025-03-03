@@ -37,7 +37,7 @@ const AppLayout = ({ children, classNames, ...rest }) => {
   useEffect(() => {
     if (location.state?.showToast) {
       // toast.success('Login Successful!');
-      ShowDisclaimer("This Dashboard is intended for authorized personnel only. All data and information displayed are proprietary to Axens and are confidential. Any unauthorized access, distribution, or misuse of the information contained in this platform may result in legal consequences. The company does not guarantee the absolute accuracy of the data presented and users are advised to cross-check critical information. By using this platform, you agree to comply with Axens data security and privacy policies.")
+      ShowDisclaimer("This Dashboard is intended for authorized personnel only. All data and information displayed are proprietary to Tetra Pak and are confidential. Any unauthorized access, distribution, or misuse of the information contained in this platform may result in legal consequences. The company does not guarantee the absolute accuracy of the data presented and users are advised to cross-check critical information. By using this platform, you agree to comply with Tetra Pak data security and privacy policies.")
       // Clear the showToast state after displaying the toast
       navigate(location.pathname, { replace: true, state: { ...location.state, showToast: false } });
     }

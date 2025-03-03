@@ -11,18 +11,14 @@ const AnalyticsTetra = () => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1450);
 
     useEffect(() => {
-        // Function to update state based on window width
         const handleResize = () => {
-            setIsLargeScreen(window.innerWidth > 1450);
+            setIsLargeScreen(window.innerWidth > 1330);
         };
 
-        // Add event listener
         window.addEventListener('resize', handleResize);
         
-        // Call handler right away to get initial state
         handleResize();
         
-        // Clean up on component unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };

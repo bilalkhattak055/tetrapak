@@ -240,7 +240,7 @@ export default function LoginPage() {
     <>
       {loader ? (
         <div style={styles.loaderContainer}>
-          <BarLoader color="#635470" />
+          <BarLoader color="#023F88" />
         </div>
       ) : (
         <div style={styles.wrapper}>

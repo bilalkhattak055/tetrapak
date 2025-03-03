@@ -75,7 +75,7 @@ export const errorToast = (message) =>
     Swal.fire({
       html: `<p class="disclaimer-text">${text}</p>`, // Use HTML to add custom styles
       icon: "info",
-      iconColor: "#635470",
+      iconColor: "#023F88",
       showCancelButton: false,
       cancelButtonText: "Cancel",
       reverseButtons: false,

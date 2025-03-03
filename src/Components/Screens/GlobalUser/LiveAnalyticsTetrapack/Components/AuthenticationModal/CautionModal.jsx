@@ -6,6 +6,8 @@ import Authentication from "./Authentication";
 const CautionModal = ({ isOpen, toggle }) => {
   const [selectedReasons, setSelectedReasons] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+ 
       
   const toggleModal = () => setIsModalOpen(!isModalOpen);
       const handleOpenModal = () => {
@@ -28,7 +30,12 @@ const CautionModal = ({ isOpen, toggle }) => {
       className="modal-dialog-centered d-flex align-items-center justify-content-center"
       style={{ maxWidth: "700px" }}
     >
+
       <div className="p-4 w-100 rounded-lg" style={{ border: "4px solid #023F88", backgroundColor: "#fff" }}>
+      <div className="d-flex justify-content-end">
+          <button type="button" className="btn-close" aria-label="Close" onClick={toggle}></button>
+      </div>
+
         {/* Warning Icon & Title */}
         <div className="text-center">
           <AlertTriangle style={{color:"#023F88"}} size={50} />

@@ -248,10 +248,10 @@ ul.list-group {
 
 .swal2-styled {
   &.swal2-confirm {
-    background-color: #635470 !important;
+    background-color: #023F88 !important;
 
     &:focus {
-      box-shadow: 0 0 0 1px $white, 0 0 0 3px rgba(#635470, 0.4);
+      box-shadow: 0 0 0 1px $white, 0 0 0 3px rgba( #023F88, 0.4);
     }
   }
 }
