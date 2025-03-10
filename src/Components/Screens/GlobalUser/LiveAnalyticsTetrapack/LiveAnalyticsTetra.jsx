@@ -25,29 +25,14 @@ const AnalyticsTetra = () => {
     }, []);
 
     return (
-        <WeekFilterProvider>
-        
             <Row>
                 <h1 className='mt-4'>
                     <span style={{ color: "#0E0D0B" }}>Welcome to </span>
                     <span style={{ color: "#023F88" }}>Tetra Pak Inspection Dashboard!</span>
                 </h1>
                 <h5 className='mt-1 mb-3' style={{color:"#535353"}}> Here are some summary for you to check </h5>
-                <ModelAnalyticsHeader
-                    heading={`AI Based Reels Inspection System`}
-                    hideWeekText={true}
-                    currentWeek={true}
-                    shifts={false}
-                    multiShift={false}
-                    months={false}
-                    modules={false}
-                    severity={false}
-                    timeFilterOption={false}
-                    areas={false}
-                    showActions={false}
-                />
+                
                 {isLargeScreen ? (
-                    // Layout for screens above 1450px
                     <>
                         <Col lg={6} xl={3}><ReelCard /></Col>     
                         <Col xl={6}><MissandMatch /></Col>
@@ -71,7 +56,6 @@ const AnalyticsTetra = () => {
                 />
             </Row>
         
-        </WeekFilterProvider>
     );
 };
 

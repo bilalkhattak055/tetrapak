@@ -2,58 +2,17 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { CardTitle, Row, Col } from 'reactstrap';
 
-const ComplianceTargetsChart = ({ loading = false, targetAreas = [] }) => {
-  // Process the data received from props
-  const processChartData = (targetAreas) => {
-    const aggregatedData = targetAreas.reduce(
-      (acc, area) => {
-        acc.lastWeek.target += area.last_week.target;
-        acc.lastWeek.alerts += area.last_week.alerts;
-        acc.lastWeek.week = area.last_week.week;
-        acc.lastWeek.year = area.last_week.year;
-
-        acc.currentWeek.target += area.current_week.target;
-        acc.currentWeek.alerts += area.current_week.alerts;
-        acc.currentWeek.week = area.current_week.week;
-        acc.currentWeek.year = area.current_week.year;
-
-        return acc;
-      },
+const ComplianceTargetsChart = ({ loading = false }) => {
+  // Dummy data
+  const dummyData = {
+    series: [
       {
-        lastWeek: { target: 0, alerts: 0, week: 0, year: 0 },
-        currentWeek: { target: 0, alerts: 0, week: 0, year: 0 },
+        name: 'Count',
+        data: [120, 85, 35, 12],
       }
-    );
-
-    const allValues = [
-      aggregatedData.lastWeek.target,
-      aggregatedData.lastWeek.alerts,
-      aggregatedData.currentWeek.target,
-      aggregatedData.currentWeek.alerts
-    ];
-    const maxValue = Math.max(...allValues);
-    const dynamicMax = Math.ceil((maxValue * 0.9) / 100) * 100;
-
-    return {
-      series: [
-        {
-          name: 'Target',
-          data: [aggregatedData.lastWeek.target, aggregatedData.currentWeek.target],
-        },
-        {
-          name: 'Alert',
-          data: [aggregatedData.lastWeek.alerts, aggregatedData.currentWeek.alerts],
-        },
-      ],
-      categories: [
-        `Week ${aggregatedData.lastWeek.week}`,
-        `Week ${aggregatedData.currentWeek.week}`,
-      ],
-      dynamicMax,
-    };
+    ],
+    categories: ['Total Reels', 'Match Reels', 'Mis-Match Reels', 'Wrong Mis Match'],
   };
-
-  const chartData = processChartData(targetAreas);
 
   const options = {
     chart: {
@@ -72,14 +31,23 @@ const ComplianceTargetsChart = ({ loading = false, targetAreas = [] }) => {
       },
     },
     dataLabels: {
-      enabled: false,
+      enabled: false, // Removed the numbers from bars
     },
     stroke: {
       show: false,
       width: 0,
     },
     xaxis: {
-      categories: chartData.categories,
+      title: {
+        text: "Reels",
+        style: {
+          fontSize: '16px',
+          color: '#8C8C8C',
+          fontWeight: 500,
+          fontFamily: 'Arial, sans-serif'
+        },
+      },
+      categories: dummyData.categories,
       labels: {
         style: {
           fontSize: '12px',
@@ -95,7 +63,7 @@ const ComplianceTargetsChart = ({ loading = false, targetAreas = [] }) => {
     },
     yaxis: {
       title: {
-        text: 'Accuracy (%)',
+        text: 'Number of Reels',
         style: {
           fontSize: '14px',
           color: '#8C8C8C',
@@ -108,12 +76,15 @@ const ComplianceTargetsChart = ({ loading = false, targetAreas = [] }) => {
           fontSize: '12px',
           colors: '#666666',
         },
+        formatter: function (val) {
+          return Math.round(val);
+        },
       },
       min: 0,
-      max: chartData.dynamicMax,
+      max: 150,
       tickAmount: 4,
     },
-    colors: ['#0B76B7', '#41B2EF'],
+    colors: ['#023F88'], // Changed bar color to #023F88
     legend: {
       position: 'bottom',
       horizontalAlign: 'center',
@@ -161,11 +132,11 @@ const ComplianceTargetsChart = ({ loading = false, targetAreas = [] }) => {
     <Row style={{
       borderRadius: '20px',
       border: '1px solid #ECECEC',
-      backgroundColor:"#FDFEFF",
+      backgroundColor: "#FDFEFF",
     }}>
       <Col>
         <CardTitle tag="h5" className="text-center mt-2">
-          Compliance Targets
+          All Reels Data
         </CardTitle>
         {loading ? (
           <div className="d-flex justify-content-center align-items-center" style={{ height: '250px' }}>
@@ -174,7 +145,7 @@ const ComplianceTargetsChart = ({ loading = false, targetAreas = [] }) => {
             </div>
           </div>
         ) : (
-          <ReactApexChart options={options} series={chartData.series} type="bar" height={360} />
+          <ReactApexChart options={options} series={dummyData.series} type="bar" height={360} />
         )}
       </Col>
     </Row>

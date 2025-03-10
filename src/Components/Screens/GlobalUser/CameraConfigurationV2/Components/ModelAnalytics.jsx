@@ -252,9 +252,6 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
             transition: all 0.3s ease;
           }
           
-          .filter-dropdown .btn-primary:active {
-            animation: expandButton 1s ease;  
-          }
 
           .filter-dropdown.show .btn-primary {
             animation: expandButton 1s ease;
@@ -606,8 +603,8 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
                             onClick={handleAccept}
                             style={{
                               backgroundColor: '#635470',
-                              borderColor: '#635470'
-                            }}
+                              borderColor: '#635470',
+                    }}
                           >
                             Accept
                           </Button>

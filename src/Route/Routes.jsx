@@ -114,6 +114,7 @@ import HeatMapDetails from "../Components/Dashboards/AreaDashbaord/reports/HeatM
 import Area_Analysis_new from "../Components/Screens/AreaAnalysis/Area_Analysis_new";
 import SummaryForGlobal from "../Components/Screens/GlobalUser/Summary/SummaryForGlobal";
 import LiveAnalyticsScreen from "../Components/Screens/GlobalUser/LiveAnalytics/LiveAnalyticsNewDesignV2";
+import Inspection from "../Components/Screens/GlobalUser/LiveAnalyticsTetrapack/Inspection";
 
 //axens routes
 import AxenLiveAnalytics from "../Components/Screens/GlobalUser/LiveAnalyticsAxens/LiveAnalyticsAxens";
@@ -146,7 +147,7 @@ export const routes = {
     //{ path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <LiveAnalyticsScreen /> },
     // { path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <GlobalLiveAnalytics /> },
     { path: `${process.env.PUBLIC_URL}/dashboard/default/alerts`, Component: <HeatMapDetails /> },
-    { path: `${process.env.PUBLIC_URL}/reports`, Component: <GlobalAIReport /> },
+    //{ path: `${process.env.PUBLIC_URL}/reports`, Component: <GlobalAIReport /> },
     { path: `${process.env.PUBLIC_URL}/moduleInfo`, Component: <ModuleTable /> },
     { path: `${process.env.PUBLIC_URL}/targets`, Component: <GlobalTargetAndControls /> },
     { path: `${process.env.PUBLIC_URL}/newtargets`, Component:<TargetControl /> },
@@ -212,7 +213,8 @@ export const routes = {
     
     //Tetra Pack Routes
     { path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <AnalyticsTetra/>},
-
+    { path: `${process.env.PUBLIC_URL}/reports`, Component: <Inspection/> },
+   
   ],
   'global': [
     // {path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <CompanyDefault /> },
@@ -224,7 +226,7 @@ export const routes = {
     { path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <GlobalLiveAnalytics /> },
     
     { path: `${process.env.PUBLIC_URL}/dashboard/default/alerts`, Component: <HeatMapDetails /> },
-    { path: `${process.env.PUBLIC_URL}/reports`, Component: <GlobalAIReport /> },
+   // { path: `${process.env.PUBLIC_URL}/reports`, Component: <GlobalAIReport /> },
     { path: `${process.env.PUBLIC_URL}/moduleInfo`, Component: <ModuleTable /> },
     { path: `${process.env.PUBLIC_URL}/targets`, Component: <GlobalTargetAndControls /> },
     { path: `${process.env.PUBLIC_URL}/newtargets`, Component:<TargetControl /> },
@@ -286,7 +288,7 @@ export const routes = {
   'area': [
     { path: `${process.env.PUBLIC_URL}/dashboard/default`, Component: <AreaDefault /> },
     // { path: `${process.env.PUBLIC_URL}/dashboard/reports`, Component: <AreaReports /> },
-    { path: `${process.env.PUBLIC_URL}/reports`, Component: <AiModelAndReports /> },
+    //{ path: `${process.env.PUBLIC_URL}/reports`, Component: <AiModelAndReports /> },
     { path: `${process.env.PUBLIC_URL}/moduleInfo`, Component: <ModuleTable /> },
     { path: `${process.env.PUBLIC_URL}/dashboard/support-it`, Component: <AreaItSupport /> },
     { path: `${process.env.PUBLIC_URL}/targets`, Component: <TargetsAndControls /> },
