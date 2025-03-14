@@ -18,10 +18,11 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
     
     const toggleModal = () => setIsModalOpen(!isModalOpen);
     
+    // When user clicks on "Disable Alarm", we always disable the alarm,
+    // stop the pulse animation and hide the warning indicator.
     const handleAlarmToggle = () => {
-        setAlarmEnabled(!alarmEnabled);
-        if (alertDetected && alarmEnabled) {
-            // If we're disabling the alarm while an alert is active
+        if (alarmEnabled) {
+            setAlarmEnabled(false);
             setAlertDetected(false);
             setIsAnimating(false);
         }
@@ -29,11 +30,10 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
     
     const handleOpenModal = () => {
         setIsModalOpen(true);
-        // Simulate a mismatch alert detected when modal opens
-        if (alarmEnabled) {
-            setAlertDetected(true);
-            setIsAnimating(true);
-        }
+        // Disable alarm vibration when mis-match button is clicked
+        setAlarmEnabled(false);
+        setAlertDetected(false);
+        setIsAnimating(false);
     };
     
     const openZoomModal = (imageSrc, data = {}) => {
@@ -51,7 +51,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
         
         setIsAnimating(true);
         
-        // Reset animation effect if component unmounts
+        // Cleanup if component unmounts
         return () => {
             setIsAnimating(false);
         };
@@ -59,7 +59,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
 
     // CSS for the animated button
     const animatedButtonStyle = {
-        backgroundColor: alarmEnabled ? "#B80F0A" : "#28a745",
+        backgroundColor:  "#B80F0A",
         border: "none",
         color: "#FFFFFF",
         boxShadow: isAnimating ? '0 0 10px #ff0000' : 'none',
@@ -92,12 +92,16 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                                 className="rounded-2 px-3 py-1" 
                                 style={animatedButtonStyle}
                             >
-                                {alarmEnabled ? "Disable Alarm" : "Enable Alarm"}
+                                 Alarm Active
                             </button>
-                            <button className="btn btn-light text-success rounded-2 px-3 py-1" style={{boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'}}>
+                            <button className="btn btn-light text-success rounded-2 px-3 py-1" style={{ boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}>
                                 Matched
                             </button>
-                            <button onClick={handleOpenModal} className="btn text-danger rounded-2 px-3 py-1" style={{backgroundColor:"#FEEAF0", boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'}}>
+                            <button 
+                                onClick={handleOpenModal} 
+                                className="btn text-danger rounded-2 px-3 py-1" 
+                                style={{ backgroundColor:"#FEEAF0", boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}
+                            >
                                 Mis-match
                             </button>
                         </div>
@@ -137,7 +141,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                                     <div 
                                         className="position-absolute top-0 end-0 m-3 p-2 rounded-circle" 
                                         style={{
-                                            backgroundColor: 'rgba(255, 0, 0, 0.97)',
+                                            backgroundColor: 'rgba(177, 0, 0, 0.97)',
                                             width: '20px',
                                             height: '20px',
                                             animation: 'pulse 1s infinite'
@@ -147,22 +151,19 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                             </div>
                             
                             <div className="d-flex gap-2 justify-content-center">
-                                <button className="btn btn-success rounded-2 px-3 py-2" style={{boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'}}>
-                                    Run Conware
+                                <button className="btn btn-success rounded-2 px-3 py-2" style={{ boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}>
+                                    Run Conveyor
                                 </button>
-                                <button className="btn btn-light text-success rounded-2 px-3 py-2" style={{boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'}}>
-                                    Stop Conwar
-                                </button>
-                                <button onClick={handleOpenModal} className="btn text-danger rounded-2 px-3 py-2" style={{backgroundColor:"#FEEAF0", boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'}}>
-                                    Re-Process
-                                </button>
+                                <button className="btn text-danger rounded-2 px-3 py-2" style={{ backgroundColor:"#FEEAF0", boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}>
+                                    Stop Conveyor
+                                </button>  
                             </div>
                         </Col>
 
                         {/* Right Side - Barcode Values Section */}
                         <Col md={4}>
                             <div className="d-flex flex-column gap-3">
-                                {[1, 2].map((item, index) => (
+                                {[1, 2].map((item) => (
                                     <div 
                                         key={item} 
                                         className="shadow-md"
@@ -203,7 +204,8 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                                                     borderRadius: '4px',
                                                     padding: '0px 6px',
                                                     fontSize: '14px'
-                                                }}>
+                                                }}
+                                            >
                                                 #
                                             </span>
                                             <span className="text-muted me-2" style={{ color: "#000000" }}>Value</span>

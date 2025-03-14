@@ -1,5 +1,6 @@
 import AlertCountsChart from "../Target and Controal V2/Component/AlertCount";
 import ComplianceTargetsChart from "../Target and Controal V2/Component/ComplianceTarget";
+import ReProcessChart from "./Components/Reprocess";
 import ModelAnalyticsHeader from "../CameraConfigurationV2/Components/ModelAnalytics";
 import WeekFilterProvider from '../../../../Contexts/WeakGlobal';
 import { Row, Col } from "react-bootstrap";
@@ -32,6 +33,11 @@ const Inspection = () => {
                         <AlertCountsChart />
                     </div>
                 </Col>
+            </Row>
+            <Row>
+                <div className="p-3">
+                    <ReProcessChart />
+                </div>
             </Row>
         </WeekFilterProvider>
 

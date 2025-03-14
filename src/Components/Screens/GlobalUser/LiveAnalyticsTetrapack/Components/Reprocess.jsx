@@ -2,11 +2,11 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { CardTitle, Row, Col } from 'reactstrap';
 
-const AlertCountsChart = ({ loading = false }) => {
-    // Dummy data for wrong mis-match reasons
-    const dummyData = {
-        categories: ['Camera Problem', 'Time Problem', 'Detection Problem'],
-        counts: [28, 42, 15]
+const ReProcessChart = ({ loading = false }) => {
+    // Data for reprocess by weekdays
+    const weekdayData = {
+        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        counts: [32, 45, 39, 28, 36, 15, 10]
     };
 
     const options = {
@@ -35,7 +35,7 @@ const AlertCountsChart = ({ loading = false }) => {
         },
         xaxis: {
             title: {
-                text: 'Reasons',
+                text: 'Weekdays',
                 style: {
                     fontSize: '14px',
                     color: '#8C8C8C',
@@ -43,7 +43,7 @@ const AlertCountsChart = ({ loading = false }) => {
                     fontFamily: 'Arial, sans-serif',
                 },
             },
-            categories: dummyData.categories,
+            categories: weekdayData.categories,
             labels: {
                 style: {
                     fontSize: '12px',
@@ -59,7 +59,7 @@ const AlertCountsChart = ({ loading = false }) => {
         },
         yaxis: {
             title: {
-                text: 'Number of Occurrences',
+                text: 'Number of Reprocesses',
                 style: {
                     fontSize: '14px',
                     color: '#8C8C8C',
@@ -77,7 +77,7 @@ const AlertCountsChart = ({ loading = false }) => {
             max: 50,
             tickAmount: 5,
         },
-        colors: ['#D21404', '#FF5733', '#710C04'], 
+        colors: ['#D21404', '#FF5733', '#710C04', '#FF8C00', '#FF4500', '#B22222', '#8B0000'], 
         legend: {
             show: false, 
         },
@@ -121,7 +121,7 @@ const AlertCountsChart = ({ loading = false }) => {
     // Format the data for ApexCharts
     const series = [{
         name: 'Count',
-        data: dummyData.counts
+        data: weekdayData.counts
     }];
 
     return (
@@ -132,7 +132,7 @@ const AlertCountsChart = ({ loading = false }) => {
         }}>
             <Col>
                 <CardTitle tag="h5" className="text-center mt-2">
-                    Wrong Mis-Match Reasons
+                    Reprocesses by Weekday
                 </CardTitle>
                 {loading ? (
                     <div className="d-flex justify-content-center align-items-center" style={{ height: '250px' }}>
@@ -153,4 +153,4 @@ const AlertCountsChart = ({ loading = false }) => {
     );
 };
 
-export default AlertCountsChart;
+export default ReProcessChart;
