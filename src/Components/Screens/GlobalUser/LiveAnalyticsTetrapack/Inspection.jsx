@@ -13,13 +13,13 @@ const Inspection = () => {
             <ModelAnalyticsHeader
                 heading={`AI Based Reels Inspection System`}
                 hideWeekText={true}
-                currentWeek={true}
+                currentWeek={false}
                 shifts={false}
-                multiShift={false}
+                multiShift={true}
                 months={false}
                 modules={false}
                 severity={false}
-                timeFilterOption={false}
+                timeFilterOption={true}
                 areas={false}
                 showActions={true}
             />

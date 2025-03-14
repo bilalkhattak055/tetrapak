@@ -267,20 +267,20 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
           }
 
           .shift-button:hover {
-            background-color: #635470 !important;
+            background-color: #023F88 !important;
             color: white !important;
             opacity: 0.8;
-            border:1px #635470 !important;
+            border:1px #023F88 !important;
           }
 
           .filter-select {
             margin-bottom: 1rem;
             border-color: #635470;
           }
-
+          /*
           .dropdown-menu-container {
             max-height: 350px;
-            overflow-y: auto;
+            overflow-y: hidden;
           }
 
           .dropdown-menu-container::-webkit-scrollbar {
@@ -300,7 +300,7 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
           .dropdown-menu-container::-webkit-scrollbar-thumb:hover {
             background: #534460;
           }
-
+            */
           .action-buttons {
             display: flex;
             justify-content: space-between;
@@ -493,7 +493,7 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
                             <div className="mb-1">
                               <Label for="dailySelect" className="form-label">Select Date</Label>
                               <Input
-                                style={{ borderColor: '#635470' }}
+                                style={{ borderColor: '#023F88' }}
                                 type="date"
                                 id="dailySelect"
                                 value={customStartDate || ''}
@@ -569,9 +569,9 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
                               <Button
                                 key={shift}
                                 style={{
-                                  backgroundColor: selectmultishift.includes(shift) ? '#635470' : 'white',
-                                  color: selectmultishift.includes(shift) ? '#fff' : '#635470',
-                                  borderColor: '#635470',
+                                  backgroundColor: selectmultishift.includes(shift) ? '#023F88' : 'white',
+                                  color: selectmultishift.includes(shift) ? '#fff' : '#000000',
+                                  borderColor: '#023F88',
                                   textWrap: "nowrap",
                                 }}
                                 className="flex-grow-1 shift-button"

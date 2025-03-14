@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, FormGroup, Label } from "reactstrap";
-import loader from '../../asset/process.svg';
+import loader from '../../asset/process2.svg';
 import left from '../../asset/left.svg';
 import Authentication from './Authentication';
 
