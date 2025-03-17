@@ -63,7 +63,7 @@ const ReprocessModal = ({ isOpen, toggle }) => {
                 toggle={handleClose}
                 centered
                 className="modal-dialog-centered d-flex align-items-center justify-content-center"
-                style={{ maxWidth: "550px" }}
+                style={{ maxWidth: "500px" }}
             >
                 <div className="p-4 w-100 rounded-lg" style={{ border: "4px solid #023F88", backgroundColor: "#fff" }}>
                     <div className="d-flex justify-content-between align-items-center">
@@ -93,27 +93,40 @@ const ReprocessModal = ({ isOpen, toggle }) => {
                         {/* Initial state - option selection */}
                         {!selectedOption && (
                             <p className="mb-3" style={{ color: "#023F88" }}>
-                                Do you want to {" "}
+                            Do you want to{" "}
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                                 <a
                                     onClick={() => handleOptionSelect('bypass')}
-                                    style={{ color: "#0E0D0B", fontWeight: 600, textDecoration: "underline", cursor: "pointer" }}
+                                    style={{
+                                        color: "#0E0D0B",
+                                        fontWeight: 500,
+                                        textDecoration: "underline",
+                                        cursor: "pointer"
+                                    }}
                                 >
                                     Bypass
                                 </a>
-                                /
+                                <span style={{ color: "#0E0D0B", fontWeight: 600 }}>OR</span>
                                 <a
                                     onClick={() => handleOptionSelect('reprocess')}
-                                    style={{ color: "#0E0D0B", fontWeight: 600, textDecoration: "underline", cursor: "pointer" }}
+                                    style={{
+                                        color: "#0E0D0B",
+                                        fontWeight: 500,
+                                        textDecoration: "underline",
+                                        cursor: "pointer"
+                                    }}
                                 >
                                     Reprocess
                                 </a>
-                            </p>
+                            </span>
+                        </p>
+                        
                         )}
 
                         {/* Show conveyor question when reprocess is selected */}
                         {selectedOption === 'reprocess' && conveyorResponse === null && (
                             <p className="mb-3" style={{ color: "#023F88" }}>
-                                Do you want to run conveyer again?
+                                Did you change the sticker for reprocessing?
                             </p>
                         )}
 
@@ -127,7 +140,7 @@ const ReprocessModal = ({ isOpen, toggle }) => {
                         {/* When bypass is selected or conveyor response is no */}
                         {(selectedOption === 'bypass' || (selectedOption === 'reprocess' && conveyorResponse === 'no')) && (
                             <p className="mb-3" style={{ color: "#023F88" }}>
-                                Are you sure you dont want to stop conveyer?
+                                Are you sure you want to bypass and run the conveyer?
                             </p>
                         )}
                     </div>
@@ -139,6 +152,7 @@ const ReprocessModal = ({ isOpen, toggle }) => {
                         {/* Bypass option selected - show proceed button */}
                         {selectedOption === 'bypass' && (
                             <button
+                                onClick={handleOpenModal}
                                 className="btn text-white px-4 py-2 shadow-sm"
                                 style={{ backgroundColor: "#023F88", fontSize: "15px" }}
                             >
@@ -155,13 +169,6 @@ const ReprocessModal = ({ isOpen, toggle }) => {
                                     style={{ backgroundColor: "#28a745", fontSize: "15px" }}
                                 >
                                     Yes
-                                </button>
-                                <button
-                                    onClick={() => handleConveyorResponse('no')}
-                                    className="btn text-white px-4 py-2 shadow-sm"
-                                    style={{ backgroundColor: "#dc3545", fontSize: "15px" }}
-                                >
-                                    No
                                 </button>
                             </div>
                         )}
@@ -180,7 +187,7 @@ const ReprocessModal = ({ isOpen, toggle }) => {
                         {/* If conveyor response is no, show proceed button (same as bypass) */}
                         {selectedOption === 'reprocess' && conveyorResponse === 'no' && (
                             <button
-
+                            
                                 className="btn text-white px-4 py-2 shadow-sm"
                                 style={{ backgroundColor: "#023F88", fontSize: "15px" }}
                             >

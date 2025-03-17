@@ -23,8 +23,8 @@ const Authentication = ({ isOpen, toggle }) => {
                     </div>
                     <FormGroup style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <div className="mb-3" style={{ display: "flex", flexDirection: "column" }}>
-                            <input className="mb-2 px-4 py-2" style={{ borderRadius: "5px", border: "1px solid #C7C9D9" }} placeholder="Enter Email*" type="email" />
-                            <input className="px-4 py-2" style={{ borderRadius: "5px", border: "1px solid #C7C9D9" }} placeholder="Enter Password*" type="password" />
+                            <input className="mb-2 px-4 py-2" style={{ borderRadius: "5px", border: "2.5px solid #C7C9D9" }} placeholder="Enter Email*" type="email" />
+                            <input className="px-4 py-2" style={{ borderRadius: "5px", border: "2.5px solid #C7C9D9" }} placeholder="Enter Password*" type="password" />
                         </div>
                         <button className="btn text-white px-4 py-2 shadow-sm " style={{ backgroundColor: "#023F88", fontSize: "15px" }}>
                             Authenticate
