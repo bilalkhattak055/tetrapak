@@ -1,6 +1,6 @@
 {
   "name": "cuba-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Desktop Application Created For TetraPak AI Safety Inspection",
   "author": "Syed Saad Ali",
   "private": true,
@@ -130,7 +130,7 @@
     },
     "win": {
       "sign": false,
-      "icon": "build/icon.ico"
+      "icon": "build/icons/win/icon.ico"
     },
     "mac": {
       "target": "dmg"
@@ -185,6 +185,7 @@
   "devDependencies": {
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8",
+    "electron-icon-builder": "^2.0.1",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "react": "^18.2.0",
