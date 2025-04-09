@@ -168,11 +168,13 @@ useEffect(() => {
         </div>
       </Col>
       <Col sm="5" className="left-header p-0 d-none d-md-block" style={{ width: "fit-content",marginLeft:"-18px" }}>
-        {/* <NotificationSlider /> */} 
+        {/* <NotificationSlider /> 
        {user?.id==129?
         null
         :<H4 attrH4={{className: 'header-heading'}}>{role === 'it-officer' || role === 'super-admin' ? 'Industrial Safety AI Dashboard' : role === 'area' ? 'Area Safety AI Dashboard' :role=='global' ? 'Tetra Pack Safety AI Dashboard' :  `${JSON.parse(localStorage.getItem('userData'))?.factory?.name || 'Tetra Pack'} Safety AI Dashboard`}
         </H4>}
+        */} 
+        <H4 attrH4={{className: 'header-heading'}}>Tetra Pak Inspection AI Dashboard</H4>
       </Col>
     </Fragment>
   );
