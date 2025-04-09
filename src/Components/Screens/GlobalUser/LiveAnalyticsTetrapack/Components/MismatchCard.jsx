@@ -5,7 +5,7 @@ import { BiCctv } from "react-icons/bi";
 import CameraService from '../../../../../api/cameraService';
 import cross from '../asset/cross.svg'
 
-const MissMatch = ({ loader }) => {
+const MissMatch = ({ loader,Mismatch }) => {
   const [data, setData] = useState({ active_cameras: null, total_cameras: null });
 
   const getCurrentWeek = () => {
@@ -68,9 +68,9 @@ const MissMatch = ({ loader }) => {
           <img src={cross}/>
           <p >
             <span style={{ color: '#2F2F3B',fontSize: '30px', fontWeight: '500' }}>
-              12
+              {Mismatch}
             </span>
-            <p style={{marginTop:"-10px",color: '#023F88', fontSize: '16px',fontWeight:500,textWrap:"nowrap",overflow:"hidden"}}>
+            <p style={{marginTop:"-2px",color: '#023F88', fontSize: '16px',fontWeight:500,textWrap:"nowrap",overflow:"hidden"}}>
             Wrong Mis Match
            </p> 
           </p>

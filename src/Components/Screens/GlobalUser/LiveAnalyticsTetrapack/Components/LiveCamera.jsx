@@ -16,10 +16,9 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
     const [alertDetected, setAlertDetected] = useState(true);
     const [isAnimating, setIsAnimating] = useState(false);
     
-    const toggleModal = () => setIsModalOpen(!isModalOpen);
+    console.log("Received props:", { images, barcodeData });
     
-    // When user clicks on "Disable Alarm", we always disable the alarm,
-    // stop the pulse animation and hide the warning indicator.
+    const toggleModal = () => setIsModalOpen(!isModalOpen);
     const handleAlarmToggle = () => {
         if (alarmEnabled) {
             setAlarmEnabled(false);
@@ -30,7 +29,6 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
     
     const handleOpenModal = () => {
         setIsModalOpen(true);
-        // Disable alarm vibration when mis-match button is clicked
         setAlarmEnabled(false);
         setAlertDetected(false);
         setIsAnimating(false);
@@ -50,14 +48,12 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
         }
         
         setIsAnimating(true);
-        
-        // Cleanup if component unmounts
+         
         return () => {
             setIsAnimating(false);
         };
     }, [alertDetected, alarmEnabled]);
 
-    // CSS for the animated button
     const animatedButtonStyle = {
         backgroundColor:  "#B80F0A",
         border: "none",
@@ -67,10 +63,16 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
         transition: 'all 0.3s ease',
     };
 
+    // Make sure we have valid data to display
+    const mainCameraImage = Array.isArray(images) && images.length > 0 ? images[0] : CameraImg;
+    const barcodes = Array.isArray(barcodeData) && barcodeData.length > 0 ? barcodeData : [
+        { value: '112233', image: Value },
+        { value: '112233', image: Value }
+    ];
+
     return (
         <>
         <Container fluid className='mb-2'>
-            {/* Add the keyframes animation at the component level */}
             <style>
                 {`
                 @keyframes pulse {
@@ -83,7 +85,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
             
             <Card className="shadow h-100">
                 <CardBody>
-                    {/* Header section with buttons inline */}
+            
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <CardTitle tag="h5" className="mb-0">Live Camera Image</CardTitle>
                         <div className="d-flex gap-2">
@@ -116,7 +118,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                                     cursor: 'pointer'
                                 }}
-                                onClick={() => openZoomModal(CameraImg, { 
+                                onClick={() => openZoomModal(mainCameraImage, { 
                                     cameraName: 'Main Camera', 
                                     areaName: 'Production Line', 
                                     alertName: 'Quality Check',
@@ -125,7 +127,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                             >
                                 {/* Image container */}
                                 <img
-                                    src={CameraImg}
+                                    src={mainCameraImage}
                                     alt="Product"
                                     className="img-fluid rounded"
                                     style={{
@@ -163,9 +165,9 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                         {/* Right Side - Barcode Values Section */}
                         <Col md={4}>
                             <div className="d-flex flex-column gap-3">
-                                {[1, 2].map((item) => (
+                                {barcodes.slice(0, 2).map((barcode, index) => (
                                     <div 
-                                        key={item} 
+                                        key={index} 
                                         className="shadow-md"
                                         style={{
                                             backgroundColor: '#F8F9FA',
@@ -173,16 +175,16 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                                             borderRadius: "15px",
                                             cursor: 'pointer'
                                         }}
-                                        onClick={() => openZoomModal(Value, { 
-                                            cameraName: `Barcode Scanner ${item}`, 
+                                        onClick={() => openZoomModal(barcode.image, { 
+                                            cameraName: `Barcode Scanner ${index + 1}`, 
                                             areaName: 'Quality Control',
                                             alertName: 'Barcode Verification',
                                             lastActive: '2 minutes ago'
                                         })}
                                     >
                                         <img
-                                            src={Value}
-                                            alt={`Barcode ${item}`}
+                                            src={barcode.image}
+                                            alt={`Barcode ${index + 1}`}
                                             className="img-fluid"
                                             style={{
                                                 width: '100%',
@@ -209,7 +211,7 @@ const LiveCameraComparison = ({ images, barcodeData }) => {
                                                 #
                                             </span>
                                             <span className="text-muted me-2" style={{ color: "#000000" }}>Value</span>
-                                            <span className="fw-bold ms-auto" style={{ color: "#000000" }}>112233</span>
+                                            <span className="fw-bold ms-auto" style={{ color: "#000000" }}>{barcode.value}</span>
                                         </div>
                                     </div>
                                 ))}
