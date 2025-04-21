@@ -40,7 +40,7 @@ export const MENUITEMS = {
         },
         // { path: `${process.env.PUBLIC_URL}/dashboard/summary`, icon: <Grid />, title: "Summary", activeTitle: 'summary', type: "link" },
         { path: `${process.env.PUBLIC_URL}/dashboard/default`, icon: <Grid />, title: "Dashboard", activeTitle: 'default', type: "link" },
-        { path: `${process.env.PUBLIC_URL}/reports`, icon: <BarChart />, title: "Inspection", activeTitle: 'inspection', type: "link" },
+        { path: `${process.env.PUBLIC_URL}/reports`, icon: <BarChart />, title: "Inspection", activeTitle: 'reports', type: "link" },
         //{ path: `${process.env.PUBLIC_URL}/areaanalysis`, icon: <PieChart />, title: "Area Owner Analysis", activeTitle: 'areaanalysis', type: "link" },
         //{ path: `${process.env.PUBLIC_URL}/sub-area-analysis`, icon: <Layers />, title: "Sub Area Analysis", activeTitle: 'sub-area-analysis', type: "link" },
         // { path: `${process.env.PUBLIC_URL}/targets`, icon: <Target />, title: "Targets & Controls", activeTitle: 'targets', type: "link" },

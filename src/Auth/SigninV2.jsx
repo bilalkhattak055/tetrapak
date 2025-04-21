@@ -9,11 +9,7 @@ import api from '../api/api';
 import { isTokenExpired } from '../_helper/helper';
 import Enums from './Enum';
 import { Btn } from '../AbstractElements';
-import AxenLogin from '../assets/images/logo/TetraLogo.svg';
 import Disrupt from './Disrupt.svg';
-import DesignTop from './DesignTop.svg';
-import DesignBottom from './DesignBottom.svg';
-import DesignBottom2 from './DesignBottom2.svg';
 import Axens1 from './preview.png';
 
 

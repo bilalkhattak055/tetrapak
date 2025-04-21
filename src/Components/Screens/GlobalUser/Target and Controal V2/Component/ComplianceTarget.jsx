@@ -2,13 +2,19 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { CardTitle, Row, Col } from 'reactstrap';
 
-const ComplianceTargetsChart = ({ loading = false }) => {
-  // Dummy data
-  const dummyData = {
+const ComplianceTargetsChart = ({ loading = false, data }) => {
+  // function to convert data in corrct format run time ka error prevention ka lye
+  const seriesData = Array.isArray(data) ? data : 
+                     (data && typeof data === 'object' ? 
+                     [data.total_reels || 0, data.match_reels || 0, 
+                      data.mismatch_reels || 0, data.wrong_mismatch_reels || 0] : 
+                     [0, 0, 0, 0]);
+
+  const chartConfig = {
     series: [
       {
         name: 'Count',
-        data: [120, 85, 35, 12],
+        data: seriesData,
       }
     ],
     categories: ['Total Reels', 'Match Reels', 'Mis-Match Reels', 'Wrong Mis Match'],
@@ -47,7 +53,7 @@ const ComplianceTargetsChart = ({ loading = false }) => {
           fontFamily: 'Arial, sans-serif'
         },
       },
-      categories: dummyData.categories,
+      categories: chartConfig.categories,
       labels: {
         style: {
           fontSize: '12px',
@@ -81,7 +87,7 @@ const ComplianceTargetsChart = ({ loading = false }) => {
         },
       },
       min: 0,
-      max: 150,
+      max: Math.max(...seriesData) * 1.2 || 150, // Dynamic max value based on data
       tickAmount: 4,
     },
     colors: ['#023F88'], // Changed bar color to #023F88
@@ -145,7 +151,7 @@ const ComplianceTargetsChart = ({ loading = false }) => {
             </div>
           </div>
         ) : (
-          <ReactApexChart options={options} series={dummyData.series} type="bar" height={360} />
+          <ReactApexChart options={options} series={chartConfig.series} type="bar" height={360} />
         )}
       </Col>
     </Row>

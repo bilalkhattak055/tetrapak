@@ -2,12 +2,20 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { CardTitle, Row, Col } from 'reactstrap';
 
-const AlertCountsChart = ({ loading = false }) => {
-    // Dummy data for wrong mis-match reasons
-    const dummyData = {
+const AlertCountsChart = ({ loading = false,data }) => {
+    const seriesData = Array.isArray(data) ? data : 
+    (data && typeof data === 'object' ? 
+    [data.camera_problem || 0, data.time_problem || 0, data.detection_problem || 0] : 
+    [0, 0, 0, 0]);
+    const chartConfig = {
+        series: [
+          {
+            name: 'Count',
+            data: seriesData,
+          }
+        ],
         categories: ['Camera Problem', 'Time Problem', 'Detection Problem'],
-        counts: [28, 42, 15]
-    };
+      };
 
     const options = {
         chart: {
@@ -43,7 +51,7 @@ const AlertCountsChart = ({ loading = false }) => {
                     fontFamily: 'Arial, sans-serif',
                 },
             },
-            categories: dummyData.categories,
+            categories: chartConfig.categories,
             labels: {
                 style: {
                     fontSize: '12px',
@@ -121,7 +129,7 @@ const AlertCountsChart = ({ loading = false }) => {
     // Format the data for ApexCharts
     const series = [{
         name: 'Count',
-        data: dummyData.counts
+        data: data
     }];
 
     return (
@@ -143,7 +151,7 @@ const AlertCountsChart = ({ loading = false }) => {
                 ) : (
                     <ReactApexChart
                         options={options}
-                        series={series}
+                        series={chartConfig.series}
                         type="bar"
                         height={360}
                     />

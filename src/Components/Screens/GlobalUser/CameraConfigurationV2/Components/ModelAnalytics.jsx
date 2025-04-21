@@ -434,7 +434,7 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
                             >
                               <option value="week">Week</option>
                               <option value="month">Month</option>
-                              <option value="custom">Custom</option>
+                               {/*<option value="custom">Custom</option>*/}
                               <option value="daily">Daily</option>
                             </Input>
                           </div>
@@ -468,7 +468,7 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
                               />
                             </div>
                           )}
-
+                          {/*
                           {timeFilterSelection === 'custom' && (
                             <div className="mb-1">
                               <Label for="customStartDate" className="form-label">Start Date</Label>
@@ -489,6 +489,7 @@ console.log("MY CURRENT WEAK",getCurrentWeek())
                               />
                             </div>
                           )}
+                          */}
                           {timeFilterSelection === 'daily' && (
                             <div className="mb-1">
                               <Label for="dailySelect" className="form-label">Select Date</Label>

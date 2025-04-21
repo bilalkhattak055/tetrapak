@@ -7,12 +7,12 @@ import './style.css'
 const MissandMatch = ({MissandMatch,Match}) => {
     return (
         <Card style={{ borderRadius: '21px', height: '130px', width: '100%' }}>
-            <CardBody className='pt-4 pb-3'>
+            <CardBody className='pt-4'>
                 <div className='d-flex justify-content-around'>
                     {/* Match Reels */}
                     <div className='d-flex align-items-center'>
                         <img src={plus} className='icon' alt="plus icon" />
-                        <div className='ms-3'>
+                        <div className='ms-1'>
                             <h2 className='heading-font'>{Match}</h2>
                             <p className='card-text' style={{ color: '#023F88', fontSize: '18px', fontWeight: 500, marginBottom: "-3px" }}>Match Reels</p>
                         </div>
@@ -31,7 +31,7 @@ const MissandMatch = ({MissandMatch,Match}) => {
                     {/* Mis-Match Reels */}
                     <div className='d-flex align-items-center'>
                         <img src={minus} className='icon' alt="minus icon" />
-                        <div className='ms-3'>
+                        <div className='ms-2'>
                             <h2 className='heading-font'>{MissandMatch}</h2>
                             <p className='card-text' style={{ color: '#023F88', fontSize: '18px', fontWeight: 500, margin: 0 }}>Mis-Match Reels</p>
                         </div>

@@ -262,7 +262,7 @@ const Header = () => {
   };
 
   return (
-    <Container fluid>
+   
     <Fragment>
       <div className={`page-header ${toggleIcon ? 'close_icon' : ''}`}>
         <Row className='header-wrapper m-0 ' style={{ position: 'relative' }}>
@@ -326,7 +326,7 @@ const Header = () => {
         </Row>
       </div>
     </Fragment>
-    </Container>
+    
   );
 };
 
