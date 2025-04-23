@@ -6,7 +6,7 @@ import Authentication from './Authentication';
 import { AuthProvider } from '../../context/AuthContext';
 import tetraPakGraphService from '../../../../../../api/TetraPakGraphService';
 
-const ReprocessModal = ({ isOpen, toggle }) => {
+const ReprocessModal = ({ isOpen, toggle, onAuthStatusChange }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
     const [conveyorResponse, setConveyorResponse] = useState(null);
@@ -41,6 +41,14 @@ const ReprocessModal = ({ isOpen, toggle }) => {
     const handleClose = () => {
         setSelectedOption(null);
         setConveyorResponse(null);
+        // Reset authentication states when closing the modal
+        if (onAuthStatusChange) {
+            onAuthStatusChange({
+                authState: false,
+                bypassState: false,
+                reprocessState: false
+            });
+        }
         toggle();
     };
     
@@ -95,6 +103,16 @@ const ReprocessModal = ({ isOpen, toggle }) => {
                 console.log("Data Fetching Failed");
             } else {
                 console.log("Update successful");
+                
+                // Update the auth states based on the selected option
+                if (onAuthStatusChange) {
+                    onAuthStatusChange({
+                        authState: true,
+                        bypassState: selectedOption === 'bypass',
+                        reprocessState: selectedOption === 'reprocess'
+                    });
+                }
+                
                 // Close the modal after successful update
                 handleClose();
             }

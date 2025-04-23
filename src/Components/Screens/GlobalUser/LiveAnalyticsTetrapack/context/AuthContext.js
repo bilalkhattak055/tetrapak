@@ -21,32 +21,36 @@ export const AuthProvider = ({ children }) => {
     let timer;
     
     if (authState.isAuthenticated && authState.authTimestamp) {
+      console.log("Setting auth context timeout");
       timer = setTimeout(() => {
+        console.log("Auth context timeout reached");
         setAuthState(prevState => ({
           ...prevState,
           isAuthenticated: false,
           bypassSelected: false,
           reprocessSelected: false,
         }));
-        console.log("Authentication expired after 30 seconds");
       }, 30000); // 30 seconds
     }
 
     return () => {
-      if (timer) clearTimeout(timer);
+      if (timer) {
+        console.log("Clearing auth context timeout");
+        clearTimeout(timer);
+      }
     };
   }, [authState.isAuthenticated, authState.authTimestamp]);
 
   // Handle authentication with option tracking
   const handleAuthentication = (authenticated, option) => {
     if (authenticated) {
+      console.log(`Setting authentication with option: ${option}`);
       setAuthState({
         isAuthenticated: true,
         bypassSelected: option === 'bypass',
         reprocessSelected: option === 'reprocess',
         authTimestamp: new Date().getTime(),
       });
-      console.log(`Authentication successful. Option: ${option}`);
     } else {
       setAuthState({
         isAuthenticated: false,
@@ -54,7 +58,6 @@ export const AuthProvider = ({ children }) => {
         reprocessSelected: false,
         authTimestamp: null,
       });
-      console.log("Authentication failed");
     }
   };
 

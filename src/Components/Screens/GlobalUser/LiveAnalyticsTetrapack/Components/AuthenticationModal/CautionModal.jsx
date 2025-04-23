@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { Modal, Label, Collapse } from "reactstrap";
 import { AlertTriangle, Check } from "lucide-react";
 import Authentication from "./Authentication";
@@ -13,11 +13,95 @@ const CautionModal = ({ isOpen, toggle }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState(null);
+  // Authentication states
+  const [authState, setAuthState] = useState(false);
+  const [bypassState, setBypassState] = useState(false);
+  const [reprocessState, setReprocessState] = useState(false);
+  const [wrongMisMatchState, setWrongMisMatchState] = useState(false);
+  const [statusWsConnected, setStatusWsConnected] = useState(false);
+  const statusSocketRef = useRef(null);
+
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8064');
+    statusSocketRef.current = ws;
+
+    ws.onopen = () => {
+      console.log('Status WebSocket connected');
+      setStatusWsConnected(true);
+    };
+
+    ws.onclose = () => {
+      console.log('Status WebSocket disconnected');
+      setStatusWsConnected(false);
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+      setStatusWsConnected(false);
+    };
+
+    return () => {
+      if (statusSocketRef.current) {
+        statusSocketRef.current.close();
+      }
+    };
+  }, []);
+
 
   const getUserId = (id) => {
     setUserId(id);
     console.log("user id is there in parent", id);
   }
+
+
+  // Function to send status updates through the existing WebSocket connection
+  const sendStatusUpdate = () => {
+    if (!statusSocketRef.current || statusSocketRef.current.readyState !== WebSocket.OPEN) {
+      console.warn('Status WebSocket not connected. Cannot send update.');
+      return;
+    }
+
+    try {
+      const statusData = {
+        auth_state: authState,
+        bypass_state: bypassState,
+        reprocess_state: reprocessState,
+        wrong_match: wrongMisMatchState
+      };
+
+      statusSocketRef.current.send(JSON.stringify(statusData));
+      console.log('Sent status update to backend:', statusData);
+    } catch (error) {
+      console.error('Error sending status update:', error);
+    }
+  };
+
+  // Watch for changes in authentication states and send updates
+  useEffect(() => {
+    console.log("Auth states changed:", { authState, bypassState, reprocessState ,wrongMisMatchState});
+    if (statusWsConnected) {
+      sendStatusUpdate();
+
+      // Only set the timeout if any of the states become true
+      if (authState || bypassState || reprocessState) {
+        console.log("Setting 30-second timeout for auth states reset");
+        const timeoutId = setTimeout(() => {
+          console.log("30-second timeout reached - resetting auth states");
+          setAuthState(false);
+          setBypassState(false);
+          setReprocessState(false);
+          sendStatusUpdate();
+        }, 30000); // 30 seconds = 30000 milliseconds
+
+        // Cleanup timeout on component unmount or when states change
+        return () => {
+          console.log("Clearing existing timeout");
+          clearTimeout(timeoutId);
+        };
+      }
+    }
+  }, [authState, bypassState, reprocessState, wrongMisMatchState,statusWsConnected]);
+
 
   // Reason -> ID mapping
   const reasonIdMap = {
@@ -29,6 +113,19 @@ const CautionModal = ({ isOpen, toggle }) => {
   // Toggle modals
   const toggleReprocessModal = () => setIsReprocessModalOpen(!isReprocessModalOpen);
   const toggleAuthModal = () => setIsAuthModalOpen(!isAuthModalOpen);
+  const handleAuthStatusChange = (statusUpdate) => {
+    console.log("Auth status changed:", statusUpdate);
+    // Only update if the values are actually changing
+    if (statusUpdate.authState !== authState) {
+      setAuthState(statusUpdate.authState);
+    }
+    if (statusUpdate.bypassState !== bypassState) {
+      setBypassState(statusUpdate.bypassState);
+    }
+    if (statusUpdate.reprocessState !== reprocessState) {
+      setReprocessState(statusUpdate.reprocessState);
+    }
+  };
 
   // Called after successful authentication
   const updateReason = async () => {
@@ -226,14 +323,14 @@ const CautionModal = ({ isOpen, toggle }) => {
       <ReprocessModal
         isOpen={isReprocessModalOpen}
         toggle={toggleReprocessModal}
+        onAuthStatusChange={handleAuthStatusChange}
       />
-
       {/* Authentication Modal */}
       <Authentication
         isOpen={isAuthModalOpen}
         toggle={toggleAuthModal}
-        authOption={handleAuthResult} 
-        isAuthenticated={handleAuthResult}  
+        authOption={handleAuthResult}
+        isAuthenticated={handleAuthResult}
         userid={getUserId} />
     </AuthProvider>
   );

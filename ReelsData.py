@@ -38,6 +38,15 @@ class WebSocketReelSender:
         # Base directory for images.
         self.images_dir = os.path.join(os.path.dirname(__file__), "images")
         os.makedirs(self.images_dir, exist_ok=True)
+        
+        # Create subdirectories for each image type
+        self.raw_dir = os.path.join(self.images_dir, "raw")
+        self.crop_a_dir = os.path.join(self.images_dir, "crop_a")
+        self.crop_b_dir = os.path.join(self.images_dir, "crop_b")
+        
+        os.makedirs(self.raw_dir, exist_ok=True)
+        os.makedirs(self.crop_a_dir, exist_ok=True)
+        os.makedirs(self.crop_b_dir, exist_ok=True)
 
         print(f"Reel data WebSocket server will run on ws://localhost:{self.websocket_port}")
         print(f"Image server will run on http://localhost:{self.http_port}")
@@ -46,40 +55,49 @@ class WebSocketReelSender:
 
     def get_latest_images(self):
         """
-        Finds the latest camera and barcode images in the images directory.
-        Returns a dictionary with the current image URLs (or fallback defaults).
+        Finds the latest images in each category (raw, crop_a, crop_b).
+        Returns a dictionary with the current image URLs.
         """
-        all_images = glob.glob(os.path.join(self.images_dir, "*.jpg")) + \
-                     glob.glob(os.path.join(self.images_dir, "*.jpeg")) + \
-                     glob.glob(os.path.join(self.images_dir, "*.png"))
-
-        # Separate camera and barcode images using regex.
-        camera_images = [img for img in all_images if re.search(r'camera|cam', os.path.basename(img).lower())]
-        barcode_images = [img for img in all_images if re.search(r'barcode|bar|code', os.path.basename(img).lower())]
+        # Find the latest images in each directory
+        raw_images = glob.glob(os.path.join(self.raw_dir, "*.jpg")) + \
+                     glob.glob(os.path.join(self.raw_dir, "*.jpeg")) + \
+                     glob.glob(os.path.join(self.raw_dir, "*.png"))
+                     
+        crop_a_images = glob.glob(os.path.join(self.crop_a_dir, "*.jpg")) + \
+                      glob.glob(os.path.join(self.crop_a_dir, "*.jpeg")) + \
+                      glob.glob(os.path.join(self.crop_a_dir, "*.png"))
+                      
+        crop_b_images = glob.glob(os.path.join(self.crop_b_dir, "*.jpg")) + \
+                      glob.glob(os.path.join(self.crop_b_dir, "*.jpeg")) + \
+                      glob.glob(os.path.join(self.crop_b_dir, "*.png"))
 
         # Sort images by modification time (newest first).
-        camera_images.sort(key=os.path.getmtime, reverse=True)
-        barcode_images.sort(key=os.path.getmtime, reverse=True)
+        raw_images.sort(key=os.path.getmtime, reverse=True)
+        crop_a_images.sort(key=os.path.getmtime, reverse=True)
+        crop_b_images.sort(key=os.path.getmtime, reverse=True)
 
         latest_images = {}
 
-        # Add up to 3 camera images.
-        for i, img in enumerate(camera_images[:3]):
-            filename = os.path.basename(img)
-            latest_images[f"camera{i+1}"] = f"http://localhost:{self.http_port}/images/{filename}"
-        # Fallback for missing camera images.
-        for i in range(1, 4):
-            if f"camera{i}" not in latest_images:
-                latest_images[f"camera{i}"] = f"http://localhost:{self.http_port}/images/default_camera.jpg"
+        # Add the latest raw image or use default
+        if raw_images:
+            filename = os.path.basename(raw_images[0])
+            latest_images["raw_image"] = f"http://localhost:{self.http_port}/images/raw/{filename}"
+        else:
+            latest_images["raw_image"] = f"http://localhost:{self.http_port}/images/raw/default_raw.jpg"
 
-        # Add up to 2 barcode images.
-        for i, img in enumerate(barcode_images[:2]):
-            filename = os.path.basename(img)
-            latest_images[f"barcode{i+1}"] = f"http://localhost:{self.http_port}/images/{filename}"
-        # Fallback for missing barcode images.
-        for i in range(1, 3):
-            if f"barcode{i}" not in latest_images:
-                latest_images[f"barcode{i}"] = f"http://localhost:{self.http_port}/images/default_barcode.jpg"
+        # Add the latest crop_a image or use default
+        if crop_a_images:
+            filename = os.path.basename(crop_a_images[0])
+            latest_images["crop_a"] = f"http://localhost:{self.http_port}/images/crop_a/{filename}"
+        else:
+            latest_images["crop_a"] = f"http://localhost:{self.http_port}/images/crop_a/default_crop_a.jpg"
+
+        # Add the latest crop_b image or use default
+        if crop_b_images:
+            filename = os.path.basename(crop_b_images[0])
+            latest_images["crop_b"] = f"http://localhost:{self.http_port}/images/crop_b/{filename}"
+        else:
+            latest_images["crop_b"] = f"http://localhost:{self.http_port}/images/crop_b/default_crop_b.jpg"
 
         return latest_images
 
@@ -115,8 +133,7 @@ class WebSocketReelSender:
                 self.wrong_mismatch += random.choice([0, 1])
                 
                 # Periodically toggle match/mismatch status to simulate different conditions
-                # This is just for testing - in a real system, these would be determined by actual matching logic
-                if random.random() < 0.5:  # 30% chance to toggle status
+                if random.random() < 0.5:  # 50% chance to toggle status
                     self.match_reel = not self.match_reel
                     self.mismatch_reel = not self.mismatch_reel
                 
@@ -202,9 +219,6 @@ class WebSocketReelSender:
         Handle logic specific to bypass authentication mode
         """
         print("Processing bypass authentication...")
-        # Implement specific bypass logic here
-        # For example, you might want to skip certain checks or validations
-        
         # Example implementation:
         self.match_reel = True  # Force a match during bypass
         self.mismatch_reel = False
@@ -216,15 +230,47 @@ class WebSocketReelSender:
         Handle logic specific to reprocess authentication mode
         """
         print("Processing reprocess authentication...")
-        # Implement specific reprocess logic here
-        # For example, you might want to trigger a reanalysis of data
-        
         # Example implementation:
         # Reset counters for reprocessing
         self.total_reels = max(0, self.total_reels - 1)  # Decrement as we're reprocessing
         print(f"Reprocess mode active: Set total_reels to {self.total_reels}")
+
+    async def handle_get_image(self, request):
+        """
+        Serves an image file based on the image type and filename in the URL.
+        Falls back to a default image if the requested file does not exist.
+        """
+        image_type = request.match_info['type']
+        image_name = request.match_info['filename']
         
-        # You could trigger specific image reprocessing here
+        # Determine the appropriate directory based on image type
+        if image_type == "raw":
+            image_dir = self.raw_dir
+            default_image = "default_raw.jpg"
+        elif image_type == "crop_a":
+            image_dir = self.crop_a_dir
+            default_image = "default_crop_a.jpg"
+        elif image_type == "crop_b":
+            image_dir = self.crop_b_dir
+            default_image = "default_crop_b.jpg"
+        else:
+            return web.Response(text=f"Invalid image type: {image_type}", status=400)
+        
+        image_path = os.path.join(image_dir, image_name)
+        
+        if not os.path.exists(image_path):
+            # Use the default image for this type
+            default_path = os.path.join(image_dir, default_image)
+            
+            # If the default doesn't exist, create a placeholder default file
+            if not os.path.exists(default_path):
+                # This is just a fallback to ensure we always have a default
+                # In a real app, you'd want to have actual default images
+                return web.Response(text=f"Image {image_name} not found and no default available", status=404)
+            
+            return web.FileResponse(default_path)
+        
+        return web.FileResponse(image_path)
 
     async def start_websocket_server(self):
         # Start the reel data WebSocket server.
@@ -238,32 +284,10 @@ class WebSocketReelSender:
         print(f"Status WebSocket server started on ws://localhost:{self.status_ws_port}")
         return status_server
 
-    async def handle_get_image(self, request):
-        """
-        Serves an image file based on the filename in the URL.
-        Falls back to a default image if the requested file does not exist.
-        """
-        image_name = request.match_info['filename']
-        image_path = os.path.join(self.images_dir, image_name)
-
-        if not os.path.exists(image_path):
-            # Determine default image based on request.
-            if 'camera' in image_name.lower():
-                default_path = os.path.join(self.images_dir, "default_camera.jpg")
-            elif 'barcode' in image_name.lower() or 'bar' in image_name.lower():
-                default_path = os.path.join(self.images_dir, "default_barcode.jpg")
-            else:
-                default_path = os.path.join(self.images_dir, "default_image.jpg")
-            
-            if os.path.exists(default_path):
-                return web.FileResponse(default_path)
-            return web.Response(text=f"Image {image_name} not found", status=404)
-        
-        return web.FileResponse(image_path)
-
     async def start_http_server(self):
         """
         Starts an HTTP server to serve images, with CORS enabled.
+        Sets up routes for different image types.
         """
         app = web.Application()
         cors = aiohttp_cors.setup(app, defaults={
@@ -274,7 +298,8 @@ class WebSocketReelSender:
             )
         })
         
-        route = app.router.add_get('/images/{filename}', self.handle_get_image)
+        # Add route for each image type
+        route = app.router.add_get('/images/{type}/{filename}', self.handle_get_image)
         cors.add(route)
         
         runner = web.AppRunner(app)

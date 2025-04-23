@@ -3,8 +3,9 @@ import MissandMatch from './Components/MissandMatchCard';
 import MissMatch from './Components/MismatchCard';
 import ReelCard from './Components/ReelCard';
 import LiveCameraComparison from './Components/LiveCamera';
-import { Row, Col,Container} from 'reactstrap';
+import { Row, Col, Container } from 'reactstrap';
 import { AuthProvider } from './context/AuthContext';
+
 const AnalyticsTetra = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1450);
   const [isMediumScreen, setIsMediumScreen] = useState(window.innerWidth >= 1280);
@@ -23,13 +24,11 @@ const AnalyticsTetra = () => {
   const [bypassState, setBypassState] = useState(false);
   const [reprocessState, setReprocessState] = useState(false);
 
-  // State for image URLs
+  // State for image URLs - updated to use new structure
   const [imageUrls, setImageUrls] = useState({
-    camera1: null,
-    camera2: null,
-    camera3: null,
-    barcode1: null,
-    barcode2: null
+    raw_image: null,
+    crop_a: null,
+    crop_b: null
   });
 
   // State to track WebSocket connections status
@@ -168,19 +167,21 @@ const AnalyticsTetra = () => {
             match_reels: data.match_reels,
             missMatch_reels: data.mismatch_reels,
             wrong_mismatch: data.wrong_mismatch,
-            match_reel: data.match_reel || false,  // Set default if not provided
-            mismatch_reel: data.mismatch_reel || false // Set default if not provided
+            match_reel: data.match_reel || false,
+            mismatch_reel: data.mismatch_reel || false
           });
 
           // Update image URLs if they're provided
           if (data.image_urls) {
             setImageUrls({
-              camera1: data.image_urls.camera1,
-              camera2: data.image_urls.camera2,
-              camera3: data.image_urls.camera3,
-              barcode1: data.image_urls.barcode1,
-              barcode2: data.image_urls.barcode2
+              raw_image: data.image_urls.raw_image,
+              crop_a: data.image_urls.crop_a,
+              crop_b: data.image_urls.crop_b
             });
+            
+            console.log("Raw image:", data.image_urls.raw_image);
+            console.log("Crop A:", data.image_urls.crop_a);
+            console.log("Crop B:", data.image_urls.crop_b);
           }
         } catch (err) {
           console.error('Error parsing reel data:', err);
@@ -216,7 +217,7 @@ const AnalyticsTetra = () => {
         clearTimeout(reconnectTimer);
       }
     };
-  }, []); // Empty dependency ensures this runs once on mount
+  }, []);
 
   // Handle screen resize events to update layout
   useEffect(() => {
@@ -232,10 +233,11 @@ const AnalyticsTetra = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+  
   //medium screen
   useEffect(() => {
     const handleResize = () => {
-      setIsMediumScreen( window.innerWidth >= 992);
+      setIsMediumScreen(window.innerWidth >= 992);
     };
 
     window.addEventListener('resize', handleResize);
@@ -251,85 +253,84 @@ const AnalyticsTetra = () => {
     console.log("authState changed to", authState, bypassState, reprocessState);
   }, [authState, bypassState, reprocessState]);
 
+  // Updated to use our new image structure
   const cameraImages = [
-    imageUrls.camera1 || 'https://t4.ftcdn.net/jpg/03/11/07/61/360_F_311076193_tNZbw0YPAfHHV1wZ0NuV0AftLardNBa7.jpg',
+    imageUrls.raw_image || 'https://t4.ftcdn.net/jpg/03/11/07/61/360_F_311076193_tNZbw0YPAfHHV1wZ0NuV0AftLardNBa7.jpg',
   ];
 
-  // Create proper barcode data objects for each barcode image
+  // Create proper barcode data objects using our new crop_a and crop_b images
   const barcodeData = [
     {
       value: '112233',
-      image: imageUrls.camera2 || 'https://4.imimg.com/data4/UC/KX/MY-11948983/tetrapack01-jpg9b31ec1b-be17-4364-a714-de28ee086ed1original.jpg'
+      image: imageUrls.crop_a || 'https://4.imimg.com/data4/UC/KX/MY-11948983/tetrapack01-jpg9b31ec1b-be17-4364-a714-de28ee086ed1original.jpg'
     },
-    // Add a second barcode for the UI layout
     {
       value: '445566',
-      image: imageUrls.camera3 || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc_7uyoAUjK3THhC0ZDv0eoj7FmlJ2oW47nA&s'
+      image: imageUrls.crop_b || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc_7uyoAUjK3THhC0ZDv0eoj7FmlJ2oW47nA&s'
     }
   ];
 
   return (
     <AuthProvider>
       <Container fluid>
-      <Row>
-        <h1 className='mt-4'>
-          <span style={{ color: "#0E0D0B" }}>Welcome to </span>
-          <span style={{ color: "#023F88" }}>Tetra Pak Inspection Dashboard!</span>
-        </h1>
-        {!wsConnected ? (
-          <span style={{ color: "red", fontSize: "18px" }}> (Connecting to data source...)</span>
-        ) : (
-          <h5 className='mt-1 mb-3' style={{ color: "#535353" }}>
-            Here are some summary for you to check
-          </h5>
-        )}
-        {isLargeScreen ? (
-          <>
-            <Col lg={6} xl={3}>
-              <ReelCard totalReels={reelsData.total_reels} />
-            </Col>
-            <Col xl={6}>
-              <MissandMatch MissandMatch={reelsData.missMatch_reels} Match={reelsData.match_reels} />
-            </Col>
-            <Col lg={6} xl={3}>
-              <MissMatch Mismatch={reelsData.wrong_mismatch} />
-            </Col>
-          </>
-        ) : isMediumScreen ? (
-          <>
-            <Col lg={6} xl={6}>
-              <ReelCard totalReels={reelsData.total_reels} />
-              
-            </Col>
-            <Col lg={6} xl={6}>
-            <MissMatch Mismatch={reelsData.wrong_mismatch} />
-            </Col>
-            <Col>
-              <MissandMatch MissandMatch={reelsData.missMatch_reels} Match={reelsData.match_reels} />
-            </Col>
-          </>
-        ) : (
-          // Original layout for smaller screens
-          <>
-            <Col lg={6}>
-              <ReelCard totalReels={reelsData.total_reels} />
-            </Col>
-            <Col lg={6}>
-              <MissandMatch MissandMatch={reelsData.missMatch_reels} Match={reelsData.match_reels} />
-            </Col>
-            <Col>
-              <MissMatch Mismatch={reelsData.wrong_mismatch} />
-            </Col>
-          </>
-        )}
+        <Row>
+          <h1 className='mt-4'>
+            <span style={{ color: "#0E0D0B" }}>Welcome to </span>
+            <span style={{ color: "#023F88" }}>Tetra Pak Inspection Dashboard!</span>
+          </h1>
+          {!wsConnected ? (
+            <span style={{ color: "red", fontSize: "18px" }}> (Connecting to data source...)</span>
+          ) : (
+            <h5 className='mt-1 mb-3' style={{ color: "#535353" }}>
+              Here are some summary for you to check
+            </h5>
+          )}
+          {isLargeScreen ? (
+            <>
+              <Col lg={6} xl={3}>
+                <ReelCard totalReels={reelsData.total_reels} />
+              </Col>
+              <Col xl={6}>
+                <MissandMatch MissandMatch={reelsData.missMatch_reels} Match={reelsData.match_reels} />
+              </Col>
+              <Col lg={6} xl={3}>
+                <MissMatch Mismatch={reelsData.wrong_mismatch} />
+              </Col>
+            </>
+          ) : isMediumScreen ? (
+            <>
+              <Col lg={6} xl={6}>
+                <ReelCard totalReels={reelsData.total_reels} />
+              </Col>
+              <Col lg={6} xl={6}>
+                <MissMatch Mismatch={reelsData.wrong_mismatch} />
+              </Col>
+              <Col>
+                <MissandMatch MissandMatch={reelsData.missMatch_reels} Match={reelsData.match_reels} />
+              </Col>
+            </>
+          ) : (
+            // Original layout for smaller screens
+            <>
+              <Col lg={6}>
+                <ReelCard totalReels={reelsData.total_reels} />
+              </Col>
+              <Col lg={6}>
+                <MissandMatch MissandMatch={reelsData.missMatch_reels} Match={reelsData.match_reels} />
+              </Col>
+              <Col>
+                <MissMatch Mismatch={reelsData.wrong_mismatch} />
+              </Col>
+            </>
+          )}
 
-        <LiveCameraComparison
-          images={cameraImages}
-          barcodeData={barcodeData}
-          matchStatus={reelsData.match_reel}
-          mismatchStatus={reelsData.mismatch_reel}
-        />
-      </Row>
+          <LiveCameraComparison
+            images={cameraImages}
+            barcodeData={barcodeData}
+            matchStatus={reelsData.match_reel}
+            mismatchStatus={reelsData.mismatch_reel}
+          />
+        </Row>
       </Container>
     </AuthProvider>
   );
