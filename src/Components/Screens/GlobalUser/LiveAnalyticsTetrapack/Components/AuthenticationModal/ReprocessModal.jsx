@@ -10,21 +10,16 @@ const ReprocessModal = ({ isOpen, toggle, onAuthStatusChange }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
     const [conveyorResponse, setConveyorResponse] = useState(null);
-    const [userId, setUserId] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const toggleModal = () => setIsModalOpen(!isModalOpen);
+    const userid = JSON.parse(localStorage.getItem('userId'));
+    
 
     // Define operation type IDs as constants
     const OPERATION_TYPE = {
         REPROCESS: 1,
         BYPASS: 2
     };
-
-    const getUserId = (id) => {
-        setUserId(id);
-        console.log("user id is there in parent", id);
-    }
-    
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
@@ -89,9 +84,9 @@ const ReprocessModal = ({ isOpen, toggle, onAuthStatusChange }) => {
                     {
                         client_id: 1,
                         factory_id: 1,
-                        user_id: userId,
+                        user_id: userid,
                         object_id: 3,
-                        operation_type_id: operationTypeId // Dynamic operation type ID
+                        operation_type_id: operationTypeId 
                     },
                 ],
             };
@@ -286,7 +281,6 @@ const ReprocessModal = ({ isOpen, toggle, onAuthStatusChange }) => {
                         toggle={toggleModal}
                         authOption={selectedOption}
                         isAuthenticated={handleAuthResult}
-                        userid={getUserId}
                     />
                 </Modal>
             </AuthProvider>

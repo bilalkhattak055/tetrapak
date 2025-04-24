@@ -203,6 +203,8 @@ export default function LoginPage() {
         }
 
         const user_role = JSON.parse(localStorage.getItem('role'));
+        localStorage.setItem('userId', JSON.stringify(getInfoLocal?.id));
+
 
         switch (user_role) {
           case Enums.FACTORY:

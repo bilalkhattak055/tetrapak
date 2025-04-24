@@ -11,6 +11,9 @@ const tetraPakGraphService = {
     },
     updateSyncRow(payload){
         return api.post(`inspection/sync_rows`, payload);
+    },
+    getUserActionDetails(payload){
+        return api.put(`inspection/get_user_operation_details`, payload);
     }
 }
 export default tetraPakGraphService;

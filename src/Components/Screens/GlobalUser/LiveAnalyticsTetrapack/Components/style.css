@@ -47,3 +47,31 @@
       justify-content: space-around !important;
     }
   }
+  
+    /* Put these styles in your global CSS or a styled‑component block */
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(4,155,24,0.7); }
+  70%  { box-shadow: 0 0 12px 10px rgba(4,155,24,0); }
+  100% { box-shadow: 0 0 0 0 rgba(4,155,24,0); }
+}
+
+@keyframes vibrate {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes pop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Combine them in one utility class for reuse */
+.match‑highlight {
+  animation:
+    pulse 1.2s infinite ease‑out,
+    vibrate 0.3s infinite ease‑in‑out,
+    pop 1s infinite ease‑in‑out;
+}

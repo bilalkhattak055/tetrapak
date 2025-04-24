@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Modal, Label, Collapse } from "reactstrap";
 import { AlertTriangle, Check } from "lucide-react";
 import Authentication from "./Authentication";
@@ -12,12 +12,14 @@ const CautionModal = ({ isOpen, toggle }) => {
   const [isMismatchOpen, setIsMismatchOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const userid = JSON.parse(localStorage.getItem('userId'));
+  
   // Authentication states
   const [authState, setAuthState] = useState(false);
   const [bypassState, setBypassState] = useState(false);
   const [reprocessState, setReprocessState] = useState(false);
   const [wrongMisMatchState, setWrongMisMatchState] = useState(false);
+  const [correctMatchState, setCorrectMatchState] = useState(false); // New state for correct match
   const [statusWsConnected, setStatusWsConnected] = useState(false);
   const statusSocketRef = useRef(null);
 
@@ -47,13 +49,6 @@ const CautionModal = ({ isOpen, toggle }) => {
     };
   }, []);
 
-
-  const getUserId = (id) => {
-    setUserId(id);
-    console.log("user id is there in parent", id);
-  }
-
-
   // Function to send status updates through the existing WebSocket connection
   const sendStatusUpdate = () => {
     if (!statusSocketRef.current || statusSocketRef.current.readyState !== WebSocket.OPEN) {
@@ -66,7 +61,8 @@ const CautionModal = ({ isOpen, toggle }) => {
         auth_state: authState,
         bypass_state: bypassState,
         reprocess_state: reprocessState,
-        wrong_match: wrongMisMatchState
+        wrong_mismatch: wrongMisMatchState,
+        correct_match: correctMatchState // New correct match state
       };
 
       statusSocketRef.current.send(JSON.stringify(statusData));
@@ -78,20 +74,19 @@ const CautionModal = ({ isOpen, toggle }) => {
 
   // Watch for changes in authentication states and send updates
   useEffect(() => {
-    console.log("Auth states changed:", { authState, bypassState, reprocessState ,wrongMisMatchState});
+    console.log("States changed:", { authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState });
     if (statusWsConnected) {
       sendStatusUpdate();
 
       // Only set the timeout if any of the states become true
-      if (authState || bypassState || reprocessState) {
-        console.log("Setting 30-second timeout for auth states reset");
+      if (authState || bypassState || reprocessState || correctMatchState) {
         const timeoutId = setTimeout(() => {
-          console.log("30-second timeout reached - resetting auth states");
           setAuthState(false);
           setBypassState(false);
           setReprocessState(false);
+          setCorrectMatchState(false);
           sendStatusUpdate();
-        }, 30000); // 30 seconds = 30000 milliseconds
+        }, 1000); 
 
         // Cleanup timeout on component unmount or when states change
         return () => {
@@ -100,8 +95,7 @@ const CautionModal = ({ isOpen, toggle }) => {
         };
       }
     }
-  }, [authState, bypassState, reprocessState, wrongMisMatchState,statusWsConnected]);
-
+  }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, statusWsConnected]);
 
   // Reason -> ID mapping
   const reasonIdMap = {
@@ -113,6 +107,16 @@ const CautionModal = ({ isOpen, toggle }) => {
   // Toggle modals
   const toggleReprocessModal = () => setIsReprocessModalOpen(!isReprocessModalOpen);
   const toggleAuthModal = () => setIsAuthModalOpen(!isAuthModalOpen);
+  
+  // Handler for correct match button
+  const handleCorrectMatch = () => {
+    // Set the correct match state to true to send to backend
+    setCorrectMatchState(true);
+    
+    // Open the reprocess modal (existing functionality)
+    toggleReprocessModal();
+  };
+  
   const handleAuthStatusChange = (statusUpdate) => {
     console.log("Auth status changed:", statusUpdate);
     // Only update if the values are actually changing
@@ -138,7 +142,7 @@ const CautionModal = ({ isOpen, toggle }) => {
           {
             client_id: 1,
             factory_id: 1,
-            user_id: userId,
+            user_id: userid,
             object_id: 3,
             validation_reason_id: validationReasonId,
             model_id: 1,
@@ -168,7 +172,9 @@ const CautionModal = ({ isOpen, toggle }) => {
         : [...prev, reason]
     );
   };
+  
   console.log("login status from child:", isAuthenticated);
+  
   const handleProceedFurther = () => {
     if (isAuthenticated) {
       updateReason();
@@ -177,6 +183,7 @@ const CautionModal = ({ isOpen, toggle }) => {
     if (selectedReasons.length === 0) return;
     toggleAuthModal();
   };
+  
   const handleAuthResult = (result) => {
     setIsAuthenticated(result);
     if (result) {
@@ -186,6 +193,7 @@ const CautionModal = ({ isOpen, toggle }) => {
       console.log("Authentication failed in caution modal");
     }
   };
+  
   const handleMainModalClose = () => {
     toggle();
     setIsAuthenticated(false);
@@ -233,7 +241,7 @@ const CautionModal = ({ isOpen, toggle }) => {
             <button
               className="btn btn-success px-4 py-3 shadow-sm"
               style={{ fontSize: "15px" }}
-              onClick={toggleReprocessModal}
+              onClick={handleCorrectMatch}
             >
               Correct
             </button>
@@ -325,13 +333,14 @@ const CautionModal = ({ isOpen, toggle }) => {
         toggle={toggleReprocessModal}
         onAuthStatusChange={handleAuthStatusChange}
       />
+      
       {/* Authentication Modal */}
       <Authentication
         isOpen={isAuthModalOpen}
         toggle={toggleAuthModal}
         authOption={handleAuthResult}
         isAuthenticated={handleAuthResult}
-        userid={getUserId} />
+      />
     </AuthProvider>
   );
 };

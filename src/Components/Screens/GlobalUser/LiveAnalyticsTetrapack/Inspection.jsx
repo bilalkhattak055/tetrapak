@@ -9,6 +9,7 @@ import tetraPakGraphService from "../../../../api/TetraPakGraphService";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import download from './asset/download.svg'
+import UserTable from "./Components/ActionTable";
 
 const Inspection = () => {
     const [reelsData, setReelsData] = useState({});
@@ -16,6 +17,16 @@ const Inspection = () => {
     const [wrongMatchData, setWrongMatchData] = useState({});
     const [loading, setLoading] = useState(true);
     const [exporting, setExporting] = useState(false);
+    const [userID, setUserId]=useState("");
+    const [userName, setUserName]=useState("");
+    const [userEmail, setEmail]=useState("");
+    const [userBypass, setBypass]=useState("");
+    const [userReprocess, setReprocess]=useState("");
+    const [userWrongMatch,setWrongMatch]=useState("");
+    const userid = JSON.parse(localStorage.getItem('userId'));
+    console.log("client id is coming:",userid)
+  
+
     const pageRef = useRef(null);
     const [activeFilters, setActiveFilters] = useState({
         week: new Date().getFullYear() + "-W" + String(getWeekNumber()).padStart(2, "0"),
@@ -72,7 +83,8 @@ const Inspection = () => {
                 ending: "",
                 shift: ""
             },
-            factory_id: 1
+            factory_id: 1,
+            client_id:userid
         };
 
         // Only pass one filter type at a time
@@ -95,9 +107,10 @@ const Inspection = () => {
         const reelApi = tetraPakGraphService.getAllReels(payload);
         const reprocessApi = tetraPakGraphService.getReprocessCount(payload);
         const wrongMatchApi = tetraPakGraphService.getWrongCount(payload);
+        const userActionDetail=tetraPakGraphService.getUserActionDetails(payload);
     
-        Promise.all([reelApi, reprocessApi, wrongMatchApi])
-            .then(([reelsRes, reprocessRes, wrongMatchRes]) => {
+        Promise.all([reelApi, reprocessApi, wrongMatchApi,userActionDetail])
+            .then(([reelsRes, reprocessRes, wrongMatchRes,userActionRes]) => {
                 if (reelsRes.data && reelsRes.data.success) {
                     setReelsData(reelsRes.data.data);
                 }
@@ -107,6 +120,17 @@ const Inspection = () => {
                 if(wrongMatchRes.data && wrongMatchRes.data.success) {
                     setWrongMatchData(wrongMatchRes.data.data);
                 }
+                if(userActionRes.data && userActionRes.data.success){
+                     const user = userActionRes.data.data[0];
+                    setUserId(user.user_id)
+                    setUserName(user.user_name)
+                    setEmail(user.user_email)
+                    setReprocess(user.sticker_reprocess)
+                    setBypass(user.bypass)
+                    setWrongMatch(user.total_wrong_mismatch)
+                    
+                }
+                console.log("userid",userID)
                 setLoading(false);
             })
             .catch((error) => {
@@ -174,7 +198,7 @@ const Inspection = () => {
             let yPosition = margin + 15;
             
             // Find all chart components
-            const chartElements = pageRef.current.querySelectorAll('.apexcharts-canvas');
+            const chartElements = pageRef.current.querySelectorAll('.apexcharts-canvas, .Tabledpt');
             
             // Process each chart
             for (let i = 0; i < chartElements.length; i++) {
@@ -307,6 +331,16 @@ const Inspection = () => {
                     <div className="p-3">
                         <ReProcessChart data={reprocessData} loading={loading} />
                     </div>
+                </Row>
+                <Row>
+                    <UserTable
+                    id={userID}
+                    username={userName}
+                    email={userEmail}
+                    bypass={userBypass}
+                    reprocess={userReprocess}
+                    WrongCount={userWrongMatch}
+                    />
                 </Row>
             </div>
         </WeekFilterProvider>

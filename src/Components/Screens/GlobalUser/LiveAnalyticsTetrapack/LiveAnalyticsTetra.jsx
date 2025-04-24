@@ -9,6 +9,9 @@ import { AuthProvider } from './context/AuthContext';
 const AnalyticsTetra = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1450);
   const [isMediumScreen, setIsMediumScreen] = useState(window.innerWidth >= 1280);
+  const userid = JSON.parse(localStorage.getItem('userId'));
+    console.log("client id is coming:om",userid)
+  
 
   const [reelsData, setReelsData] = useState({
     total_reels: "0",
@@ -23,6 +26,7 @@ const AnalyticsTetra = () => {
   const [authState, setAuthState] = useState(false);
   const [bypassState, setBypassState] = useState(false);
   const [reprocessState, setReprocessState] = useState(false);
+ 
 
   // State for image URLs - updated to use new structure
   const [imageUrls, setImageUrls] = useState({
@@ -100,7 +104,6 @@ const AnalyticsTetra = () => {
         auth_state: authState,
         bypass_state: bypassState,
         reprocess_state: reprocessState,
-        match_reels: reelsData.match_reel,
         missMatch_reels: reelsData.mismatch_reel,
         wrong_mismatch: reelsData.wrong_mismatch !== "0"
       };

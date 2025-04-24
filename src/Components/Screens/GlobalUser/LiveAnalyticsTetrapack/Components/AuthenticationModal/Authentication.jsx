@@ -7,11 +7,10 @@ import { isAuthenticateUser } from "../../../../../../Auth/authHelper";
 import { isTokenExpired} from "../../../../../../_helper/helper";
 import api from "../../../../../../api/api";
 import { toast} from 'react-toastify';
-const Authentication = ({ isOpen, toggle, authOption, isAuthenticated ,userid}) => {
+const Authentication = ({ isOpen, toggle, authOption, isAuthenticated}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authStatus, setAuthStatus] = useState("idle");
-  const { handleAuthentication } = useAuth();
   const [error, setError] = useState('');
   const [loader, setLoader] = useState(false);
   
@@ -34,9 +33,10 @@ const Authentication = ({ isOpen, toggle, authOption, isAuthenticated ,userid}) 
           isAuthenticated(true);
           // Update authStatus to show success screen
           setAuthStatus("success");
+          localStorage.setItem('userId', JSON.stringify(getInfoLocal?.id));
+
+  
         }  
-        console.log("user id is there", getInfoLocal?.id);
-        userid(getInfoLocal?.id);
       } else {
         setError('Invalid email or password');
         toast.error('Incorrect Username or Password!');

@@ -31,6 +31,9 @@ class WebSocketReelSender:
         self.auth_state = False
         self.bypass_state = False
         self.reprocess_state = False
+        
+        # New flag for correct match state (just for logging)
+        self.correct_match_state = False
 
         # Control flag for running state.
         self.running = True
@@ -192,6 +195,11 @@ class WebSocketReelSender:
                             self.bypass_state = False
                             self.reprocess_state = False
                             print("Authentication expired or ended, reset bypass and reprocess states")
+                    
+                    # Update correct match state if provided (just for logging)
+                    if 'correct_match' in data:
+                        self.correct_match_state = bool(data['correct_match'])
+                        print(f"Correct match state updated: {self.correct_match_state}")
                     
                     # Update reel matching states if provided
                     if 'match_reels' in data:

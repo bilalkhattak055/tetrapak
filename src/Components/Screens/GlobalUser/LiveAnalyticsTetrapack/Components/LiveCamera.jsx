@@ -144,11 +144,16 @@ const LiveCameraComparison = ({ images, barcodeData, matchStatus, mismatchStatus
     };
 
     const matchButtonStyle = {
-        boxShadow: matchStatus && !mismatchStatus ? '0 0 10px rgb(0, 196, 26)' : 'none',
-        animation: matchStatus && !mismatchStatus ? 'pulse 1s infinite' : 'none',
+        backgroundColor: matchStatus && !mismatchStatus ? "#4CAF50" : "#FFFFFF",
+        color: matchStatus && !mismatchStatus ? "#FFFFFF" : "#28a745",
+        border: matchStatus && !mismatchStatus ? "none" : "3px solid rgb(1, 77, 19)",
+        boxShadow: matchStatus && !mismatchStatus ? '0 0 15px rgba(40, 167, 69, 0.8)' : 'none',
+        animation: matchStatus && !mismatchStatus ? 'pulse 1.2s infinite' : 'none',
         transition: 'all 0.3s ease',
-        fontSize:"1em"
-    };
+        fontSize: "1em",
+        transform: matchStatus && !mismatchStatus ? 'scale(1.05)' : 'scale(1)',
+        padding: "6px 12px"
+      };
 
     // Make sure we have valid data to display
     const mainCameraImage = Array.isArray(images) && images.length > 0 ? images[0] : CameraImg;
