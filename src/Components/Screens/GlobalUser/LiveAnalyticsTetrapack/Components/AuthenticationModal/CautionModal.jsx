@@ -19,7 +19,7 @@ const CautionModal = ({ isOpen, toggle }) => {
   const [bypassState, setBypassState] = useState(false);
   const [reprocessState, setReprocessState] = useState(false);
   const [wrongMisMatchState, setWrongMisMatchState] = useState(false);
-  const [correctMatchState, setCorrectMatchState] = useState(false); // New state for correct match
+  const [correctMatchState, setCorrectMatchState] = useState(false); 
   const [statusWsConnected, setStatusWsConnected] = useState(false);
   const statusSocketRef = useRef(null);
 
@@ -62,7 +62,7 @@ const CautionModal = ({ isOpen, toggle }) => {
         bypass_state: bypassState,
         reprocess_state: reprocessState,
         wrong_mismatch: wrongMisMatchState,
-        correct_match: correctMatchState // New correct match state
+        correct_match: correctMatchState 
       };
 
       statusSocketRef.current.send(JSON.stringify(statusData));
@@ -79,11 +79,12 @@ const CautionModal = ({ isOpen, toggle }) => {
       sendStatusUpdate();
 
       // Only set the timeout if any of the states become true
-      if (authState || bypassState || reprocessState || correctMatchState) {
+      if (authState || bypassState || reprocessState || wrongMisMatchState || correctMatchState) {
         const timeoutId = setTimeout(() => {
           setAuthState(false);
           setBypassState(false);
           setReprocessState(false);
+          setWrongMisMatchState(false);
           setCorrectMatchState(false);
           sendStatusUpdate();
         }, 1000); 
@@ -131,7 +132,7 @@ const CautionModal = ({ isOpen, toggle }) => {
     }
   };
 
-  // Called after successful authentication
+  // Called after successful authentication or direct submission
   const updateReason = async () => {
     try {
       // Take the first selected reason (or adjust to handle multiple, if needed)
@@ -156,8 +157,9 @@ const CautionModal = ({ isOpen, toggle }) => {
         console.log("Data Fetching Failed");
       } else {
         console.log("Update successful");
-        // If you want to close the CautionModal after a successful update, call toggle() here
-        // toggle();
+        // Set wrong mismatch state to true to send to backend
+        setWrongMisMatchState(true);
+        toggle(); // Close the modal after successful update
       }
     } catch (error) {
       console.error("Error updating reasons:", error);

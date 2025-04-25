@@ -10,9 +10,7 @@ const AnalyticsTetra = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1450);
   const [isMediumScreen, setIsMediumScreen] = useState(window.innerWidth >= 1280);
   const userid = JSON.parse(localStorage.getItem('userId'));
-    console.log("client id is coming:om",userid)
-  
-
+  console.log("client id is coming:om", userid)
   const [reelsData, setReelsData] = useState({
     total_reels: "0",
     match_reels: "0",
@@ -21,130 +19,16 @@ const AnalyticsTetra = () => {
     match_reel: false,
     mismatch_reel: false,
   });
-
-  // Authentication states
-  const [authState, setAuthState] = useState(false);
-  const [bypassState, setBypassState] = useState(false);
-  const [reprocessState, setReprocessState] = useState(false);
- 
-
-  // State for image URLs - updated to use new structure
   const [imageUrls, setImageUrls] = useState({
     raw_image: null,
     crop_a: null,
     crop_b: null
   });
-
-  // State to track WebSocket connections status
   const [wsConnected, setWsConnected] = useState(false);
-  const [statusWsConnected, setStatusWsConnected] = useState(false);
-
-  // Status WebSocket for sending data to backend on port 8064
-  useEffect(() => {
-    let statusSocket = null;
-    let reconnectTimer = null;
-
-    const connectStatusWebSocket = () => {
-      const wsUrl = 'ws://localhost:8064';
-      statusSocket = new WebSocket(wsUrl);
-
-      statusSocket.onopen = () => {
-        console.log('Status WebSocket connection established.');
-        setStatusWsConnected(true);
-
-        if (reconnectTimer) {
-          clearTimeout(reconnectTimer);
-          reconnectTimer = null;
-        }
-
-        // Send initial status when connection is first established
-        sendStatusUpdate();
-      };
-
-      statusSocket.onerror = (error) => {
-        console.error('Status WebSocket error:', error);
-        setStatusWsConnected(false);
-      };
-
-      statusSocket.onclose = (event) => {
-        console.log('Status WebSocket connection closed:', event);
-        setStatusWsConnected(false);
-
-        // Attempt to reconnect after 3 seconds
-        reconnectTimer = setTimeout(() => {
-          console.log('Attempting to reconnect Status WebSocket...');
-          connectStatusWebSocket();
-        }, 3000);
-      };
-    };
-
-    // Initial connection
-    connectStatusWebSocket();
-
-    // Clean up function
-    return () => {
-      if (statusSocket) {
-        statusSocket.close();
-      }
-      if (reconnectTimer) {
-        clearTimeout(reconnectTimer);
-      }
-    };
-  }, []);
-
-  // Function to send status updates to backend
-  const sendStatusUpdate = () => {
-    if (!statusWsConnected) {
-      console.warn('Status WebSocket not connected. Cannot send update.');
-      return;
-    }
-
-    try {
-      const statusData = {
-        auth_state: authState,
-        bypass_state: bypassState,
-        reprocess_state: reprocessState,
-        missMatch_reels: reelsData.mismatch_reel,
-        wrong_mismatch: reelsData.wrong_mismatch !== "0"
-      };
-
-      const statusSocket = new WebSocket('ws://localhost:8064');
-      statusSocket.onopen = () => {
-        statusSocket.send(JSON.stringify(statusData));
-        console.log('Sent status update to backend:', statusData);
-        statusSocket.close();
-      };
-    } catch (error) {
-      console.error('Error sending status update:', error);
-    }
-  };
-
-  // Watch for changes in authentication states and send updates
-  useEffect(() => {
-    if (statusWsConnected) {
-      sendStatusUpdate();
-
-      // Set a timeout to reset auth states after 30 seconds
-      if (authState) {
-        const timeoutId = setTimeout(() => {
-          setAuthState(false);
-          setBypassState(false);
-          setReprocessState(false);
-          // Send the updated status after resetting
-          sendStatusUpdate();
-        }, 30000); // 30 seconds
-
-        return () => clearTimeout(timeoutId);
-      }
-    }
-  }, [authState, bypassState, reprocessState, statusWsConnected]);
-
-  // Effect for WebSocket connection to receive reel data
   useEffect(() => {
     // WebSocket connection setup
     let socket = null;
     let reconnectTimer = null;
-
     const connectWebSocket = () => {
       const wsUrl = 'ws://localhost:8062';
       socket = new WebSocket(wsUrl);
@@ -152,19 +36,15 @@ const AnalyticsTetra = () => {
       socket.onopen = () => {
         console.log('WebSocket connection established to reel data server.');
         setWsConnected(true);
-        // Clear any reconnect timers if connection is successful
         if (reconnectTimer) {
           clearTimeout(reconnectTimer);
           reconnectTimer = null;
         }
       };
-
       socket.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
           console.log('Received reel data:', data);
-
-          // Update the state with the new reel data
           setReelsData({
             total_reels: data.total_reels,
             match_reels: data.match_reels,
@@ -173,15 +53,13 @@ const AnalyticsTetra = () => {
             match_reel: data.match_reel || false,
             mismatch_reel: data.mismatch_reel || false
           });
-
-          // Update image URLs if they're provided
           if (data.image_urls) {
             setImageUrls({
               raw_image: data.image_urls.raw_image,
               crop_a: data.image_urls.crop_a,
               crop_b: data.image_urls.crop_b
             });
-            
+
             console.log("Raw image:", data.image_urls.raw_image);
             console.log("Crop A:", data.image_urls.crop_a);
             console.log("Crop B:", data.image_urls.crop_b);
@@ -199,19 +77,13 @@ const AnalyticsTetra = () => {
       socket.onclose = (event) => {
         console.log('WebSocket connection closed:', event);
         setWsConnected(false);
-
-        // Attempt to reconnect after 5 seconds
         reconnectTimer = setTimeout(() => {
           console.log('Attempting to reconnect WebSocket...');
           connectWebSocket();
         }, 5000);
       };
     };
-
-    // Initial connection
     connectWebSocket();
-
-    // Clean up the socket when the component unmounts
     return () => {
       if (socket) {
         socket.close();
@@ -221,47 +93,32 @@ const AnalyticsTetra = () => {
       }
     };
   }, []);
-
-  // Handle screen resize events to update layout
   useEffect(() => {
     const handleResize = () => {
       setIsLargeScreen(window.innerWidth > 1330);
     };
 
     window.addEventListener('resize', handleResize);
-    // Trigger the handler immediately for initial layout.
     handleResize();
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  
-  //medium screen
   useEffect(() => {
     const handleResize = () => {
       setIsMediumScreen(window.innerWidth >= 992);
     };
 
     window.addEventListener('resize', handleResize);
-    // Trigger the handler immediately for initial layout.
     handleResize();
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    console.log("authState changed to", authState, bypassState, reprocessState);
-  }, [authState, bypassState, reprocessState]);
-
-  // Updated to use our new image structure
   const cameraImages = [
     imageUrls.raw_image || 'https://t4.ftcdn.net/jpg/03/11/07/61/360_F_311076193_tNZbw0YPAfHHV1wZ0NuV0AftLardNBa7.jpg',
   ];
-
-  // Create proper barcode data objects using our new crop_a and crop_b images
   const barcodeData = [
     {
       value: '112233',
@@ -272,7 +129,6 @@ const AnalyticsTetra = () => {
       image: imageUrls.crop_b || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc_7uyoAUjK3THhC0ZDv0eoj7FmlJ2oW47nA&s'
     }
   ];
-
   return (
     <AuthProvider>
       <Container fluid>
