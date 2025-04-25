@@ -14,6 +14,9 @@ const tetraPakGraphService = {
     },
     getUserActionDetails(payload){
         return api.put(`inspection/get_user_operation_details`, payload);
+    },
+    updateReelSyncRow(payload){
+        return api.post(`inspection/sync_rows`,payload);
     }
 }
 export default tetraPakGraphService;

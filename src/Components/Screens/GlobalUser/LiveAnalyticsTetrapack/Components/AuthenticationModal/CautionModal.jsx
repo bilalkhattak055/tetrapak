@@ -22,6 +22,7 @@ const CautionModal = ({ isOpen, toggle }) => {
   const [correctMatchState, setCorrectMatchState] = useState(false); 
   const [statusWsConnected, setStatusWsConnected] = useState(false);
   const statusSocketRef = useRef(null);
+  const statusIntervalRef = useRef(null);  // Reference for the interval timer
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8064');
@@ -30,26 +31,32 @@ const CautionModal = ({ isOpen, toggle }) => {
     ws.onopen = () => {
       console.log('Status WebSocket connected');
       setStatusWsConnected(true);
+      
+      // Start sending status updates continuously once connected
+      startContinuousStatusUpdates();
     };
 
     ws.onclose = () => {
       console.log('Status WebSocket disconnected');
       setStatusWsConnected(false);
+      stopContinuousStatusUpdates();
     };
 
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
       setStatusWsConnected(false);
+      stopContinuousStatusUpdates();
     };
 
     return () => {
+      stopContinuousStatusUpdates();
       if (statusSocketRef.current) {
         statusSocketRef.current.close();
       }
     };
   }, []);
 
-  // Function to send status updates through the existing WebSocket connection
+  // Function to send status updates through the WebSocket connection
   const sendStatusUpdate = () => {
     if (!statusSocketRef.current || statusSocketRef.current.readyState !== WebSocket.OPEN) {
       console.warn('Status WebSocket not connected. Cannot send update.');
@@ -72,31 +79,45 @@ const CautionModal = ({ isOpen, toggle }) => {
     }
   };
 
-  // Watch for changes in authentication states and send updates
+  // Start continuous status updates
+  const startContinuousStatusUpdates = () => {
+    // Clear any existing interval first
+    stopContinuousStatusUpdates();
+    
+    // Set new interval to send updates every 500ms (0.5 seconds)
+    statusIntervalRef.current = setInterval(() => {
+      sendStatusUpdate();
+    }, 100);
+    
+    console.log('Started continuous status updates (every 0.5 seconds)');
+  };
+
+  // Stop continuous status updates
+  const stopContinuousStatusUpdates = () => {
+    if (statusIntervalRef.current) {
+      clearInterval(statusIntervalRef.current);
+      statusIntervalRef.current = null;
+      console.log('Stopped continuous status updates');
+    }
+  };
+
+  // Watch for changes in authentication states
   useEffect(() => {
     console.log("States changed:", { authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState });
-    if (statusWsConnected) {
-      sendStatusUpdate();
+  if (authState || bypassState || reprocessState || wrongMisMatchState || correctMatchState) {
+      const resetTimeoutId = setTimeout(() => {
+        setAuthState(false);
+        setBypassState(false);
+        setReprocessState(false);
+        setWrongMisMatchState(false);
+        setCorrectMatchState(false);
+      }, 1000);
 
-      // Only set the timeout if any of the states become true
-      if (authState || bypassState || reprocessState || wrongMisMatchState || correctMatchState) {
-        const timeoutId = setTimeout(() => {
-          setAuthState(false);
-          setBypassState(false);
-          setReprocessState(false);
-          setWrongMisMatchState(false);
-          setCorrectMatchState(false);
-          sendStatusUpdate();
-        }, 1000); 
-
-        // Cleanup timeout on component unmount or when states change
-        return () => {
-          console.log("Clearing existing timeout");
-          clearTimeout(timeoutId);
-        };
-      }
+      return () => {
+        clearTimeout(resetTimeoutId);
+      };
     }
-  }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, statusWsConnected]);
+  }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState]);
 
   // Reason -> ID mapping
   const reasonIdMap = {
@@ -236,6 +257,11 @@ const CautionModal = ({ isOpen, toggle }) => {
             <p style={{ color: "#000000" }}>
               Is this mis-match correct or wrong?
             </p>
+          </div>
+
+          {/* Status indicator (optional, for debugging) */}
+          <div className="text-center mb-2" style={{ fontSize: '12px', color: statusWsConnected ? 'green' : 'red' }}>
+            Status WebSocket: {statusWsConnected ? 'Connected' : 'Disconnected'}
           </div>
 
           {/* Action buttons */}

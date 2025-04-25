@@ -5,12 +5,12 @@ import ReelCard from './Components/ReelCard';
 import LiveCameraComparison from './Components/LiveCamera';
 import { Row, Col, Container } from 'reactstrap';
 import { AuthProvider } from './context/AuthContext';
+import tetraPakGraphService from '../../../../api/TetraPakGraphService';
 
 const AnalyticsTetra = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1450);
   const [isMediumScreen, setIsMediumScreen] = useState(window.innerWidth >= 1280);
   const userid = JSON.parse(localStorage.getItem('userId'));
-  console.log("client id is coming:om", userid)
   const [reelsData, setReelsData] = useState({
     total_reels: "0",
     match_reels: "0",
@@ -25,6 +25,7 @@ const AnalyticsTetra = () => {
     crop_b: null
   });
   const [wsConnected, setWsConnected] = useState(false);
+
   useEffect(() => {
     // WebSocket connection setup
     let socket = null;
@@ -41,6 +42,7 @@ const AnalyticsTetra = () => {
           reconnectTimer = null;
         }
       };
+
       socket.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
@@ -93,6 +95,7 @@ const AnalyticsTetra = () => {
       }
     };
   }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setIsLargeScreen(window.innerWidth > 1330);
@@ -105,6 +108,7 @@ const AnalyticsTetra = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMediumScreen(window.innerWidth >= 992);
@@ -116,6 +120,7 @@ const AnalyticsTetra = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   const cameraImages = [
     imageUrls.raw_image || 'https://t4.ftcdn.net/jpg/03/11/07/61/360_F_311076193_tNZbw0YPAfHHV1wZ0NuV0AftLardNBa7.jpg',
   ];
@@ -129,6 +134,58 @@ const AnalyticsTetra = () => {
       image: imageUrls.crop_b || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc_7uyoAUjK3THhC0ZDv0eoj7FmlJ2oW47nA&s'
     }
   ];
+
+  // Reels Data API call sync
+  const FetchReelsData = async () => {
+    const Payload = {
+      inspection_alert_counts: [
+      {
+        client_id: 1,
+        factory_id: 1,
+        object_id: 1,
+        model_id: 1,
+        count: reelsData.missMatch_reels,
+        date: "2025-04-25"
+      },
+      {
+        client_id: 1,
+        factory_id: 1,
+        object_id: 2,
+        model_id: 1,
+        count: reelsData.match_reels,
+        date: "2025-04-25"
+      },
+      {
+        client_id: 1,
+        factory_id: 1,
+        object_id: 3,
+        model_id: 1,
+        count: reelsData.wrong_mismatch,
+        date: "2025-04-25"
+      }]
+    };
+    try {
+      const SyncRow = await tetraPakGraphService.updateSyncRow(Payload);
+      if (!SyncRow.ok) {
+        console.error("Data Fetching Failed");
+      } else {
+        const data = await SyncRow.json();
+        console.log(data);
+      }
+    } catch (error) {
+      console.error("Error during sync:", error);
+    }
+  };
+
+  // Trigger FetchReelsData every minute
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      FetchReelsData();
+    }, 90000); // 60,000ms = 1 minute
+
+    return () => clearInterval(intervalId); // Clean up the interval on component unmount
+  }, [reelsData]); // Trigger the effect when reelsData changes
+
   return (
     <AuthProvider>
       <Container fluid>
