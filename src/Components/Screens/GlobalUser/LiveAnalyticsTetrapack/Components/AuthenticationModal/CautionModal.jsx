@@ -258,12 +258,6 @@ const CautionModal = ({ isOpen, toggle }) => {
               Is this mis-match correct or wrong?
             </p>
           </div>
-
-          {/* Status indicator (optional, for debugging) */}
-          <div className="text-center mb-2" style={{ fontSize: '12px', color: statusWsConnected ? 'green' : 'red' }}>
-            Status WebSocket: {statusWsConnected ? 'Connected' : 'Disconnected'}
-          </div>
-
           {/* Action buttons */}
           <div className="d-flex justify-content-center gap-3 mt-3 mb-3">
             <button
