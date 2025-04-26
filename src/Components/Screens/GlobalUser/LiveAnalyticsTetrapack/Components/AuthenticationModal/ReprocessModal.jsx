@@ -3,7 +3,6 @@ import { Modal, FormGroup } from "reactstrap";
 import loader from '../../asset/process2.svg';
 import left from '../../asset/left.svg';
 import Authentication from './Authentication';
-import { AuthProvider } from '../../context/AuthContext';
 import tetraPakGraphService from '../../../../../../api/TetraPakGraphService';
 
 const ReprocessModal = ({ isOpen, toggle, onAuthStatusChange }) => {
@@ -75,46 +74,38 @@ const ReprocessModal = ({ isOpen, toggle, onAuthStatusChange }) => {
     // Modified updateProcess to use dynamic operation_type_id
     const updateProcess = async () => {
         try {
-            // Determine operation_type_id based on selected option
-            const operationTypeId = selectedOption === 'reprocess' ? 
-                OPERATION_TYPE.REPROCESS : OPERATION_TYPE.BYPASS;
-            
-            const payload = {
-                inspection_operations: [
-                    {
-                        client_id: 1,
-                        factory_id: 1,
-                        user_id: userid,
-                        object_id: 3,
-                        operation_type_id: operationTypeId 
-                    },
-                ],
-            };
-
-            console.log(`Calling API with operation_type_id: ${operationTypeId} for ${selectedOption}`);
-            
-            const response = await tetraPakGraphService.updateSyncRow(payload);
-            if (!response) {
-                console.log("Data Fetching Failed");
-            } else {
-                console.log("Update successful");
-                
-                // Update the auth states based on the selected option
-                if (onAuthStatusChange) {
-                    onAuthStatusChange({
-                        authState: true,
-                        bypassState: selectedOption === 'bypass',
-                        reprocessState: selectedOption === 'reprocess'
-                    });
-                }
-                
-                // Close the modal after successful update
-                handleClose();
+          const operationTypeId = selectedOption === 'reprocess' ? OPERATION_TYPE.REPROCESS : OPERATION_TYPE.BYPASS;
+      
+          const payload = {
+            inspection_operations: [
+              {
+                client_id: 1,
+                factory_id: 1,
+                user_id: userid,
+                object_id: 3,
+                operation_type_id: operationTypeId
+              },
+            ],
+          };
+      
+          console.log(`Calling API with operation_type_id: ${operationTypeId} for ${selectedOption}`);
+      
+          const response = await tetraPakGraphService.updateSyncRow(payload);
+          if (response) {
+            if (onAuthStatusChange) {
+              onAuthStatusChange({
+                authState: true,
+                bypassState: selectedOption === 'bypass',
+                reprocessState: selectedOption === 'reprocess'
+              });
             }
+            handleClose();
+          }
         } catch (error) {
-            console.error("Error updating operations:", error);
+          console.error("Error updating operations:", error);
         }
-    };
+      };
+      
     
     const handleAuthResult = (result) => {
         setIsAuthenticated(result);
@@ -130,7 +121,6 @@ const ReprocessModal = ({ isOpen, toggle, onAuthStatusChange }) => {
     
     return (
         <>
-            <AuthProvider>
                 <Modal
                     isOpen={isOpen}
                     toggle={handleClose}
@@ -283,7 +273,7 @@ const ReprocessModal = ({ isOpen, toggle, onAuthStatusChange }) => {
                         isAuthenticated={handleAuthResult}
                     />
                 </Modal>
-            </AuthProvider>
+            
         </>
     );
 };

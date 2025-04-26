@@ -156,7 +156,7 @@ class WebSocketReelSender:
         except websockets.exceptions.ConnectionClosed as e:
             print(f"Reel data WebSocket connection closed: {e}")
 
-    async def handle_status_ws(self, websocket, path=None):
+    async def handle_recv_data_WS(self, websocket, path=None):
         """
         Receives status update data from the frontend.
         Updates the backend state based on incoming JSON messages.
@@ -168,57 +168,60 @@ class WebSocketReelSender:
                 message = await websocket.recv()
                 try:
                     data = json.loads(message)
-                    print(f"Received status update from frontend: {data}")
+                    print(f"Received status update from frontend------------: {data}")
                     
-                    # Update internal authentication state based on received data
-                    if 'auth_state' in data:
-                        self.auth_state = bool(data['auth_state'])
-                        print(f"Authentication state updated: {self.auth_state}")
-                        
-                        # Process authentication mode changes
-                        if self.auth_state:
-                            if 'bypass_state' in data:
-                                self.bypass_state = bool(data['bypass_state'])
-                                print(f"Bypass state updated: {self.bypass_state}")
-                            
-                            if 'reprocess_state' in data:
-                                self.reprocess_state = bool(data['reprocess_state'])
-                                print(f"Reprocess state updated: {self.reprocess_state}")
-                            
-                            # Handle the different authentication modes
-                            if self.bypass_state:
-                                self.process_bypass_auth()
-                            elif self.reprocess_state:
-                                self.process_reprocess_auth()
-                        else:
-                            # Reset states when auth is false
-                            self.bypass_state = False
-                            self.reprocess_state = False
-                            print("Authentication expired or ended, reset bypass and reprocess states")
+                    # Update states with default values if keys are missing
+                    self.auth_state = bool(data.get('auth_state', False))
+                    self.bypass_state = bool(data.get('bypass_state', False))
+                    self.reprocess_state = bool(data.get('reprocess_state', False))
+                    self.mismatch_reel = bool(data.get('missMatch_reels', False))
+                    self.wrong_match = bool(data.get('wrong_mismatch', False))
+                    self.correct_match_state = bool(data.get('correct_match', False))
                     
-                    # Update correct match state if provided (just for logging)
-                    if 'correct_match' in data:
-                        self.correct_match_state = bool(data['correct_match'])
-                        print(f"Correct match state updated: {self.correct_match_state}")
+                    self.flags = {
+                        "auth_state": self.auth_state,
+                        "bypass_state": self.bypass_state,
+                        "reprocess_state": self.reprocess_state,
+                        "correct_match_state": self.correct_match_state,
+                        "mismatch_reel": self.mismatch_reel,
+                        "wrong_match": self.wrong_match 
+                    } 
                     
-                    # Update reel matching states if provided
-                    if 'match_reels' in data:
-                        self.match_reel = bool(data['match_reels'])
-                        print(f"Match reel state updated: {self.match_reel}")
-                    
-                    if 'missMatch_reels' in data:
-                        self.mismatch_reel = bool(data['missMatch_reels'])
-                        print(f"Mismatch reel state updated: {self.mismatch_reel}")
-                    
-                    if 'wrong_mismatch' in data:
-                        self.wrong_match = bool(data['wrong_mismatch'])
-                        print(f"Wrong match state updated: {self.wrong_match}")
+                    print("updated flags---------------------------", self.flags)
                     
                     # Send acknowledgement back to client
                     await websocket.send(json.dumps({"status": "received", "timestamp": asyncio.get_event_loop().time()}))
                     
+                    # Process authentication mode changes
+                    if self.auth_state:
+                        # Handle the different authentication modes
+                        if self.bypass_state:
+                            self.process_bypass_auth()
+                        elif self.reprocess_state:
+                            self.process_reprocess_auth()
+                    else:
+                        # Reset states when auth is false
+                        self.bypass_state = False
+                        self.reprocess_state = False
+                        print("Authentication expired or ended, reset bypass and reprocess states")
+                    
+                    if self.mismatch_reel:
+                        if hasattr(self, 'handle_UI_buttons_logic'):
+                            self.handle_UI_buttons_logic()
+                        
+                        if hasattr(self, 'conveyor_stop') and hasattr(self, 'socket'):
+                            self.conveyor_stop = True
+                            self.socket.send_json({"conveyor_stop_state": self.conveyor_stop})
+                            print("conveyor stop state has been sent to stop the conveyor")
+                            print("--------------------------------------------------------")
+
                 except json.JSONDecodeError:
                     print(f"Received non-JSON message: {message}")
+                except Exception as e:
+                    print(f"Error processing message: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    
         except websockets.exceptions.ConnectionClosed as e:
             print(f"Status WebSocket connection closed: {e}")
 
@@ -288,7 +291,7 @@ class WebSocketReelSender:
 
     async def start_status_websocket_server(self):
         # Start the status updates WebSocket server.
-        status_server = await websockets.serve(self.handle_status_ws, "localhost", self.status_ws_port)
+        status_server = await websockets.serve(self.handle_recv_data_WS, "localhost", self.status_ws_port)
         print(f"Status WebSocket server started on ws://localhost:{self.status_ws_port}")
         return status_server
 

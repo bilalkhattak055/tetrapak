@@ -22,41 +22,43 @@ const CautionModal = ({ isOpen, toggle }) => {
   const [correctMatchState, setCorrectMatchState] = useState(false); 
   const [statusWsConnected, setStatusWsConnected] = useState(false);
   const statusSocketRef = useRef(null);
-  const statusIntervalRef = useRef(null);  // Reference for the interval timer
 
-  useEffect(() => {
+  const connectWebSocket = () => {
     const ws = new WebSocket('ws://localhost:8064');
     statusSocketRef.current = ws;
 
     ws.onopen = () => {
       console.log('Status WebSocket connected');
       setStatusWsConnected(true);
-      
-      // Start sending status updates continuously once connected
-      startContinuousStatusUpdates();
     };
 
     ws.onclose = () => {
-      console.log('Status WebSocket disconnected');
+      console.log('Status WebSocket disconnected, attempting reconnect in 3 seconds...');
       setStatusWsConnected(false);
-      stopContinuousStatusUpdates();
+      setTimeout(() => {
+        connectWebSocket(); // Attempt to reconnect
+      }, 3000);
     };
 
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
       setStatusWsConnected(false);
-      stopContinuousStatusUpdates();
     };
 
+    return ws;
+  };
+
+  useEffect(() => {
+    const ws = connectWebSocket();
+
     return () => {
-      stopContinuousStatusUpdates();
-      if (statusSocketRef.current) {
-        statusSocketRef.current.close();
+      if (ws) {
+        ws.close();
       }
     };
   }, []);
 
-  // Function to send status updates through the WebSocket connection
+  // Function to send status updates through the existing WebSocket connection
   const sendStatusUpdate = () => {
     if (!statusSocketRef.current || statusSocketRef.current.readyState !== WebSocket.OPEN) {
       console.warn('Status WebSocket not connected. Cannot send update.');
@@ -79,54 +81,46 @@ const CautionModal = ({ isOpen, toggle }) => {
     }
   };
 
-  // Start continuous status updates
-  const startContinuousStatusUpdates = () => {
-    // Clear any existing interval first
-    stopContinuousStatusUpdates();
-    
-    // Set new interval to send updates every 500ms (0.5 seconds)
-    statusIntervalRef.current = setInterval(() => {
-      sendStatusUpdate();
-    }, 100);
-    
-    console.log('Started continuous status updates (every 0.5 seconds)');
-  };
-
-  // Stop continuous status updates
-  const stopContinuousStatusUpdates = () => {
-    if (statusIntervalRef.current) {
-      clearInterval(statusIntervalRef.current);
-      statusIntervalRef.current = null;
-      console.log('Stopped continuous status updates');
-    }
-  };
-
-  // Watch for changes in authentication states
+  // Watch for changes in authentication states and send updates
   useEffect(() => {
     console.log("States changed:", { authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState });
-  if (authState || bypassState || reprocessState || wrongMisMatchState || correctMatchState) {
-      const resetTimeoutId = setTimeout(() => {
+    if (statusWsConnected) {
+      sendStatusUpdate();
+
+      // Reset states after a timeout if they are true
+      const timeoutId = setTimeout(() => {
         setAuthState(false);
         setBypassState(false);
         setReprocessState(false);
         setWrongMisMatchState(false);
         setCorrectMatchState(false);
-      }, 1000);
+        sendStatusUpdate();
+      }, 1000); // Reset states after 1 second
 
       return () => {
-        clearTimeout(resetTimeoutId);
+        console.log("Clearing existing timeout");
+        clearTimeout(timeoutId);
       };
     }
-  }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState]);
+  }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, statusWsConnected]);
 
-  // Reason -> ID mapping
+  // Every 5 seconds, send the updated flags to the backend
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      sendStatusUpdate();
+    }, 100); // Update every 5 seconds
+
+    return () => {
+      clearInterval(intervalId); // Cleanup interval on component unmount
+    };
+  }, []);
+
   const reasonIdMap = {
     "Camera Problem": 1,
     "Time Problem": 2,
     "Detection Problem": 3,
   };
 
-  // Toggle modals
   const toggleReprocessModal = () => setIsReprocessModalOpen(!isReprocessModalOpen);
   const toggleAuthModal = () => setIsAuthModalOpen(!isAuthModalOpen);
   
@@ -153,10 +147,8 @@ const CautionModal = ({ isOpen, toggle }) => {
     }
   };
 
-  // Called after successful authentication or direct submission
   const updateReason = async () => {
     try {
-      // Take the first selected reason (or adjust to handle multiple, if needed)
       const validationReasonId = selectedReasons.length > 0 ? reasonIdMap[selectedReasons[0]] : null;
 
       const payload = {
@@ -187,7 +179,6 @@ const CautionModal = ({ isOpen, toggle }) => {
     }
   };
 
-  // Handle reason checkbox toggles
   const handleCheckboxChange = (reason) => {
     setSelectedReasons((prev) =>
       prev.includes(reason)
@@ -195,8 +186,6 @@ const CautionModal = ({ isOpen, toggle }) => {
         : [...prev, reason]
     );
   };
-  
-  console.log("login status from child:", isAuthenticated);
   
   const handleProceedFurther = () => {
     if (isAuthenticated) {
@@ -258,6 +247,7 @@ const CautionModal = ({ isOpen, toggle }) => {
               Is this mis-match correct or wrong?
             </p>
           </div>
+
           {/* Action buttons */}
           <div className="d-flex justify-content-center gap-3 mt-3 mb-3">
             <button

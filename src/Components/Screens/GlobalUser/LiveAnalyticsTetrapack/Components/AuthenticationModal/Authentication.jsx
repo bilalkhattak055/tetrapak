@@ -2,21 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Modal, FormGroup } from "reactstrap";
 import { CheckCircle, XCircle } from "lucide-react";
 import loading from "../../asset/loader.svg";
-import { useAuth } from "../../context/AuthContext";
 import { isAuthenticateUser } from "../../../../../../Auth/authHelper";
-import { isTokenExpired} from "../../../../../../_helper/helper";
+import { isTokenExpired } from "../../../../../../_helper/helper";
 import api from "../../../../../../api/api";
-import { toast} from 'react-toastify';
-const Authentication = ({ isOpen, toggle, authOption, isAuthenticated}) => {
+import { toast } from "react-toastify";
+
+const Authentication = ({ isOpen, toggle, authOption, isAuthenticated }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authStatus, setAuthStatus] = useState("idle");
   const [error, setError] = useState('');
   const [loader, setLoader] = useState(false);
-  
- 
 
-  //handle signin
+  // Handle sign-in
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -30,13 +28,12 @@ const Authentication = ({ isOpen, toggle, authOption, isAuthenticated}) => {
         if (getInfoLocal?.accessToken && !isTokenExpired()) {
           api.defaults.headers.common['Authorization'] = getInfoLocal.accessToken;
           api.defaults.headers.common['Token-Type'] = getInfoLocal.accessToken ? 'jwt' : 'none';
+          // Set isAuthenticated to true directly from the parent (passing through props)
           isAuthenticated(true);
           // Update authStatus to show success screen
           setAuthStatus("success");
           localStorage.setItem('userId', JSON.stringify(getInfoLocal?.id));
-
-  
-        }  
+        }
       } else {
         setError('Invalid email or password');
         toast.error('Incorrect Username or Password!');
@@ -50,7 +47,7 @@ const Authentication = ({ isOpen, toggle, authOption, isAuthenticated}) => {
     } finally {
       setLoader(false);
     }
-};
+  };
 
   const renderContent = () => {
     switch (authStatus) {
