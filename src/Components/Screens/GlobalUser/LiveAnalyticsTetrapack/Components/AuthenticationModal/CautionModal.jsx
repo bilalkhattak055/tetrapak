@@ -5,6 +5,7 @@ import Authentication from "./Authentication";
 import { AuthProvider } from "../../context/AuthContext";
 import ReprocessModal from "./ReprocessModal";
 import tetraPakGraphService from "../../../../../../api/TetraPakGraphService";
+import useMismatchStore from "../../Zustand/Store";
 
 const CautionModal = ({ isOpen, toggle }) => {
   const [selectedReasons, setSelectedReasons] = useState([]);
@@ -13,6 +14,7 @@ const CautionModal = ({ isOpen, toggle }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const userid = JSON.parse(localStorage.getItem('userId'));
+  const { mismatchButtonState } = useMismatchStore(); // Get mismatch button state from store
   
   // Authentication states
   const [authState, setAuthState] = useState(false);
@@ -58,6 +60,27 @@ const CautionModal = ({ isOpen, toggle }) => {
     };
   }, []);
 
+  // Watch for changes in mismatchButtonState from Zustand store
+  useEffect(() => {
+    if (statusWsConnected && statusSocketRef.current) {
+      try {
+        const statusData = {
+          auth_state: authState,
+          bypass_state: bypassState,
+          reprocess_state: reprocessState,
+          wrong_mismatch: wrongMisMatchState,
+          correct_match: correctMatchState,
+          mismatch_button_pressed: mismatchButtonState // Add mismatch button state to data
+        };
+
+        statusSocketRef.current.send(JSON.stringify(statusData));
+        console.log('Sent mismatch button state to backend:', statusData);
+      } catch (error) {
+        console.error('Error sending mismatch button update:', error);
+      }
+    }
+  }, [mismatchButtonState, statusWsConnected]);
+
   // Function to send status updates through the existing WebSocket connection
   const sendStatusUpdate = () => {
     if (!statusSocketRef.current || statusSocketRef.current.readyState !== WebSocket.OPEN) {
@@ -71,7 +94,8 @@ const CautionModal = ({ isOpen, toggle }) => {
         bypass_state: bypassState,
         reprocess_state: reprocessState,
         wrong_mismatch: wrongMisMatchState,
-        correct_match: correctMatchState 
+        correct_match: correctMatchState,
+        mismatch_button_pressed: mismatchButtonState // Include mismatch button state in all updates
       };
 
       statusSocketRef.current.send(JSON.stringify(statusData));
@@ -83,7 +107,7 @@ const CautionModal = ({ isOpen, toggle }) => {
 
   // Watch for changes in authentication states and send updates
   useEffect(() => {
-    console.log("States changed:", { authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState });
+    console.log("States changed:", { authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, mismatchButtonState });
     if (statusWsConnected) {
       sendStatusUpdate();
 
@@ -104,11 +128,11 @@ const CautionModal = ({ isOpen, toggle }) => {
     }
   }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, statusWsConnected]);
 
-  // Every 5 seconds, send the updated flags to the backend
+  // Every 0.1 seconds, send the updated flags to the backend
   useEffect(() => {
     const intervalId = setInterval(() => {
       sendStatusUpdate();
-    }, 100); // Update every 5 seconds
+    }, 30000); // Update every 0.1 seconds
 
     return () => {
       clearInterval(intervalId); // Cleanup interval on component unmount

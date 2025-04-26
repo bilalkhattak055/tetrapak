@@ -4,12 +4,14 @@ import CameraImg from '../asset/CameraImg.jpeg';
 import Value from '../asset/ValueImg.jpeg';
 import CautionModal from './AuthenticationModal/CautionModal';
 import ImageZoom from '../../../../Dashboards/AreaDashbaord/reports/Components/LiveAlertsCards/ImageZoom';
+import useMismatchStore from '../Zustand/Store';
 
 const LiveCameraComparison = ({ images, barcodeData, matchStatus, mismatchStatus }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showZoomModal, setShowZoomModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageData, setImageData] = useState({});
+    const { setMismatchButtonState } = useMismatchStore(); // Get setter from store
 
     // Alarm state management - now driven by backend status
     const [alarmEnabled, setAlarmEnabled] = useState(true);
@@ -113,6 +115,15 @@ const LiveCameraComparison = ({ images, barcodeData, matchStatus, mismatchStatus
         setIsModalOpen(true);
         setIsAnimating(false);
         setAlarmEnabled(false);
+        
+        // Set mismatch button state to true in the Zustand store
+        setMismatchButtonState(true);
+        
+        // Automatically reset to false after a timeout (similar to how other states work)
+        setTimeout(() => {
+            setMismatchButtonState(false);
+        }, 1000);
+        
         // When mismatch button is clicked, send status update
         const newStatus = {
             ...statusToSend,
