@@ -134,9 +134,17 @@ const AnalyticsTetra = () => {
       image: imageUrls.crop_b || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc_7uyoAUjK3THhC0ZDv0eoj7FmlJ2oW47nA&s'
     }
   ];
-
+//function get latest date
+const getTodayDate = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
   // Reels Data API call sync
   const FetchReelsData = async () => {
+    const latestDate=getTodayDate();
     const Payload = {
       inspection_alert_counts: [
       {
@@ -145,7 +153,7 @@ const AnalyticsTetra = () => {
         object_id: 1,
         model_id: 1,
         count: reelsData.missMatch_reels,
-        date: "2025-04-25"
+        date: latestDate
       },
       {
         client_id: 1,
@@ -153,7 +161,7 @@ const AnalyticsTetra = () => {
         object_id: 2,
         model_id: 1,
         count: reelsData.match_reels,
-        date: "2025-04-25"
+        date: latestDate
       },
       {
         client_id: 1,
@@ -161,7 +169,7 @@ const AnalyticsTetra = () => {
         object_id: 3,
         model_id: 1,
         count: reelsData.wrong_mismatch,
-        date: "2025-04-25"
+        date: latestDate
       }]
     };
     try {

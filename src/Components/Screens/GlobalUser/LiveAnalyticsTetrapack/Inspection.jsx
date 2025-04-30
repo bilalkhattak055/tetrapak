@@ -10,6 +10,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import download from './asset/download.svg'
 import UserTable from "./Components/ActionTable";
+import ReelsDashboard from "./Components/AllReelsData";
 
 const Inspection = () => {
     const [reelsData, setReelsData] = useState({});
@@ -24,8 +25,15 @@ const Inspection = () => {
     const [userReprocess, setReprocess]=useState("");
     const [userWrongMatch,setWrongMatch]=useState("");
     const userid = JSON.parse(localStorage.getItem('userId'));
-    console.log("client id is coming:",userid)
-  
+   
+    // Define chart titles
+    const chartTitles = {
+        complianceTarget: "Compliance Target Overview",
+        alertCount: "Alert Count Summary",
+        reprocessChart: "Reprocess Analytics",
+        reelsDashboard: "Reels Summary Dashboard",
+        userActivity: "User Activity Summary"
+    };
 
     const pageRef = useRef(null);
     const [activeFilters, setActiveFilters] = useState({
@@ -84,7 +92,7 @@ const Inspection = () => {
                 shift: ""
             },
             factory_id: 1,
-            client_id:userid
+            client_id: userid
         };
 
         // Only pass one filter type at a time
@@ -107,10 +115,10 @@ const Inspection = () => {
         const reelApi = tetraPakGraphService.getAllReels(payload);
         const reprocessApi = tetraPakGraphService.getReprocessCount(payload);
         const wrongMatchApi = tetraPakGraphService.getWrongCount(payload);
-        const userActionDetail=tetraPakGraphService.getUserActionDetails(payload);
+        const userActionDetail = tetraPakGraphService.getUserActionDetails(payload);
     
-        Promise.all([reelApi, reprocessApi, wrongMatchApi,userActionDetail])
-            .then(([reelsRes, reprocessRes, wrongMatchRes,userActionRes]) => {
+        Promise.all([reelApi, reprocessApi, wrongMatchApi, userActionDetail])
+            .then(([reelsRes, reprocessRes, wrongMatchRes, userActionRes]) => {
                 if (reelsRes.data && reelsRes.data.success) {
                     setReelsData(reelsRes.data.data);
                 }
@@ -121,16 +129,14 @@ const Inspection = () => {
                     setWrongMatchData(wrongMatchRes.data.data);
                 }
                 if(userActionRes.data && userActionRes.data.success){
-                     const user = userActionRes.data.data[0];
+                    const user = userActionRes.data.data[0];
                     setUserId(user.user_id)
                     setUserName(user.user_name)
                     setEmail(user.user_email)
                     setReprocess(user.sticker_reprocess)
                     setBypass(user.bypass)
                     setWrongMatch(user.total_wrong_mismatch)
-                    
                 }
-                console.log("userid",userID)
                 setLoading(false);
             })
             .catch((error) => {
@@ -197,24 +203,20 @@ const Inspection = () => {
             
             let yPosition = margin + 15;
             
-            // Find all chart components
-            const chartElements = pageRef.current.querySelectorAll('.apexcharts-canvas, .Tabledpt');
+            // Process chart sections by class name
+            const chartSections = [
+                { element: pageRef.current.querySelector('.compliance-chart-section'), title: chartTitles.complianceTarget },
+                { element: pageRef.current.querySelector('.alert-chart-section'), title: chartTitles.alertCount },
+                { element: pageRef.current.querySelector('.reprocess-chart-section'), title: chartTitles.reprocessChart },
+                { element: pageRef.current.querySelector('.reels-dashboard-section'), title: chartTitles.reelsDashboard },
+                { element: pageRef.current.querySelector('.user-activity-section'), title: chartTitles.userActivity }
+            ];
             
-            // Process each chart
-            for (let i = 0; i < chartElements.length; i++) {
-                const chart = chartElements[i];
+            // Process each chart section
+            for (const section of chartSections) {
+                if (!section.element) continue;
                 
-                // Find chart title by looking at nearby headings
-                let chartTitle = "Chart " + (i + 1);
-                const parentCard = chart.closest('.card');
-                if (parentCard) {
-                    const heading = parentCard.querySelector('.card-title, h5, h4, h3');
-                    if (heading) {
-                        chartTitle = heading.textContent.trim();
-                    }
-                }
-                
-                const canvas = await html2canvas(chart, {
+                const canvas = await html2canvas(section.element, {
                     scale: 2,
                     logging: false,
                     useCORS: true,
@@ -223,12 +225,10 @@ const Inspection = () => {
                 });
                 
                 const imgData = canvas.toDataURL('image/png');
-                
-                // Calculate dimensions
                 const imgWidth = pageWidth - (margin * 2);
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
                 
-                // Check if we need a new page
+                // Add new page if needed
                 if (yPosition + imgHeight + 10 > pageHeight) {
                     pdf.addPage();
                     yPosition = margin;
@@ -236,7 +236,7 @@ const Inspection = () => {
                 
                 // Add chart title
                 pdf.setFontSize(12);
-                pdf.text(chartTitle, margin, yPosition);
+                pdf.text(section.title, margin, yPosition);
                 yPosition += 7;
                 
                 // Add chart image
@@ -246,7 +246,7 @@ const Inspection = () => {
             
             // Save the PDF
             pdf.save('TetraPak Inspection Report.pdf');
-            
+;
         } catch (error) {
             console.error("Error generating PDF:", error);
             alert("Failed to generate PDF. Please try again.");
@@ -259,7 +259,7 @@ const Inspection = () => {
     useEffect(() => {
         fetchData(activeFilters);
     }, []);
-    
+
     return (
         <WeekFilterProvider>
             <div ref={pageRef}>
@@ -281,65 +281,88 @@ const Inspection = () => {
                     />
                     
                     {/* Active Filter Display */}
-                    <div className=" mb-1" style={{display:"flex",justifyContent:"space-between"}}>
-                    {getActiveFilterDisplay() && (
-                        <div>
-                            <Badge 
-                                pill 
-                                bg="primary" 
-                                style={{ 
-                                    backgroundColor: "#023F88", 
-                                    fontSize: "16px", 
-                                    padding: "10px 15px" 
-                                }}
-                            >
-                             Active Filter-{getActiveFilterDisplay()}
-                            </Badge>
-                        </div>
-                    )}
-                     <Button 
-                        variant="primary" 
-                        onClick={exportToPDF} 
-                        disabled={loading || exporting}
-                        style={{ backgroundColor: "#023F88" }}
-                    >
-                    {exporting ? (
-                            <>
-                            <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
-                                Downloading...
-                            </>
-                        ) : (
-                            <div className="shadow-md" style={{display:"flex",gap:"8px",fontSize:"16px",borderRadius:"10px"}}>
-                                <img src={download} alt="download pdf"/>
-                                Download Report
+                    <div className="mb-1" style={{display:"flex",justifyContent:"space-between"}}>
+                        {getActiveFilterDisplay() && (
+                            <div>
+                                <Badge 
+                                    pill 
+                                    bg="primary" 
+                                    style={{ 
+                                        backgroundColor: "#023F88", 
+                                        fontSize: "16px", 
+                                        padding: "10px 15px" 
+                                    }}
+                                >
+                                    Active Filter-{getActiveFilterDisplay()}
+                                </Badge>
                             </div>
                         )}
-                    </Button>
+                        <Button 
+                            variant="primary" 
+                            onClick={exportToPDF} 
+                            disabled={loading || exporting}
+                            style={{ backgroundColor: "#023F88" }}
+                        >
+                            {exporting ? (
+                                <>
+                                    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                    Downloading...
+                                </>
+                            ) : (
+                                <div className="shadow-md" style={{display:"flex",gap:"8px",fontSize:"16px",borderRadius:"10px"}}>
+                                    <img src={download} alt="download pdf"/>
+                                    Download Report
+                                </div>
+                            )}
+                        </Button>
                     </div>
+                    
+                    {/* Chart 1: Compliance Targets */}
                     <Col md={6} lg={7}>
-                        <div className="p-2">
+                        <div className="p-2 compliance-chart-section">
+                            
                             <ComplianceTargetsChart data={reelsData} loading={loading} />
                         </div>
                     </Col>
-                    <Col md={6} lg={5} >
-                        <div className="p-2">
+                    
+                    {/* Chart 2: Alert Counts */}
+                    <Col md={6} lg={5}>
+                        <div className="p-2 alert-chart-section">
+                            
                             <AlertCountsChart data={wrongMatchData} />
                         </div>
                     </Col>
                 </Row>
+                
+                {/* Chart 3: Reprocess */}
                 <Row>
-                    <div className="p-3">
+                    <div className="p-3 reprocess-chart-section">
+                        
                         <ReProcessChart data={reprocessData} loading={loading} />
                     </div>
                 </Row>
-                <Row>
+                
+                {/* Chart 4: Reels Dashboard */}
+                <Row className="reels-dashboard-section">
+                    
+                    <ReelsDashboard
+                        TotalReels={reelsData.total_reels}
+                        MatchReels={reelsData.match_reels}
+                        MisMatchReels={reelsData.mismatch_reels}
+                        WrongMisMatch={reelsData.wrong_mismatch_reels}
+                    />
+                </Row>
+                
+                {/* Chart 5: User Activity */}
+                <Row className="user-activity-section">
+                    
                     <UserTable
-                    id={userID}
-                    username={userName}
-                    email={userEmail}
-                    bypass={userBypass}
-                    reprocess={userReprocess}
-                    WrongCount={userWrongMatch}
+                        id={userID}
+                        username={userName}
+                        email={userEmail}
+                        bypass={userBypass}
+                        reprocess={userReprocess}
+                        WrongCount={userWrongMatch}
                     />
                 </Row>
             </div>

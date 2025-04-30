@@ -117,12 +117,10 @@ const LiveCameraComparison = ({ images, barcodeData, matchStatus, mismatchStatus
         setAlarmEnabled(false);
         
         // Set mismatch button state to true in the Zustand store
+        // and keep it true until workflow completes
         setMismatchButtonState(true);
         
-        // Automatically reset to false after a timeout (similar to how other states work)
-        setTimeout(() => {
-            setMismatchButtonState(false);
-        }, 1000);
+        // Remove the setTimeout that resets the state to false
         
         // When mismatch button is clicked, send status update
         const newStatus = {
@@ -131,7 +129,7 @@ const LiveCameraComparison = ({ images, barcodeData, matchStatus, mismatchStatus
             match_reels: false
         };
         setStatusToSend(newStatus);
-
+    
         if (statusSocket && statusSocket.readyState === WebSocket.OPEN) {
             statusSocket.send(JSON.stringify(newStatus));
         }

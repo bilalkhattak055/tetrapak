@@ -19,36 +19,37 @@ const Authentication = ({ isOpen, toggle, authOption, isAuthenticated }) => {
     e.preventDefault();
     setError('');
     setLoader(true);
-
+  
     try {
       const auth = await isAuthenticateUser(email, password);
-
+  
       if (auth) {
         const getInfoLocal = JSON.parse(localStorage.getItem('userData'));
         if (getInfoLocal?.accessToken && !isTokenExpired()) {
           api.defaults.headers.common['Authorization'] = getInfoLocal.accessToken;
           api.defaults.headers.common['Token-Type'] = getInfoLocal.accessToken ? 'jwt' : 'none';
-          // Set isAuthenticated to true directly from the parent (passing through props)
-          isAuthenticated(true);
+          
           // Update authStatus to show success screen
+          isAuthenticated(true);
           setAuthStatus("success");
           localStorage.setItem('userId', JSON.stringify(getInfoLocal?.id));
         }
       } else {
         setError('Invalid email or password');
         toast.error('Incorrect Username or Password!');
-        // Update authStatus to show error screen
         setAuthStatus("error");
+        isAuthenticated(false);
       }
     } catch (err) {
       setError('An error occurred during login');
       toast.error('Login failed. Please try again.');
       setAuthStatus("error");
+      isAuthenticated(false);
     } finally {
       setLoader(false);
     }
   };
-
+ 
   const renderContent = () => {
     switch (authStatus) {
       case "idle":

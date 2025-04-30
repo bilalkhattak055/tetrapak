@@ -14,16 +14,19 @@ const CautionModal = ({ isOpen, toggle }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const userid = JSON.parse(localStorage.getItem('userId'));
-  const { mismatchButtonState } = useMismatchStore(); // Get mismatch button state from store
+  
+  // Use Zustand store for mismatch button state
+  const { mismatchButtonState, setMismatchButtonState } = useMismatchStore();
   
   // Authentication states
   const [authState, setAuthState] = useState(false);
   const [bypassState, setBypassState] = useState(false);
   const [reprocessState, setReprocessState] = useState(false);
   const [wrongMisMatchState, setWrongMisMatchState] = useState(false);
-  const [correctMatchState, setCorrectMatchState] = useState(false); 
+  const [correctMatchState, setCorrectMatchState] = useState(false);
   const [statusWsConnected, setStatusWsConnected] = useState(false);
   const statusSocketRef = useRef(null);
+  const intervalRef = useRef(null);
 
   const connectWebSocket = () => {
     const ws = new WebSocket('ws://localhost:8064');
@@ -70,7 +73,7 @@ const CautionModal = ({ isOpen, toggle }) => {
           reprocess_state: reprocessState,
           wrong_mismatch: wrongMisMatchState,
           correct_match: correctMatchState,
-          mismatch_button_pressed: mismatchButtonState // Add mismatch button state to data
+          mismatch_button_pressed: mismatchButtonState // Use Zustand state directly
         };
 
         statusSocketRef.current.send(JSON.stringify(statusData));
@@ -79,7 +82,7 @@ const CautionModal = ({ isOpen, toggle }) => {
         console.error('Error sending mismatch button update:', error);
       }
     }
-  }, [mismatchButtonState, statusWsConnected]);
+  }, [mismatchButtonState, statusWsConnected, authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState]);
 
   // Function to send status updates through the existing WebSocket connection
   const sendStatusUpdate = () => {
@@ -95,7 +98,7 @@ const CautionModal = ({ isOpen, toggle }) => {
         reprocess_state: reprocessState,
         wrong_mismatch: wrongMisMatchState,
         correct_match: correctMatchState,
-        mismatch_button_pressed: mismatchButtonState // Include mismatch button state in all updates
+        mismatch_button_pressed: mismatchButtonState // Use Zustand state directly
       };
 
       statusSocketRef.current.send(JSON.stringify(statusData));
@@ -107,37 +110,31 @@ const CautionModal = ({ isOpen, toggle }) => {
 
   // Watch for changes in authentication states and send updates
   useEffect(() => {
-    console.log("States changed:", { authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, mismatchButtonState });
     if (statusWsConnected) {
       sendStatusUpdate();
-
-      // Reset states after a timeout if they are true
-      const timeoutId = setTimeout(() => {
-        setAuthState(false);
-        setBypassState(false);
-        setReprocessState(false);
-        setWrongMisMatchState(false);
-        setCorrectMatchState(false);
-        sendStatusUpdate();
-      }, 1000); // Reset states after 1 second
-
-      return () => {
-        console.log("Clearing existing timeout");
-        clearTimeout(timeoutId);
-      };
     }
-  }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, statusWsConnected]);
-
-  // Every 0.1 seconds, send the updated flags to the backend
+  }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, mismatchButtonState, statusWsConnected]);
+  
+  // Set up interval for periodic status updates
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    // Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    
+    // Create new interval
+    intervalRef.current = setInterval(() => {
       sendStatusUpdate();
-    }, 30000); // Update every 0.1 seconds
-
+    }, 6000); // Update every 6 seconds
+    
+    // Clean up interval on component unmount
     return () => {
-      clearInterval(intervalId); // Cleanup interval on component unmount
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
-  }, []);
+  }, [authState, bypassState, reprocessState, wrongMisMatchState, correctMatchState, mismatchButtonState, statusWsConnected]);
 
   const reasonIdMap = {
     "Camera Problem": 1,
@@ -152,8 +149,8 @@ const CautionModal = ({ isOpen, toggle }) => {
   const handleCorrectMatch = () => {
     // Set the correct match state to true to send to backend
     setCorrectMatchState(true);
-    
-    // Open the reprocess modal (existing functionality)
+    // Set mismatch button state to true in Zustand store
+    setMismatchButtonState(true);
     toggleReprocessModal();
   };
   
@@ -176,7 +173,7 @@ const CautionModal = ({ isOpen, toggle }) => {
       const validationReasonId = selectedReasons.length > 0 ? reasonIdMap[selectedReasons[0]] : null;
 
       const payload = {
-        inspection_alerts: [
+        inspection_alert_validation: [
           {
             client_id: 1,
             factory_id: 1,
@@ -196,6 +193,8 @@ const CautionModal = ({ isOpen, toggle }) => {
         console.log("Update successful");
         // Set wrong mismatch state to true to send to backend
         setWrongMisMatchState(true);
+        // Set mismatch button state to true in Zustand store
+        setMismatchButtonState(true);
         toggle(); // Close the modal after successful update
       }
     } catch (error) {
@@ -219,21 +218,37 @@ const CautionModal = ({ isOpen, toggle }) => {
     if (selectedReasons.length === 0) return;
     toggleAuthModal();
   };
-  
   const handleAuthResult = (result) => {
+    console.log("Auth result received:", result);
     setIsAuthenticated(result);
     if (result) {
-      console.log("Authentication successful. Now calling updateReason...");
-      updateReason();
+        console.log("Authentication successful. Now calling updateReason...");
+        updateReason();
+        
+        // Reset all state flags
+        setCorrectMatchState(false);
+        setWrongMisMatchState(false);
+        setAuthState(false);
+        setBypassState(false);
+        setReprocessState(false);
+        setMismatchButtonState(false);
+        toggleAuthModal();
     } else {
-      console.log("Authentication failed in caution modal");
+        console.log("Authentication failed in caution modal");
     }
-  };
-  
-  const handleMainModalClose = () => {
-    toggle();
+};
+
+const handleMainModalClose = () => {
+    setMismatchButtonState(false);
     setIsAuthenticated(false);
-  };
+    setCorrectMatchState(false);
+    setWrongMisMatchState(false);
+    setAuthState(false);
+    setBypassState(false);
+    setReprocessState(false);
+    
+    toggle();
+};
 
   return (
     <AuthProvider>

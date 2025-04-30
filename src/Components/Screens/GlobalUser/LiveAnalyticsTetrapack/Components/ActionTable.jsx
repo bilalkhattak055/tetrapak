@@ -235,21 +235,22 @@ export default function UserTable({id, username, email, bypass, reprocess,WrongC
   );
 
   return (
-    <div className="table-container py-5">
+    <div className="table-container py-4">
       <Container>
         {/* Stylish Header */}
         <div className="header-section mb-4" style={{ textAlign: "center" }}>
-          <h2
-            className="display-5 fw-bold mb-1"
+        <h3
+            className=" fw-bold mb-1"
             style={{
-              background: "linear-gradient(45deg,rgb(11, 15, 204),rgb(104, 131, 179))",
+              background: "linear-gradient(45deg,rgba(0, 0, 3, 0.93),rgba(41, 43, 46, 0.84))",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+              textAlign:"center"
             }}
           >
             User Activity Table
-          </h2>
+    </h3>
           <p className="text-muted">Monitor User Activity and Reporting</p>
         </div>
 
