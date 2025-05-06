@@ -13,6 +13,7 @@ const CautionModal = ({ isOpen, toggle }) => {
   const [isMismatchOpen, setIsMismatchOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authKey, setAuthKey] = useState(0); // Add key to force re-render Authentication component
   const userid = JSON.parse(localStorage.getItem('userId'));
   
   // Use Zustand store for mismatch button state
@@ -143,7 +144,31 @@ const CautionModal = ({ isOpen, toggle }) => {
   };
 
   const toggleReprocessModal = () => setIsReprocessModalOpen(!isReprocessModalOpen);
-  const toggleAuthModal = () => setIsAuthModalOpen(!isAuthModalOpen);
+  
+  // Modified to reset auth component when toggling
+  const toggleAuthModal = () => {
+    if (!isAuthModalOpen) {
+      // Reset authentication state and increment key to force re-render
+      setIsAuthenticated(false);
+      setAuthKey(prevKey => prevKey + 1);
+    }
+    setIsAuthModalOpen(!isAuthModalOpen);
+  };
+  
+  // Function to reset all states after submission
+  const resetAllStates = () => {
+    setSelectedReasons([]);
+    setIsMismatchOpen(false);
+    setIsAuthenticated(false);
+    setCorrectMatchState(false);
+    setWrongMisMatchState(false);
+    setAuthState(false);
+    setBypassState(false);
+    setReprocessState(false);
+    setMismatchButtonState(false);
+    setIsAuthModalOpen(false);
+    setAuthKey(prevKey => prevKey + 1);
+  };
   
   // Handler for correct match button
   const handleCorrectMatch = () => {
@@ -195,7 +220,13 @@ const CautionModal = ({ isOpen, toggle }) => {
         setWrongMisMatchState(true);
         // Set mismatch button state to true in Zustand store
         setMismatchButtonState(true);
-        toggle(); // Close the modal after successful update
+        setAuthState(true);
+        setIsAuthModalOpen(false);
+        
+        // Reset all states after a successful update with a short delay
+        setTimeout(() => {
+          resetAllStates();
+        }, 15000);
       }
     } catch (error) {
       console.error("Error updating reasons:", error);
@@ -218,37 +249,23 @@ const CautionModal = ({ isOpen, toggle }) => {
     if (selectedReasons.length === 0) return;
     toggleAuthModal();
   };
+  
   const handleAuthResult = (result) => {
     console.log("Auth result received:", result);
     setIsAuthenticated(result);
     if (result) {
         console.log("Authentication successful. Now calling updateReason...");
         updateReason();
-        
-        // Reset all state flags
-        setCorrectMatchState(false);
-        setWrongMisMatchState(false);
-        setAuthState(false);
-        setBypassState(false);
-        setReprocessState(false);
-        setMismatchButtonState(false);
-        toggleAuthModal();
     } else {
         console.log("Authentication failed in caution modal");
     }
-};
-
-const handleMainModalClose = () => {
-    setMismatchButtonState(false);
-    setIsAuthenticated(false);
-    setCorrectMatchState(false);
-    setWrongMisMatchState(false);
-    setAuthState(false);
-    setBypassState(false);
-    setReprocessState(false);
-    
-    toggle();
-};
+  };
+  
+  const handleMainModalClose = () => {
+    // Reset the states to their initial values
+    resetAllStates();
+    toggle(); // Toggle the main modal state
+  };
 
   return (
     <AuthProvider>
@@ -385,8 +402,9 @@ const handleMainModalClose = () => {
         onAuthStatusChange={handleAuthStatusChange}
       />
       
-      {/* Authentication Modal */}
+      {/* Authentication Modal - Note the key prop for forcing re-render */}
       <Authentication
+        key={authKey}
         isOpen={isAuthModalOpen}
         toggle={toggleAuthModal}
         authOption={handleAuthResult}

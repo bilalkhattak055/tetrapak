@@ -13,6 +13,20 @@ const Authentication = ({ isOpen, toggle, authOption, isAuthenticated }) => {
   const [authStatus, setAuthStatus] = useState("idle");
   const [error, setError] = useState('');
   const [loader, setLoader] = useState(false);
+  
+  // Reset auth status when modal is opened or closed
+  useEffect(() => {
+    if (!isOpen) {
+      // Only reset the form fields, not the authStatus when closing
+      // This maintains the success state if modal is closed after success
+      setEmail('');
+      setPassword('');
+    } else {
+      // Reset the authStatus to idle when the modal is opened
+      setAuthStatus("idle");
+      setError('');
+    }
+  }, [isOpen]);
 
   // Handle sign-in
   const handleSubmit = async (e) => {
@@ -94,8 +108,9 @@ const Authentication = ({ isOpen, toggle, authOption, isAuthenticated }) => {
                 className="btn text-white px-4 py-2 shadow-sm"
                 style={{ backgroundColor: "#023F88", fontSize: "15px" }}
                 onClick={handleSubmit}
+                disabled={loader}
               >
-                Authenticate
+                {loader ? "Authenticating..." : "Authenticate"}
               </button>
             </FormGroup>
           </>
@@ -146,9 +161,7 @@ const Authentication = ({ isOpen, toggle, authOption, isAuthenticated }) => {
 
   const handleClose = () => {
     toggle();
-    // Don't reset auth status when closing - we want to maintain the success state
-    setEmail("");
-    setPassword("");
+    // Don't reset auth status when closing manually
   };
 
   return (
