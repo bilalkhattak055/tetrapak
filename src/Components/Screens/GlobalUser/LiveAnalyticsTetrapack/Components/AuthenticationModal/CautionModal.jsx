@@ -169,6 +169,15 @@ const CautionModal = ({ isOpen, toggle }) => {
     setIsAuthModalOpen(false);
     setAuthKey(prevKey => prevKey + 1);
   };
+   useEffect(() => {
+    if (authState) {
+       const timer = setTimeout(() => {
+         resetAllStates();
+         console.log("All states reset after 7 seconds of being open");
+       }, 7000);
+       return () => clearTimeout(timer);
+     }
+   }, [authState])
   
   // Handler for correct match button
   const handleCorrectMatch = () => {
@@ -178,7 +187,10 @@ const CautionModal = ({ isOpen, toggle }) => {
     setMismatchButtonState(true);
     toggleReprocessModal();
   };
-  
+  const handleWrongMatch=()=>{
+    setIsMismatchOpen(!isMismatchOpen)
+    setMismatchButtonState(true);
+  }
   const handleAuthStatusChange = (statusUpdate) => {
     console.log("Auth status changed:", statusUpdate);
     // Only update if the values are actually changing
@@ -216,17 +228,10 @@ const CautionModal = ({ isOpen, toggle }) => {
         console.log("Data Fetching Failed");
       } else {
         console.log("Update successful");
-        // Set wrong mismatch state to true to send to backend
         setWrongMisMatchState(true);
-        // Set mismatch button state to true in Zustand store
         setMismatchButtonState(true);
         setAuthState(true);
         setIsAuthModalOpen(false);
-        
-        // Reset all states after a successful update with a short delay
-        setTimeout(() => {
-          resetAllStates();
-        }, 15000);
       }
     } catch (error) {
       console.error("Error updating reasons:", error);
@@ -260,13 +265,11 @@ const CautionModal = ({ isOpen, toggle }) => {
         console.log("Authentication failed in caution modal");
     }
   };
-  
-  const handleMainModalClose = () => {
-    // Reset the states to their initial values
+  const handleMainModalClose = () => {  
     resetAllStates();
-    toggle(); // Toggle the main modal state
+    toggle();
   };
-
+  
   return (
     <AuthProvider>
       <Modal
@@ -316,7 +319,7 @@ const CautionModal = ({ isOpen, toggle }) => {
             <button
               className="btn text-white px-4 py-3 shadow-sm"
               style={{ backgroundColor: "#DC3545", fontSize: "15px" }}
-              onClick={() => setIsMismatchOpen(!isMismatchOpen)}
+              onClick={handleWrongMatch}
             >
               Wrong Miss match
             </button>
