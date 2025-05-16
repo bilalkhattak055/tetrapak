@@ -71,7 +71,7 @@ const MissMatch = ({ loader,Mismatch }) => {
               {Mismatch}
             </span>
             <p style={{marginTop:"-2px",color: '#023F88', fontSize: '16px',fontWeight:500,textWrap:"nowrap",overflow:"hidden"}}>
-            Wrong Mis Match
+            Unidentified Reels
            </p> 
           </p>
         </div>

@@ -8,9 +8,11 @@ import { Row, Col, Badge, Button, Spinner } from "react-bootstrap";
 import tetraPakGraphService from "../../../../api/TetraPakGraphService";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import download from './asset/download.svg'
+import download from './asset/download.svg';
 import UserTable from "./Components/ActionTable";
 import ReelsDashboard from "./Components/AllReelsData";
+import PDFReportTemplate from "./PDF REPORTS/PDFREPORT";
+import { generatePdfFilename, getPdfMetadata } from './pdfUtils';
 
 const Inspection = () => {
     const [reelsData, setReelsData] = useState({});
@@ -18,31 +20,26 @@ const Inspection = () => {
     const [wrongMatchData, setWrongMatchData] = useState({});
     const [loading, setLoading] = useState(true);
     const [exporting, setExporting] = useState(false);
-    const [userID, setUserId]=useState("");
-    const [userName, setUserName]=useState("");
-    const [userEmail, setEmail]=useState("");
-    const [userBypass, setBypass]=useState("");
-    const [userReprocess, setReprocess]=useState("");
-    const [userWrongMatch,setWrongMatch]=useState("");
+    const [userID, setUserId] = useState("");
+    const [userName, setUserName] = useState("");
+    const [userEmail, setEmail] = useState("");
+    const [userBypass, setBypass] = useState("");
+    const [userReprocess, setReprocess] = useState("");
+    const [userWrongMatch, setWrongMatch] = useState("");
     const userid = JSON.parse(localStorage.getItem('userId'));
-   
-    // Define chart titles
-    const chartTitles = {
-        complianceTarget: "Compliance Target Overview",
-        alertCount: "Alert Count Summary",
-        reprocessChart: "Reprocess Analytics",
-        reelsDashboard: "Reels Summary Dashboard",
-        userActivity: "User Activity Summary"
-    };
-
+    const [emailRecipients, setEmailRecipients] = useState(['Support@thedisruptlabs.com','syedsaadali432@gmail.com']); 
+    const [ccemailRecipients,setccemailRecipents]=useState(['ahsan.ali@thedisruptlabs.com'])
     const pageRef = useRef(null);
+    const pdfReportRef = useRef(null);
+    const emailIntervalRef = useRef(null);
+
     const [activeFilters, setActiveFilters] = useState({
         week: new Date().getFullYear() + "-W" + String(getWeekNumber()).padStart(2, "0"),
         month: "",
         customStartDate: "",
         filter: "week"
     });
-    
+
     // Get current week number
     function getWeekNumber() {
         const now = new Date();
@@ -62,7 +59,7 @@ const Inspection = () => {
             customStartDate: filterPayload.customStartDate || "",
             filter: filterPayload.filter || "week"
         };
-        
+
         setActiveFilters(newActiveFilters);
         fetchData(newActiveFilters);
     };
@@ -75,7 +72,7 @@ const Inspection = () => {
             customStartDate: "",
             filter: "week"
         };
-        
+
         setActiveFilters(defaultFilters);
         fetchData(defaultFilters);
     };
@@ -110,25 +107,25 @@ const Inspection = () => {
     // Fetch data from APIs
     const fetchData = (filters) => {
         const payload = preparePayload(filters);
-        
+
         setLoading(true);
         const reelApi = tetraPakGraphService.getAllReels(payload);
         const reprocessApi = tetraPakGraphService.getReprocessCount(payload);
         const wrongMatchApi = tetraPakGraphService.getWrongCount(payload);
         const userActionDetail = tetraPakGraphService.getUserActionDetails(payload);
-    
+
         Promise.all([reelApi, reprocessApi, wrongMatchApi, userActionDetail])
             .then(([reelsRes, reprocessRes, wrongMatchRes, userActionRes]) => {
                 if (reelsRes.data && reelsRes.data.success) {
                     setReelsData(reelsRes.data.data);
                 }
-                if(reprocessRes.data && reprocessRes.data.success) {
+                if (reprocessRes.data && reprocessRes.data.success) {
                     setReprocessData(reprocessRes.data.data);
                 }
-                if(wrongMatchRes.data && wrongMatchRes.data.success) {
+                if (wrongMatchRes.data && wrongMatchRes.data.success) {
                     setWrongMatchData(wrongMatchRes.data.data);
                 }
-                if(userActionRes.data && userActionRes.data.success){
+                if (userActionRes.data && userActionRes.data.success) {
                     const user = userActionRes.data.data[0];
                     setUserId(user.user_id)
                     setUserName(user.user_name)
@@ -144,7 +141,7 @@ const Inspection = () => {
                 setLoading(false);
             });
     };
-    
+
     // Format active filter for display
     const getActiveFilterDisplay = () => {
         if (activeFilters.filter === "week" && activeFilters.week) {
@@ -160,93 +157,128 @@ const Inspection = () => {
         }
         return null;
     };
-    
-    // Export charts to PDF
+
+    // Generate PDF blob for email attachment
+    const generatePdfBlob = async () => {
+        // Wait for any loading to complete
+        if (loading) {
+            await new Promise(resolve => {
+                const checkLoading = setInterval(() => {
+                    if (!loading) {
+                        clearInterval(checkLoading);
+                        resolve();
+                    }
+                }, 200);
+            });
+        }
+
+        // Small delay to ensure PDF component is fully rendered
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Create PDF with professional settings
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4',
+            compress: true
+        });
+
+        // Capture the dedicated PDF component
+        const canvas = await html2canvas(pdfReportRef.current, {
+            scale: 2, // Higher scale for better quality
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+        });
+
+        const imgData = canvas.toDataURL('image/png', 1.0);
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        // Calculate image dimensions to fit page properly
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const imgWidth = pageWidth;
+        const imgHeight = (canvasHeight * imgWidth) / canvasWidth;
+
+        // Add image to PDF with multiple pages if needed
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        // First page
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        // Add additional pages if content is longer than one page
+        while (heightLeft >= 0) {
+            position = position - pageHeight; // Move position for next page slice
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+
+        // Add metadata to PDF
+        pdf.setProperties(getPdfMetadata(getActiveFilterDisplay()));
+
+        // Return PDF blob
+        return pdf.output('blob');
+    };
+
+    // Export to PDF for download
     const exportToPDF = async () => {
         try {
             setExporting(true);
-            
-            // Wait for any loading to complete
-            if (loading) {
-                await new Promise(resolve => {
-                    const checkLoading = setInterval(() => {
-                        if (!loading) {
-                            clearInterval(checkLoading);
-                            resolve();
-                        }
-                    }, 500);
-                });
-            }
-            
-            // Wait a moment for charts to finish rendering
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            // Create PDF with professional settings
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4',
+                compress: true
+            });
+
+            // Capture the dedicated PDF component
+            const canvas = await html2canvas(pdfReportRef.current, {
+                scale: 2, // Higher scale for better quality
+                useCORS: true,
+                allowTaint: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            });
+
+            const imgData = canvas.toDataURL('image/png', 1.0);
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
-            const margin = 15;
-            
-            // Add title
-            pdf.setFontSize(16);
-            pdf.text("AI Based Reels Inspection System Report", pageWidth / 2, margin, { align: 'center' });
-            
-            // Add date
-            const today = new Date();
-            pdf.setFontSize(8);
-            pdf.text(`(Generated: ${today.toLocaleDateString()})`, pageWidth - margin, margin, { align: 'right' });
-            
-            // Add filter information
-            const filterDisplay = getActiveFilterDisplay();
-            if (filterDisplay) {
-                pdf.text(`Filter: ${filterDisplay}`, margin, margin + 8);
+
+            // Calculate image dimensions to fit page properly
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const imgWidth = pageWidth;
+            const imgHeight = (canvasHeight * imgWidth) / canvasWidth;
+
+            // Add image to PDF with multiple pages if needed
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            // First page
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            // Add additional pages if content is longer than one page
+            while (heightLeft >= 0) {
+                position = position - pageHeight; // Move position for next page slice
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
             }
-            
-            let yPosition = margin + 15;
-            
-            // Process chart sections by class name
-            const chartSections = [
-                { element: pageRef.current.querySelector('.compliance-chart-section'), title: chartTitles.complianceTarget },
-                { element: pageRef.current.querySelector('.alert-chart-section'), title: chartTitles.alertCount },
-                { element: pageRef.current.querySelector('.reprocess-chart-section'), title: chartTitles.reprocessChart },
-                { element: pageRef.current.querySelector('.reels-dashboard-section'), title: chartTitles.reelsDashboard },
-                { element: pageRef.current.querySelector('.user-activity-section'), title: chartTitles.userActivity }
-            ];
-            
-            // Process each chart section
-            for (const section of chartSections) {
-                if (!section.element) continue;
-                
-                const canvas = await html2canvas(section.element, {
-                    scale: 2,
-                    logging: false,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: '#ffffff'
-                });
-                
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = pageWidth - (margin * 2);
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                // Add new page if needed
-                if (yPosition + imgHeight + 10 > pageHeight) {
-                    pdf.addPage();
-                    yPosition = margin;
-                }
-                
-                // Add chart title
-                pdf.setFontSize(12);
-                pdf.text(section.title, margin, yPosition);
-                yPosition += 7;
-                
-                // Add chart image
-                pdf.addImage(imgData, 'PNG', margin, yPosition, imgWidth, imgHeight);
-                yPosition += imgHeight + 15;
-            }
-            
-            // Save the PDF
-            pdf.save('TetraPak Inspection Report.pdf');
-;
+
+            // Add metadata to PDF
+            pdf.setProperties(getPdfMetadata(getActiveFilterDisplay()));
+
+            // Save the PDF with a clear name that includes filter information and date
+            pdf.save(generatePdfFilename(getActiveFilterDisplay()));
+
         } catch (error) {
             console.error("Error generating PDF:", error);
             alert("Failed to generate PDF. Please try again.");
@@ -254,11 +286,96 @@ const Inspection = () => {
             setExporting(false);
         }
     };
-    
-    // Initial data fetch on component mount
+
+    // Send email with PDF report attached
+const sendEmailReport = async () => {
+    try {
+        // If data is still loading, wait until it's complete
+        if (loading) {
+            console.log("Data is still loading, waiting to send email...");
+            return;
+        }
+
+        // Generate PDF blob for attachment
+        const pdfBlob = await generatePdfBlob();
+
+        // Create a File object from the blob
+        const reportFile = new File(
+            [pdfBlob],
+            generatePdfFilename(getActiveFilterDisplay()),
+            { type: 'application/pdf' }
+        );
+
+        // Prepare form data for API
+        const formData = new FormData();
+
+        // Add each recipient separately - this is key for multiple recipients
+        emailRecipients.forEach(email => {
+            formData.append('receivers', email);
+        });
+        
+        // Add CC recipients
+        ccemailRecipients.forEach(email => {
+            formData.append('cc_emails', email);
+        });
+
+        // Add subject, body and attachment
+        formData.append('subject', `Reels Inspection Report`);
+        formData.append('body', `Please find attached the automated TetraPak Reels Inspection Reports.
+Summary:
+- Total Reels: ${reelsData.total_reels || "N/A"}
+- Matched Reels: ${reelsData.match_reels || "N/A"} 
+- Mismatched Reels: ${reelsData.mismatch_reels || "N/A"}
+- Wrong Mismatches: ${reelsData.wrong_mismatch_reels || "N/A"}
+
+This is an automated email sent by the Disrupt Lab AI Based Reels Inspection System.`);
+        formData.append('attachment', reportFile);
+        
+        const response = await tetraPakGraphService.sendEmail(formData);
+        console.log("Email report sent successfully:", response);
+    } catch (error) {
+        console.error("Error sending email report:", error);
+    }
+};
+    // Initialize automatic email sending at a regular interval
+    const initializeAutomaticEmailReports = () => {
+        // Clear any existing interval
+        if (emailIntervalRef.current) {
+            clearInterval(emailIntervalRef.current);
+        }
+
+        // Set up new interval to send reports every 5 minutes (300000 ms)
+        emailIntervalRef.current = setInterval(() => {
+            console.log("Sending scheduled email report...");
+            sendEmailReport();
+        }, 7200000); // 5 minutes
+    };
+
+    // Initial data fetch and email setup on component mount
     useEffect(() => {
         fetchData(activeFilters);
+        initializeAutomaticEmailReports();
+
+        // Cleanup on component unmount
+        return () => {
+            if (emailIntervalRef.current) {
+                clearInterval(emailIntervalRef.current);
+            }
+        };
     }, []);
+
+    // When active filters change, also trigger an immediate email report
+    useEffect(() => {
+        // Wait for data to be loaded before sending the email
+        if (!loading) {
+            // Small delay to ensure data is fully processed
+            const timer = setTimeout(() => {
+                sendEmailReport();
+            }, 1000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [activeFilters, loading]);
 
     return (
         <WeekFilterProvider>
@@ -279,27 +396,27 @@ const Inspection = () => {
                         onAccept={handleFilterAccept}
                         onReset={handleFilterReset}
                     />
-                    
+
                     {/* Active Filter Display */}
-                    <div className="mb-1" style={{display:"flex",justifyContent:"space-between"}}>
+                    <div className="mb-1" style={{ display: "flex", justifyContent: "space-between" }}>
                         {getActiveFilterDisplay() && (
                             <div>
-                                <Badge 
-                                    pill 
-                                    bg="primary" 
-                                    style={{ 
-                                        backgroundColor: "#023F88", 
-                                        fontSize: "16px", 
-                                        padding: "10px 15px" 
+                                <Badge
+                                    pill
+                                    bg="primary"
+                                    style={{
+                                        backgroundColor: "#023F88",
+                                        fontSize: "16px",
+                                        padding: "10px 15px"
                                     }}
                                 >
                                     Active Filter-{getActiveFilterDisplay()}
                                 </Badge>
                             </div>
                         )}
-                        <Button 
-                            variant="primary" 
-                            onClick={exportToPDF} 
+                        <Button
+                            variant="primary"
+                            onClick={exportToPDF}
                             disabled={loading || exporting}
                             style={{ backgroundColor: "#023F88" }}
                         >
@@ -309,42 +426,38 @@ const Inspection = () => {
                                     Downloading...
                                 </>
                             ) : (
-                                <div className="shadow-md" style={{display:"flex",gap:"8px",fontSize:"16px",borderRadius:"10px"}}>
-                                    <img src={download} alt="download pdf"/>
+                                <div className="shadow-md" style={{ display: "flex", gap: "8px", fontSize: "16px", borderRadius: "10px" }}>
+                                    <img src={download} alt="download pdf" />
                                     Download Report
                                 </div>
                             )}
                         </Button>
                     </div>
-                    
+
                     {/* Chart 1: Compliance Targets */}
                     <Col md={6} lg={7}>
                         <div className="p-2 compliance-chart-section">
-                            
                             <ComplianceTargetsChart data={reelsData} loading={loading} />
                         </div>
                     </Col>
-                    
+
                     {/* Chart 2: Alert Counts */}
                     <Col md={6} lg={5}>
                         <div className="p-2 alert-chart-section">
-                            
                             <AlertCountsChart data={wrongMatchData} />
                         </div>
                     </Col>
                 </Row>
-                
+
                 {/* Chart 3: Reprocess */}
                 <Row>
                     <div className="p-3 reprocess-chart-section">
-                        
                         <ReProcessChart data={reprocessData} loading={loading} />
                     </div>
                 </Row>
-                
+
                 {/* Chart 4: Reels Dashboard */}
                 <Row className="reels-dashboard-section">
-                    
                     <ReelsDashboard
                         TotalReels={reelsData.total_reels}
                         MatchReels={reelsData.match_reels}
@@ -352,10 +465,9 @@ const Inspection = () => {
                         WrongMisMatch={reelsData.wrong_mismatch_reels}
                     />
                 </Row>
-                
+
                 {/* Chart 5: User Activity */}
                 <Row className="user-activity-section">
-                    
                     <UserTable
                         id={userID}
                         username={userName}
@@ -365,6 +477,25 @@ const Inspection = () => {
                         WrongCount={userWrongMatch}
                     />
                 </Row>
+            </div>
+
+            {/* Hidden PDF Report Template - This is the key to fast, professional PDFs */}
+            <div style={{ position: 'absolute', left: '-9999px', top: 0, width: '800px', height: 'auto', overflow: 'hidden' }}>
+                <PDFReportTemplate
+                    ref={pdfReportRef}
+                    reelsData={reelsData}
+                    wrongMatchData={wrongMatchData}
+                    reprocessData={reprocessData}
+                    userData={{
+                        id: userID,
+                        username: userName,
+                        email: userEmail,
+                        bypass: userBypass,
+                        reprocess: userReprocess,
+                        WrongCount: userWrongMatch
+                    }}
+                    filterDisplay={getActiveFilterDisplay()}
+                />
             </div>
         </WeekFilterProvider>
     );

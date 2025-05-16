@@ -140,7 +140,7 @@ const AlertCountsChart = ({ loading = false,data }) => {
         }}>
             <Col>
                 <CardTitle tag="h5" className="text-center mt-2">
-                    Wrong Mis-Match Reasons
+                    Unidentified Reels Reasons
                 </CardTitle>
                 {loading ? (
                     <div className="d-flex justify-content-center align-items-center" style={{ height: '250px' }}>

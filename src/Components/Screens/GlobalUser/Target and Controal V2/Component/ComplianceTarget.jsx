@@ -17,7 +17,7 @@ const ComplianceTargetsChart = ({ loading = false, data }) => {
         data: seriesData,
       }
     ],
-    categories: ['Total Reels', 'Match Reels', 'Mis-Match Reels', 'Wrong Mis Match'],
+    categories: ['Total Reels', 'Match Reels', 'Mis-Match Reels', 'Unidentified Reels'],
   };
 
   const options = {

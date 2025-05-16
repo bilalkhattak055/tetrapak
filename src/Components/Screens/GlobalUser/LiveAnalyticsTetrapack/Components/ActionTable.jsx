@@ -116,7 +116,7 @@ export default function UserTable({id, username, email, bypass, reprocess,WrongC
       cell: row => <BadgeCell value={row.reprocessCount} color="linear-gradient(45deg, #6a11cb, #2575fc)" />,
     },
     {
-      name: "Wrong Match",
+      name: "Unidentified Reels",
       selector: row => row.WrongCount,
       sortable: true,
       center: true,

@@ -17,6 +17,9 @@ const tetraPakGraphService = {
     },
     updateReelSyncRow(payload){
         return api.post(`inspection/sync_rows`,payload);
+    },
+    sendEmail(payload){
+        return api.post(`users/send_mail_with_attachment`,payload);
     }
 }
 export default tetraPakGraphService;

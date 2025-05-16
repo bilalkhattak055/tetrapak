@@ -307,19 +307,7 @@ const LiveCameraComparison = ({ images, barcodeData, matchStatus, mismatchStatus
                                                 borderBottomLeftRadius: "15px",
                                                 borderBottomRightRadius: "15px",
                                                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                                            }}>
-                                                <span className="text-primary fw-bold me-2"
-                                                    style={{
-                                                        border: '1px solid #0d6efd',
-                                                        borderRadius: '4px',
-                                                        padding: '0px 6px',
-                                                        fontSize: '14px'
-                                                    }}
-                                                >
-                                                    #
-                                                </span>
-                                                <span className="text-muted me-2" style={{ color: "#000000" }}>Value</span>
-                                                <span className="fw-bold ms-auto" style={{ color: "#000000" }}>{barcode.value}</span>
+                                            }}>                                                
                                             </div>
                                         </div>
                                     ))}

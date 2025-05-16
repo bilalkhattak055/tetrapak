@@ -1,0 +1,432 @@
+/* PDF Report Template Styles - With Fixed Header and Page Break Solutions */
+.pdf-report-container {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background-color: white;
+  width: 210mm; /* A4 width */
+  min-height: 297mm; /* A4 height */
+  padding: 15mm;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Reset Bootstrap row and col padding to avoid layout issues */
+.pdf-row {
+  margin-left: 0;
+  margin-right: 0;
+  display: flex;
+  width: 100%;
+  page-break-inside: avoid; /* Critical for avoiding page breaks within rows */
+}
+
+.pdf-col {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* Header styles */
+.pdf-report-header {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #023F88;
+  padding-bottom: 25px;
+  align-items: center;
+  page-break-after: avoid; /* Prevents page break after header */
+  page-break-inside: avoid; /* Prevents page break within header */
+}
+.pdf-report-headerss{
+  display: flex;
+  margin-top:170px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #023F88;
+  padding-bottom: 25px;
+  align-items: center;
+  page-break-after: avoid; /* Prevents page break after header */
+  page-break-inside: avoid; /* Prevents page break within header */
+}
+
+.pdf-report-logo {
+  flex: 0 0 80px;
+  margin-right: 15px;
+}
+
+.logo-container {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logo-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.pdf-report-title {
+  flex: 1;
+}
+
+.pdf-report-title h1 {
+  font-size: 22px;
+  color: #023F88;
+  margin: 0 0 5px 0;
+}
+
+.pdf-report-date, .pdf-report-filter {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+/* Content styles */
+.pdf-report-content {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pdf-section {
+  margin-top: 25px;
+  page-break-inside: avoid; /* Critical to prevent sections from breaking across pages */
+  break-inside: avoid; /* Modern browsers */
+}
+
+.pdf-section-title {
+  font-size: 18px;
+  color: #023F88;
+  margin-bottom: 10px;
+  page-break-after: avoid; /* Keep title with its content */
+}
+
+/* Chart styles */
+.pdf-chart {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background-color: white;
+  height: 100%;
+  min-height: 200px; /* Minimum height for charts */
+  page-break-inside: avoid; /* Prevents page break within a chart */
+  break-inside: avoid; /* Modern browsers */
+}
+
+.pdf-chart-title {
+  font-size: 16px;
+  color: #023F88;
+  margin-top: 0;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  page-break-after: avoid; /* Keep chart title with chart content */
+}
+
+.pdf-chart-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.pdf-chart-data {
+  margin-bottom: 15px;
+}
+
+.pdf-stat {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.pdf-stat-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.pdf-stat-value {
+  font-weight: bold;
+  color: #023F88;
+}
+
+/* Progress bar */
+.pdf-progress-bar {
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.pdf-progress-fill {
+  height: 100%;
+  transition: width 0.5s;
+}
+
+.pdf-progress-label {
+  text-align: center;
+  margin-top: 5px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Alert indicator */
+.pdf-alert-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.pdf-alert-icon {
+  font-size: 36px;
+  text-align: center;
+}
+
+/* Reprocess table styles */
+.pdf-reprocess-table-container {
+  margin-top: 15px;
+  overflow-x: auto;
+  page-break-inside: avoid; /* Prevents table from breaking across pages */
+  break-inside: avoid; /* Modern browsers */
+}
+
+.pdf-reprocess-summary {
+  font-size: 13px;
+  color: #464545;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.pdf-reprocess-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.pdf-reprocess-table th,
+.pdf-reprocess-table td {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.pdf-reprocess-table th {
+  background-color: #f0f7ff;
+  color: #023F88;
+  font-weight: bold;
+}
+
+.pdf-row-even {
+  background-color: #f9f9f9;
+}
+
+.pdf-row-odd {
+  background-color: #ffffff;
+}
+
+.pdf-cell-period {
+  font-weight: bold;
+}
+
+.pdf-cell-count {
+  text-align: center;
+}
+
+.pdf-cell-percent {
+  text-align: right;
+  color: #023F88;
+  font-weight: bold;
+}
+
+.pdf-empty-data {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+/* Reels dashboard styles */
+.pdf-reels-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+  page-break-inside: avoid; /* Keep the grid together */
+  break-inside: avoid; /* Modern browsers */
+}
+
+.pdf-reels-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.pdf-reels-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.pdf-reels-label {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.pdf-reels-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #023F88;
+}
+
+/* User activity table */
+.pdf-user-table-container {
+  overflow-x: auto;
+  page-break-inside: avoid; /* Prevent table from breaking across pages */
+  break-inside: avoid; /* Modern browsers */
+}
+
+.pdf-user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  table-layout: fixed;
+}
+
+.pdf-user-table th,
+.pdf-user-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pdf-user-table th {
+  background-color: #f0f7ff;
+  color: #023F88;
+  font-weight: bold;
+}
+
+.pdf-user-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* User Actions section */
+.pdf-user-actions-section {
+  margin-top: 20px;
+  page-break-inside: avoid; /* Prevent breaking within this section */
+  break-inside: avoid; /* Modern browsers */
+}
+
+/* Footer styles */
+.pdf-report-footer {
+  text-align: center;
+  font-size: 12px;
+  color: #777;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: 30px;
+  page-break-before: avoid; /* Prevents page break before footer */
+  page-break-inside: avoid; /* Prevents page break within footer */
+}
+
+/* Empty state */
+.pdf-empty-chart {
+  padding: 30px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+/* Fixed page settings */
+.pdf-page {
+  position: relative;
+  page-break-after: always;
+  min-height: 250mm; /* Minimum height for content */
+}
+
+.pdf-page:last-child {
+  page-break-after: auto;
+}
+
+/* Ensure each page has its own header properly positioned */
+.page-break-before {
+  page-break-before: always !important;
+}
+
+/* Media queries for responsiveness */
+@media screen and (max-width: 768px) {
+  .pdf-reels-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* For very small screens */
+@media screen and (max-width: 480px) {
+  .pdf-report-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .pdf-report-logo {
+    margin-bottom: 10px;
+  }
+}
+
+/* Print media queries - these help with page breaks */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .pdf-report-container {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Critical print styles for headers and page breaks */
+  .pdf-page {
+    break-after: page; /* Modern equivalent to page-break-after */
+    page-break-after: always;
+    position: relative;
+  }
+  
+  .pdf-report-header {
+    display: flex !important; /* Force display even in print */
+    margin-bottom: 20px !important;
+    border-bottom: 2px solid #023F88 !important;
+    padding-bottom: 15px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+  
+  .page-break-before {
+    page-break-before: always !important;
+    break-before: page !important; /* Modern equivalent */
+  }
+  
+  /* Prevent unwanted breaks */
+  .pdf-section,
+  .pdf-chart,
+  .pdf-row {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  /* Fixed width for tables in print mode */
+  .pdf-user-table th, 
+  .pdf-user-table td {
+    max-width: 100px;
+  }
+}
