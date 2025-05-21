@@ -185,14 +185,15 @@ const getTodayDate = () => {
     }
   };
 
-  // Trigger FetchReelsData every minute
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      FetchReelsData();
-    }, 90000); // 60,000ms = 1 minute
+useEffect(() => {
+  FetchReelsData();
+  const intervalId = setInterval(() => {
+    console.log("api triggered sucssesfully")
+    FetchReelsData();
+  }, 90000);
 
-    return () => clearInterval(intervalId); // Clean up the interval on component unmount
-  }, [reelsData]); // Trigger the effect when reelsData changes
+  return () => clearInterval(intervalId);
+}, []);
 
   return (
     <AuthProvider>
