@@ -143,16 +143,23 @@ const getTodayDate = () => {
   return `${year}-${month}-${day}`;
 };
   // Reels Data API call sync
-  const FetchReelsData = async () => {
-    const latestDate=getTodayDate();
-    const Payload = {
-      inspection_alert_counts: [
+ const FetchReelsData = async () => {
+  const latestDate = getTodayDate();
+  
+  // Helper function to safely convert to integer
+  const safeParseInt = (value) => {
+    const parsed = parseInt(value, 10);
+    return isNaN(parsed) ? 0 : parsed;
+  };
+
+  const Payload = {
+    inspection_alert_counts: [
       {
         client_id: 1,
         factory_id: 1,
         object_id: 1,
         model_id: 1,
-        count: reelsData.missMatch_reels,
+        count: safeParseInt(reelsData.missMatch_reels),
         date: latestDate
       },
       {
@@ -160,7 +167,7 @@ const getTodayDate = () => {
         factory_id: 1,
         object_id: 2,
         model_id: 1,
-        count: reelsData.match_reels,
+        count: safeParseInt(reelsData.match_reels),
         date: latestDate
       },
       {
@@ -168,22 +175,27 @@ const getTodayDate = () => {
         factory_id: 1,
         object_id: 3,
         model_id: 1,
-        count: reelsData.wrong_mismatch,
+        count: safeParseInt(reelsData.wrong_mismatch),
         date: latestDate
-      }]
-    };
-    try {
-      const SyncRow = await tetraPakGraphService.updateSyncRow(Payload);
-      if (!SyncRow.ok) {
-        console.error("Data Fetching Failed");
-      } else {
-        const data = await SyncRow.json();
-        console.log(data);
       }
-    } catch (error) {
-      console.error("Error during sync:", error);
-    }
+    ]
   };
+
+  try {
+    const SyncRow = await tetraPakGraphService.updateSyncRow(Payload);
+    if (!SyncRow.ok) {
+      console.error("Data Fetching Failed");
+      return null;
+    } else {
+      const data = await SyncRow.json();
+      console.log(data);
+      return data;
+    }
+  } catch (error) {
+    console.error("Error during sync:", error);
+    throw error;
+  }
+};
 
 useEffect(() => {
   FetchReelsData();
