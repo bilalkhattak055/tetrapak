@@ -142,23 +142,22 @@ const Inspection = () => {
             });
     };
 
-    // Format active filter for display
     const getActiveFilterDisplay = () => {
-        if (activeFilters.filter === "week" && activeFilters.week) {
-            return `Week: ${activeFilters.week}`;
-        } else if (activeFilters.filter === "month" && activeFilters.month) {
-            const date = new Date(activeFilters.month);
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `Month: ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-        } else if (activeFilters.filter === "daily" && activeFilters.customStartDate) {
-            const date = new Date(activeFilters.customStartDate);
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `Date: ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-        }
-        return null;
-    };
+    if (activeFilters.filter === "week" && activeFilters.week) {
+        return `Week: ${activeFilters.week}`;
+    } else if (activeFilters.filter === "month" && activeFilters.month) {
+        const [year, month] = activeFilters.month.split("-");
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const monthIndex = parseInt(month, 10) - 1;
+        return `Month: ${monthNames[monthIndex]} ${year}`;
+    } else if (activeFilters.filter === "daily" && activeFilters.customStartDate) {
+        const date = new Date(activeFilters.customStartDate);
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `Date: ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+    }
+    return null;
+};
 
-    // Generate PDF blob for email attachment
     const generatePdfBlob = async () => {
         // Wait for any loading to complete
         if (loading) {
