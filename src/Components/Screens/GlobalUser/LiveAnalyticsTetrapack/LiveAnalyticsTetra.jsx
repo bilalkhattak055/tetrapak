@@ -142,15 +142,19 @@ const getTodayDate = () => {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
-  // Reels Data API call sync
- const FetchReelsData = async () => {
-  const latestDate = getTodayDate();
-  
-  // Helper function to safely convert to integer
-  const safeParseInt = (value) => {
+
+ const safeParseInt = (value) => {
     const parsed = parseInt(value, 10);
     return isNaN(parsed) ? 0 : parsed;
   };
+  console.log("Latest Data nhi:", safeParseInt(reelsData.missMatch_reels));
+  // Reels Data API call sync
+ const FetchReelsData = async () => {
+  const latestDate = getTodayDate();
+
+  
+  // Helper function to safely convert to integer
+ 
 
   const Payload = {
     inspection_alert_counts: [
@@ -159,7 +163,7 @@ const getTodayDate = () => {
         factory_id: 1,
         object_id: 1,
         model_id: 1,
-        count: safeParseInt(reelsData.missMatch_reels),
+        count: parseInt(reelsData.missMatch_reels),
         date: latestDate
       },
       {
@@ -167,7 +171,7 @@ const getTodayDate = () => {
         factory_id: 1,
         object_id: 2,
         model_id: 1,
-        count: safeParseInt(reelsData.match_reels),
+        count: parseInt(reelsData.match_reels),
         date: latestDate
       },
       {
@@ -175,7 +179,7 @@ const getTodayDate = () => {
         factory_id: 1,
         object_id: 3,
         model_id: 1,
-        count: safeParseInt(reelsData.wrong_mismatch),
+        count: parseInt(reelsData.wrong_mismatch),
         date: latestDate
       }
     ]
@@ -198,14 +202,20 @@ const getTodayDate = () => {
 };
 
 useEffect(() => {
-  FetchReelsData();
+  const hasValidData = parseInt(reelsData.match_reels) > 0 || parseInt(reelsData.missMatch_reels) > 0 || parseInt(reelsData.wrong_mismatch) > 0;
+  
+  if (!hasValidData) return;
+
+  FetchReelsData(); 
+
   const intervalId = setInterval(() => {
     console.log("api triggered sucssesfully")
     FetchReelsData();
   }, 90000);
 
   return () => clearInterval(intervalId);
-}, []);
+}, [reelsData]); 
+
 
   return (
     <AuthProvider>
