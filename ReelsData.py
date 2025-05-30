@@ -55,6 +55,7 @@ class WebSocketReelSender:
         print(f"Image server will run on http://localhost:{self.http_port}")
         print(f"Status WebSocket server will run on ws://localhost:{self.status_ws_port}")
         print(f"Images will be served from: {self.images_dir}")
+        print("*** TESTING MODE: Data will be sent every 7 seconds ***")
 
     def get_latest_images(self):
         """
@@ -107,7 +108,7 @@ class WebSocketReelSender:
     async def send_reel_data(self, websocket, path=None):
         """
         When a connection is established, send the initial reel data,
-        then wait 2 minutes between each update (with random increments) and send updates.
+        then wait 7 seconds between each update (with random increments) and send updates.
         """
         try:
             # Get and send the initial reel data.
@@ -123,20 +124,21 @@ class WebSocketReelSender:
                 "wrong_match": self.wrong_match
             }
             await websocket.send(json.dumps(message))
-            print(f"Sent initial reel data: {message}")
+            print(f"[{asyncio.get_event_loop().time():.2f}] Sent initial reel data: {message}")
 
+            update_count = 1
             while self.running:
-                # Wait for 2 minutes between updates.
-                await asyncio.sleep(120)
+                # Wait for 7 seconds between updates (for testing).
+                await asyncio.sleep(7)
                 
-                # Randomly update reel data.
-                self.total_reels += random.choice([0, 1])
-                self.match_reels += random.choice([0, 1])
-                self.mismatch_reels += random.choice([0, 1])
+                # Randomly update reel data with more varied changes for testing
+                self.total_reels += random.choice([0, 1, 2])
+                self.match_reels += random.choice([0, 1, 2])
+                self.mismatch_reels += random.choice([0, 1, 2, 3])  # More variation in mismatch
                 self.wrong_mismatch += random.choice([0, 1])
                 
-                # Periodically toggle match/mismatch status to simulate different conditions
-                if random.random() < 0.5:  # 50% chance to toggle status
+                # More frequent status changes for testing
+                if random.random() < 0.3:  # 30% chance to toggle status
                     self.match_reel = not self.match_reel
                     self.mismatch_reel = not self.mismatch_reel
                 
@@ -152,7 +154,9 @@ class WebSocketReelSender:
                     "wrong_match": self.wrong_match
                 }
                 await websocket.send(json.dumps(message))
-                print(f"Sent updated reel data: {message}")
+                print(f"[{asyncio.get_event_loop().time():.2f}] Update #{update_count} - Sent reel data: total={self.total_reels}, match={self.match_reels}, mismatch={self.mismatch_reels}, wrong={self.wrong_mismatch}")
+                update_count += 1
+                
         except websockets.exceptions.ConnectionClosed as e:
             print(f"Reel data WebSocket connection closed: {e}")
 
