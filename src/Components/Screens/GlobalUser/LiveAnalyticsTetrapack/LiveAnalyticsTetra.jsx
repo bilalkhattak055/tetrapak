@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MissandMatch from './Components/MissandMatchCard';
 import MissMatch from './Components/MismatchCard';
 import ReelCard from './Components/ReelCard';
@@ -25,6 +25,16 @@ const AnalyticsTetra = () => {
     crop_b: null
   });
   const [wsConnected, setWsConnected] = useState(false);
+  
+  // Use ref to store the latest reelsData without causing re-renders
+  const reelsDataRef = useRef(reelsData);
+  const lastApiCallTime = useRef(0);
+  const apiCallInterval = useRef(null);
+
+  // Update ref whenever reelsData changes
+  useEffect(() => {
+    reelsDataRef.current = reelsData;
+  }, [reelsData]);
 
   useEffect(() => {
     // WebSocket connection setup
@@ -134,88 +144,108 @@ const AnalyticsTetra = () => {
       image: imageUrls.crop_b || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc_7uyoAUjK3THhC0ZDv0eoj7FmlJ2oW47nA&s'
     }
   ];
-//function get latest date
-const getTodayDate = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
 
- const safeParseInt = (value) => {
+  // Function get latest date
+  const getTodayDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const safeParseInt = (value) => {
     const parsed = parseInt(value, 10);
     return isNaN(parsed) ? 0 : parsed;
   };
+
   console.log("Latest Data nhi:", safeParseInt(reelsData.missMatch_reels));
-  // Reels Data API call sync
- const FetchReelsData = async () => {
-  const latestDate = getTodayDate();
 
-  
-  // Helper function to safely convert to integer
- 
+  // Reels Data API call sync - using ref to get latest data
+  const FetchReelsData = async () => {
+    const latestDate = getTodayDate();
+    const currentReelsData = reelsDataRef.current;
 
-  const Payload = {
-    inspection_alert_counts: [
-      {
-        client_id: 1,
-        factory_id: 1,
-        object_id: 1,
-        model_id: 1,
-        count: parseInt(reelsData.missMatch_reels),
-        date: latestDate
-      },
-      {
-        client_id: 1,
-        factory_id: 1,
-        object_id: 2,
-        model_id: 1,
-        count: parseInt(reelsData.match_reels),
-        date: latestDate
-      },
-      {
-        client_id: 1,
-        factory_id: 1,
-        object_id: 3,
-        model_id: 1,
-        count: parseInt(reelsData.wrong_mismatch),
-        date: latestDate
+    const Payload = {
+      inspection_alert_counts: [
+        {
+          client_id: 1,
+          factory_id: 1,
+          object_id: 1,
+          model_id: 1,
+          count: parseInt(currentReelsData.missMatch_reels),
+          date: latestDate
+        },
+        {
+          client_id: 1,
+          factory_id: 1,
+          object_id: 2,
+          model_id: 1,
+          count: parseInt(currentReelsData.match_reels),
+          date: latestDate
+        },
+        {
+          client_id: 1,
+          factory_id: 1,
+          object_id: 3,
+          model_id: 1,
+          count: parseInt(currentReelsData.wrong_mismatch),
+          date: latestDate
+        }
+      ]
+    };
+
+    try {
+      const SyncRow = await tetraPakGraphService.updateSyncRow(Payload);
+      if (!SyncRow.ok) {
+        console.error("Data Fetching Failed");
+        return null;
+      } else {
+        const data = await SyncRow.json();
+        console.log("API call successful:", data);
+        return data;
       }
-    ]
+    } catch (error) {
+      console.error("Error during sync:", error);
+      throw error;
+    }
   };
 
-  try {
-    const SyncRow = await tetraPakGraphService.updateSyncRow(Payload);
-    if (!SyncRow.ok) {
-      console.error("Data Fetching Failed");
-      return null;
-    } else {
-      const data = await SyncRow.json();
-      console.log(data);
-      return data;
-    }
-  } catch (error) {
-    console.error("Error during sync:", error);
-    throw error;
-  }
-};
+  // Set up the API call interval only once when component mounts
+  useEffect(() => {
+    // Initial API call after 2 minutes
+    const initialTimeout = setTimeout(() => {
+      const currentReelsData = reelsDataRef.current;
+      const hasValidData = parseInt(currentReelsData.match_reels) > 0 || 
+                          parseInt(currentReelsData.missMatch_reels) > 0 || 
+                          parseInt(currentReelsData.wrong_mismatch) > 0;
+      
+      if (hasValidData) {
+        console.log("Initial API call after 2 minutes");
+        FetchReelsData();
+        lastApiCallTime.current = Date.now();
+      }
+    }, 120000); // 2 minutes
 
-useEffect(() => {
-  const hasValidData = parseInt(reelsData.match_reels) > 0 || parseInt(reelsData.missMatch_reels) > 0 || parseInt(reelsData.wrong_mismatch) > 0;
-  
-  if (!hasValidData) return;
+    // Set up recurring interval every 2 minutes
+    apiCallInterval.current = setInterval(() => {
+      const currentReelsData = reelsDataRef.current;
+      const hasValidData = parseInt(currentReelsData.match_reels) > 0 || 
+                          parseInt(currentReelsData.missMatch_reels) > 0 || 
+                          parseInt(currentReelsData.wrong_mismatch) > 0;
+      
+      if (hasValidData) {
+        console.log("Scheduled API call triggered successfully");
+        FetchReelsData();
+        lastApiCallTime.current = Date.now();
+      }
+    }, 120000); // 2 minutes
 
-  FetchReelsData(); 
-
-  const intervalId = setInterval(() => {
-    console.log("api triggered sucssesfully")
-    FetchReelsData();
-  }, 90000);
-
-  return () => clearInterval(intervalId);
-}, [reelsData]); 
-
+    return () => {
+      if (initialTimeout) clearTimeout(initialTimeout);
+      if (apiCallInterval.current) clearInterval(apiCallInterval.current);
+    };
+  }, []); // Empty dependency array - runs only once on mount
 
   return (
     <AuthProvider>
