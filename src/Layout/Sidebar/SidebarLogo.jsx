@@ -5,6 +5,7 @@ import { Image } from '../../AbstractElements';
 import CubaIcon from '../../assets/images/logo/login-logo.svg';
 import TetraLogo from '../../assets/images/logo/TetraPack.png';
 import CustomizerContext from '../../_helper/Customizer';
+import TalkPool from '../../assets/images/logo/talkpool.png'
 import './side.css'
 import resyncState from '../../_helper/resync';
 
